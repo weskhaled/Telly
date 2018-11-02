@@ -1,29 +1,98 @@
 <template>
-  <a-layout 
-    id="components-layout-demo-top"
-    class="layout"
-  >
-    <a-layout-header>
-      <div class="logo" />
+  <a-layout :class="collapsed ? 'collapsed' : ''">
+    <a-layout-sider 
+      v-model="collapsed"
+      collapsible>
+      <div class="logo ant-row-flex">
+        <span class="logo-text text-light">Telly</span>
+      </div>
       <a-menu
-        :style="{ lineHeight: '45px' }"
-        :default-selected-keys="['2']"
-        theme="light"
-        mode="horizontal"
+        :default-selected-keys="['1']"
+        :default-open-keys="['sub1']"
+        :inline-collapsed="collapsed"
+        mode="vertical"
+        theme="dark"
       >
-        <a-menu-item key="1">nav 1</a-menu-item>
-        <a-menu-item key="2">nav 2</a-menu-item>
-        <a-menu-item key="3">nav 3</a-menu-item>
-        <a-menu-item key="4">nav 3</a-menu-item>
-        <a-menu-item key="5">nav 3</a-menu-item>
+        <a-menu-item key="1">
+          <a-icon type="pie-chart" />
+          <span>Option 1</span>
+        </a-menu-item>
+        <a-menu-item key="2">
+          <a-icon type="desktop" />
+          <span>Option 2</span>
+        </a-menu-item>
+        <a-menu-item key="3">
+          <a-icon type="inbox" />
+          <span>Option 3</span>
+        </a-menu-item>
+        <a-sub-menu key="sub1">
+          <span 
+            slot="title">
+            <a-icon type="mail" />
+            <span>Navigation One</span>
+          </span>
+          <a-menu-item key="5">Option 5</a-menu-item>
+          <a-menu-item key="6">Option 6</a-menu-item>
+          <a-menu-item key="7">Option 7</a-menu-item>
+          <a-menu-item key="8">Option 8</a-menu-item>
+        </a-sub-menu>
+        <a-sub-menu key="sub2">
+          <span slot="title"><a-icon type="appstore" /><span>Navigation Two</span></span>
+          <a-menu-item key="9">Option 9</a-menu-item>
+          <a-menu-item key="10">Option 10</a-menu-item>
+          <a-sub-menu 
+            key="sub3" 
+            title="Submenu">
+            <a-menu-item key="11">Option 11</a-menu-item>
+            <a-menu-item key="12">Option 12</a-menu-item>
+          </a-sub-menu>
+        </a-sub-menu>
       </a-menu>
-    </a-layout-header>
-    <a-layout-content style="padding: 0 50px">
-      <nuxt/>
-    </a-layout-content>
-    <a-layout-footer style="text-align: center">
-      Ant Design ©2018 Created by Ant UED
-    </a-layout-footer>
+    </a-layout-sider>
+    <a-layout>
+      <a-layout-header>
+        <a-row 
+          type="flex" 
+          justify="end">
+          <a-col 
+            :span="12"
+            class="actions" >
+            text
+          </a-col>
+          <a-col 
+            :span="12"
+            class="menu-wrap ant-row-flex ant-row-flex-end">
+            <div class="menu">
+              <a-menu
+                :style="{ lineHeight: '45px' }"
+                :default-selected-keys="['2']"
+                theme="dark"
+                mode="horizontal"
+                class="ant-row-flex ant-row-flex-end">
+                <a-menu-item key="1">
+                  <a-button 
+                    shape="circle" 
+                    icon="search" />
+                </a-menu-item>
+                <a-menu-item key="2">
+                  <a-button 
+                    shape="circle" 
+                    icon="search" />
+                </a-menu-item>
+                <a-menu-item key="3">nav 3</a-menu-item>
+              </a-menu>
+            </div>
+            <div class="user"/>
+          </a-col>
+        </a-row>
+      </a-layout-header>
+      <a-layout-content>
+        <nuxt/>
+      </a-layout-content>
+      <!-- <a-layout-footer style="text-align: center">
+        Ant Design ©2018 Created by Ant UED
+      </a-layout-footer> -->
+    </a-layout>
   </a-layout>
 </template>
 
@@ -39,57 +108,4 @@ export default {
 }
 </script>
 <style>
-html {
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
-}
-
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-  margin: 0;
-}
-
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
-}
-
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
-
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
-
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
-}
-.ant-layout-header {
-  background: transparent;
-  padding: 0 30px;
-  line-height: 45px;
-  height: auto;
-}
 </style>
