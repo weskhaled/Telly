@@ -64,25 +64,47 @@
             class="menu-wrap ant-row-flex ant-row-flex-end">
             <div class="menu">
               <a-menu
-                :style="{ lineHeight: '45px' }"
+                :style="{ lineHeight: '70px' }"
                 :default-selected-keys="['2']"
                 theme="dark"
                 mode="horizontal"
                 class="ant-row-flex ant-row-flex-end">
-                <a-menu-item key="1">
+                <a-menu-item 
+                  key="1" 
+                  class="btnmenu">
+                  <a-button 
+                    shape="circle" 
+                    icon="notification" />
+                </a-menu-item>
+                <a-menu-item 
+                  key="2"
+                  class="btnmenu">
                   <a-button 
                     shape="circle" 
                     icon="search" />
                 </a-menu-item>
-                <a-menu-item key="2">
-                  <a-button 
-                    shape="circle" 
-                    icon="search" />
-                </a-menu-item>
-                <a-menu-item key="3">nav 3</a-menu-item>
+                <a-sub-menu>
+                  <div slot="title">
+                    <div class="user">
+                      <a-avatar 
+                        :size="32" 
+                        icon="user" />
+                      <span class="username">
+                        westest
+                      </span>
+                    </div>
+                  </div>
+                  <a-menu-item-group title="Item 1">
+                    <a-menu-item key="setting:1">Option 1</a-menu-item>
+                    <a-menu-item key="setting:2">Option 2</a-menu-item>
+                  </a-menu-item-group>
+                  <a-menu-item-group title="Item 2">
+                    <a-menu-item key="setting:3">Option 3</a-menu-item>
+                    <a-menu-item key="setting:4">Option 4</a-menu-item>
+                  </a-menu-item-group>
+                </a-sub-menu>
               </a-menu>
             </div>
-            <div class="user"/>
           </a-col>
         </a-row>
       </a-layout-header>
