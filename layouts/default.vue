@@ -7,7 +7,7 @@
       <div class="logo" />
       <a-menu
         :style="{ lineHeight: '45px' }"
-        :default-selected-keys="['1']"
+        :default-selected-keys="['2']"
         theme="light"
         mode="horizontal"
       >
@@ -26,6 +26,18 @@
     </a-layout-footer>
   </a-layout>
 </template>
+
+<script>
+import Logo from '~/components/Logo.vue'
+
+export default {
+  data() {
+    return {
+      collapsed: false
+    }
+  }
+}
+</script>
 <style>
 html {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',

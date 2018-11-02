@@ -28,9 +28,9 @@ module.exports = {
   */
   css: [
     // 'element-ui/lib/theme-chalk/index.css'
-    'ant-design-vue/dist/antd.css'
+    'ant-design-vue/dist/antd.css',
+    '~/assets/telly.scss'
   ],
-
   /*
   ** Plugins to load before mounting the App
   */
