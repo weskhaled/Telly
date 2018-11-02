@@ -70,18 +70,20 @@
                 mode="horizontal"
                 class="ant-row-flex ant-row-flex-end">
                 <a-menu-item 
-                  key="1" 
-                  class="btnmenu">
-                  <a-button 
-                    shape="circle" 
-                    icon="notification" />
-                </a-menu-item>
-                <a-menu-item 
                   key="2"
                   class="btnmenu">
-                  <a-button 
-                    shape="circle" 
-                    icon="search" />
+                  <a-badge 
+                    dot >
+                    <a-icon type="search" />
+                  </a-badge>
+                </a-menu-item>
+                <a-menu-item 
+                  key="1" 
+                  class="btnmenu">
+                  <a-badge 
+                    dot >
+                    <a-icon type="notification" />
+                  </a-badge>
                 </a-menu-item>
                 <a-sub-menu>
                   <div slot="title">
@@ -90,7 +92,8 @@
                         :size="32" 
                         icon="user" />
                       <span class="username">
-                        westest
+                        weslati khaled
+                        <span class="userinfo">Manage Account</span>
                       </span>
                     </div>
                   </div>
