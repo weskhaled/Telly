@@ -66,6 +66,9 @@ html,body{
             }
           }
         }
+        &.ant-menu-inline-collapsed > .ant-menu-item .anticon{
+          line-height: 32px;
+        }
       }
     }
     .ant-layout-sider-trigger {
