@@ -13,12 +13,14 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.0.0",
+    "@nuxtjs/auth": "^4.5.3",
+    "@nuxtjs/axios": "^5.3.4",
     "ant-design-vue": "^1.1.7",
     "cross-env": "^5.2.0",
     "element-ui": "^2.4.6",
     "express": "^4.16.3",
-    "nuxt": "^2.0.0"
+    "nuxt": "^2.0.0",
+    "plyr": "^3.4.6"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",

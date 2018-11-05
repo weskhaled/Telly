@@ -1,13 +1,15 @@
 <template>
   <a-layout :class="collapsed ? 'collapsed' : ''">
-    <a-layout-sider 
-      v-model="collapsed"
-      collapsible>
+    <a-layout-sider
+      :width="260"
+      v-model="collapsed">
       <div class="logo ant-row-flex">
-        <span class="logo-text text-light">Telly</span>
+        <span class="logo-text text-light">
+          {{ collapsed ? 'T' : 'Tellyming' }}
+        </span>
       </div>
       <a-menu
-        :default-selected-keys="['1']"
+        :default-selected-keys="['3']"
         :default-open-keys="['sub1']"
         :inline-collapsed="collapsed"
         mode="vertical"
@@ -25,17 +27,6 @@
           <a-icon type="inbox" />
           <span>Option 3</span>
         </a-menu-item>
-        <a-sub-menu key="sub1">
-          <span 
-            slot="title">
-            <a-icon type="mail" />
-            <span>Navigation One</span>
-          </span>
-          <a-menu-item key="5">Option 5</a-menu-item>
-          <a-menu-item key="6">Option 6</a-menu-item>
-          <a-menu-item key="7">Option 7</a-menu-item>
-          <a-menu-item key="8">Option 8</a-menu-item>
-        </a-sub-menu>
         <a-sub-menu key="sub2">
           <span slot="title"><a-icon type="appstore" /><span>Navigation Two</span></span>
           <a-menu-item key="9">Option 9</a-menu-item>
@@ -57,7 +48,24 @@
           <a-col 
             :span="12"
             class="actions" >
-            text
+            <a-button 
+              size="default"
+              type="default"
+              @click="()=> collapsed = !collapsed">
+              <a-icon
+                :type="collapsed ? 'menu-unfold' : 'menu-fold'"
+                class="trigger"
+              />
+            </a-button>
+            <a-button-group
+              class="btnnavig">
+              <a-button type="primary">
+                <a-icon type="left" />
+              </a-button>
+              <a-button type="primary">
+                <a-icon type="right" />
+              </a-button>
+            </a-button-group>
           </a-col>
           <a-col 
             :span="12"
@@ -72,12 +80,10 @@
                 <a-menu-item 
                   key="2"
                   class="btnmenu">
-                  <a-badge 
-                    dot >
-                    <a-icon type="search" />
-                  </a-badge>
+                  <a-icon type="search" />
                 </a-menu-item>
                 <a-menu-item 
+                  @click="showDrawer()"
                   key="1" 
                   class="btnmenu">
                   <a-badge 
@@ -89,10 +95,10 @@
                   <div slot="title">
                     <div class="user">
                       <a-avatar 
-                        :size="32" 
-                        icon="user" />
-                      <span class="username">
-                        weslati khaled
+                        :size="46" 
+                        src="https://weskhaled.herokuapp.com/assets/img/photos/developer/avatar-sm.jpg" />
+                      <span class="user">
+                        <span class="username">weslati khaled</span>
                         <span class="userinfo">Manage Account</span>
                       </span>
                     </div>
@@ -118,6 +124,18 @@
         Ant Design ©2018 Created by Ant UED
       </a-layout-footer> -->
     </a-layout>
+    <a-drawer
+      :visible="drawervisible"
+      :closable="false"
+      width="35vw"
+      title="Basic Drawer"
+      placement="right"
+      @close="onClose"
+    >
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+    </a-drawer>
   </a-layout>
 </template>
 
@@ -127,9 +145,18 @@ import Logo from '~/components/Logo.vue'
 export default {
   data() {
     return {
-      collapsed: false
+      collapsed: false,
+      drawervisible: false
     }
-  }
+  },
+  methods: {
+    showDrawer() {
+      this.drawervisible = true
+    },
+    onClose() {
+      this.drawervisible = false
+    }
+  } 
 }
 </script>
 <style>

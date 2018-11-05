@@ -29,14 +29,16 @@ module.exports = {
   css: [
     // 'element-ui/lib/theme-chalk/index.css'
     'ant-design-vue/dist/antd.css',
-    '~/assets/telly.scss'
+    // {src: '@/assets/plyr/plyr.scss', lang: 'scss'},
+    '@/assets/telly.scss'
   ],
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
     // '@/plugins/element-ui'
-    '@/plugins/antd-ui'
+    '@/plugins/antd-ui',
+    { src: '@/plugins/plyr', ssr: false }
   ],
 
   /*
@@ -44,8 +46,12 @@ module.exports = {
   */
   modules: [
     // Doc: https://github.com/nuxt-community/axios-module#usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/auth'
   ],
+  auth: {
+    // Options
+  },
   /*
   ** Axios module configuration
   */
@@ -60,16 +66,19 @@ module.exports = {
     /*
     ** You can extend webpack config here
     */
-    extend(config, ctx) {
-      // Run ESLint on save
-      if (ctx.isDev && ctx.isClient) {
-        config.module.rules.push({
-          enforce: 'pre',
-          test: /\.(js|vue)$/,
-          loader: 'eslint-loader',
-          exclude: /(node_modules)/
-        })
-      }
-    }
+    // extend(config, ctx) {
+    //   // Run ESLint on save
+    //   if (ctx.isDev && ctx.isClient) {
+    //     config.module.rules.push({
+    //       enforce: 'pre',
+    //       test: /\.(js|vue)$/,
+    //       loader: 'eslint-loader',
+    //       exclude: /(node_modules)/
+    //     })
+    //   }
+    // },
+    postcss: false,
+    extractCSS: true,
+    // vendor:[ 'plyr' ]
   }
 }
