@@ -6,6 +6,7 @@
         <div class="videoplayer">
           <video 
             id="player"
+            ref="plyr"
             controls 
             crossorigin 
             playsinline 
@@ -63,9 +64,9 @@ export default {
   computed: {},
   mounted() {
     let self = this
-    // console.log(self.$refs.plyr);
-    self.player = new Plyr.setup('#player')[0]
-    console.log(self.player)
+    // console.log(self.$refs.plyr)
+    self.player = new Plyr.setup('#player', {})[0]
+    // console.log(self.player)
     self.player.on('ready', function(event) {
       event.detail.plyr.on('playing', function(event) {
         console.log('playing')
@@ -77,6 +78,15 @@ export default {
     // });
     // this.passwordGrantLogin()
     // console.log(process.env.LARAVEL_ENDPOINT)
+  },
+  beforeRouteLeave(to, from, next) {
+    console.log('route ', this.$route)
+    console.log('from ', from)
+    if (from.name == 'index' && to.name != 'index') {
+      console.log('index')
+      this.player.destroy()
+    } else console.log('not index')
+    next()
   },
   methods: {
     async customPasswordGrantLogin() {

@@ -34,8 +34,8 @@
           </nuxt-link>
         </a-menu-item>
         <a-menu-item key="3">
-          <a-icon type="inbox" />
-          <span>Option 3</span>
+          <tv-icon class="anticon"/>
+          <span>Watch Later</span>
         </a-menu-item>
         <a-sub-menu key="sub2">
           <span slot="title"><a-icon type="appstore" /><span>Navigation Two</span></span>
@@ -161,8 +161,11 @@
 
 <script>
 import Logo from '~/components/Logo.vue'
-
+import { TvIcon } from 'vue-feather-icons'
 export default {
+  components: {
+    TvIcon
+  },
   data() {
     return {
       collapsed: false,

@@ -33,27 +33,23 @@ export default {
   },
   data() {
     return {
-      drawervisible: false
+      drawervisible: false,
+      swiper: null
     }
   },
   computed: {},
   mounted() {
     let self = this
     this.$nextTick(function() {
-      var sw = new Swiper('.swiper-container', {
+      this.swiper = new Swiper('.swiper-container', {
         // Optional parameters
+        init: false,
         loop: true
       })
+      this.swiper.init()
     })
   },
-  methods: {
-    async customPasswordGrantLogin() {
-      await this.$auth.loginWith('password_grant_custom', {
-        data: this.user
-      })
-      this.$router.replace('/')
-    }
-  }
+  methods: {}
 }
 </script>
 

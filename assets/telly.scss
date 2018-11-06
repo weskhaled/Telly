@@ -54,9 +54,13 @@ html,body{
           .anticon + span{
             font-weight: 700;
             text-transform: uppercase;
-            color: white;
+          }
+          svg{
+            width: 14px;
+            height: 14px;
           }
           &.ant-menu-item-selected{
+            color: #10d5ff;
             // box-shadow: -2px 0px 0px 0px rgba(0, 114, 255, 0), inset 2px 0px 0px 0px #0072ff;
             &::before{
               content: '';
