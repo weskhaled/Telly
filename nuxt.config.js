@@ -23,7 +23,7 @@ module.exports = {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+  loading: { color: '#10d5ff' },
 
   /*
   ** Global CSS
@@ -50,7 +50,8 @@ module.exports = {
   modules: [
     // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/axios',
-    '@nuxtjs/auth'
+    '@nuxtjs/auth',
+    '@nuxtjs/dotenv'
   ],
   auth: {
     // Options
@@ -136,13 +137,13 @@ module.exports = {
         })
       }
     },
-    loaders: [
-      {
-        test: /\.js$/, // Check for all js files
-        exclude: /node_modules\/(?!(dom7|ssr-window|swiper)\/).*/,
-        loader: 'babel-loader'
-      }
-    ],
+    // loaders: [
+    //   {
+    //     test: /\.js$/, // Check for all js files
+    //     exclude: /node_modules\/(?!(dom7|ssr-window|swiper)\/).*/,
+    //     loader: 'babel-loader'
+    //   }
+    // ],
     postcss: false,
     extractCSS: true,
     vendor:['jquery', 'bootstrap', 'plyr'],

@@ -75,7 +75,8 @@ export default {
     // .catch(e => {
     //   this.error = e + ''
     // });
-    // this.passwordGrantLogin();
+    // this.passwordGrantLogin()
+    // console.log(process.env.LARAVEL_ENDPOINT)
   },
   methods: {
     async customPasswordGrantLogin() {
@@ -88,8 +89,8 @@ export default {
       await this.$auth.loginWith('password_grant', {
         data: {
           grant_type: 'password',
-          client_id: process.env.PASSPORT_PASSWORD_GRANT_ID,
-          client_secret: process.env.PASSPORT_PASSWORD_GRANT_SECRET,
+          client_id: process.env.PASSPORT_CLIENT_ID,
+          client_secret: process.env.PASSPORT_CLIENT_SECRET,
           scope: '*',
           username: this.user.username,
           password: this.user.password
