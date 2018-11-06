@@ -15,13 +15,23 @@
         mode="vertical"
         theme="dark"
       >
-        <a-menu-item key="1">
-          <a-icon type="pie-chart" />
-          <span>Option 1</span>
+        <a-menu-item 
+          key="1">
+          <nuxt-link 
+            to="/"
+            tag="div">
+            <a-icon type="home" />
+            <span>Discover</span>
+          </nuxt-link>
         </a-menu-item>
-        <a-menu-item key="2">
-          <a-icon type="desktop" />
-          <span>Option 2</span>
+        <a-menu-item 
+          key="2">
+          <nuxt-link 
+            to="/slider"
+            tag="div">
+            <a-icon type="desktop" />
+            <span>TV & Movies</span>
+          </nuxt-link>
         </a-menu-item>
         <a-menu-item key="3">
           <a-icon type="inbox" />
@@ -42,35 +52,43 @@
     </a-layout-sider>
     <a-layout>
       <a-layout-header>
-        <a-row 
-          type="flex" 
-          justify="end">
-          <a-col 
-            :span="12"
-            class="actions" >
-            <a-button 
-              size="default"
-              type="default"
-              @click="()=> collapsed = !collapsed">
-              <a-icon
-                :type="collapsed ? 'menu-unfold' : 'menu-fold'"
-                class="trigger"
-              />
-            </a-button>
-            <a-button-group
-              class="btnnavig">
-              <a-button type="primary">
-                <a-icon type="left" />
-              </a-button>
-              <a-button type="primary">
-                <a-icon type="right" />
-              </a-button>
-            </a-button-group>
-          </a-col>
-          <a-col 
-            :span="12"
-            class="menu-wrap ant-row-flex ant-row-flex-end">
-            <div class="menu">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+          <button 
+            class="navbar-toggler" 
+            type="button" 
+            data-toggle="collapse" 
+            data-target="#navbarSupportedContent" 
+            aria-controls="navbarSupportedContent" 
+            aria-expanded="false" 
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon" />
+          </button>
+          <div 
+            id="navbarSupportedContent"
+            class="collapse navbar-collapse" >
+            <div class="actions navbar-nav mr-auto" >
+              <div class="mr-2">
+                <a-button 
+                  size="default"
+                  type="default"
+                  @click="()=> collapsed = !collapsed">
+                  <a-icon
+                    :type="collapsed ? 'menu-unfold' : 'menu-fold'"
+                    class="trigger"
+                  />
+                </a-button>
+              </div>
+              <a-button-group
+                class="btnnavig">
+                <a-button type="primary">
+                  <a-icon type="left" />
+                </a-button>
+                <a-button type="primary">
+                  <a-icon type="right" />
+                </a-button>
+              </a-button-group>
+            </div>
+            <div class="menu my-2 my-lg-0">
               <a-menu
                 :style="{ lineHeight: '70px' }"
                 :default-selected-keys="['2']"
@@ -80,12 +98,14 @@
                 <a-menu-item 
                   key="2"
                   class="btnmenu">
-                  <a-icon type="search" />
+                  <a-badge>
+                    <a-icon type="search" />
+                  </a-badge>
                 </a-menu-item>
                 <a-menu-item 
-                  @click="showDrawer()"
-                  key="1" 
-                  class="btnmenu">
+                  key="1"
+                  class="btnmenu"
+                  @click="showDrawer()">
                   <a-badge 
                     dot >
                     <a-icon type="notification" />
@@ -114,8 +134,8 @@
                 </a-sub-menu>
               </a-menu>
             </div>
-          </a-col>
-        </a-row>
+          </div>
+        </nav>
       </a-layout-header>
       <a-layout-content>
         <nuxt/>
@@ -126,7 +146,7 @@
     </a-layout>
     <a-drawer
       :visible="drawervisible"
-      :closable="false"
+      :closable="true"
       width="35vw"
       title="Basic Drawer"
       placement="right"
@@ -156,7 +176,7 @@ export default {
     onClose() {
       this.drawervisible = false
     }
-  } 
+  }
 }
 </script>
 <style>

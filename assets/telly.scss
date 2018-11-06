@@ -1,5 +1,8 @@
-@import url('https://fonts.googleapis.com/css?family=Montserrat:200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,900');
+// @import url('https://fonts.googleapis.com/css?family=Montserrat:200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,900');
+@import url('https://fonts.googleapis.com/css?family=Raleway:100,100i,300,300i,400,400i,600,600i,700,700i,900,900i');
 @import "./plyr/plyr.scss";
+@import "~bootstrap/scss/bootstrap";
+@import '~swiper/dist/css/swiper.min.css';
 html,body{
   font-family: "Raleway", sans-serif;
   font-weight: 400;
@@ -86,6 +89,10 @@ html,body{
     width: calc(100% - 260px);
     transition: all .2s;
     z-index: 1;
+    box-shadow: inset 0px 65px 65px -35px rgb(19, 28, 37);
+    .navbar {
+      padding: 0;
+    }
     .ant-menu-dark.ant-menu-horizontal{
       background-color: transparent;
     }
@@ -122,14 +129,14 @@ html,body{
       }
     }
     .actions{
-      margin-top: 15px;
+      line-height: 70px;
       button{
         background-color: transparent;
         border: 0;
         color: white;
-        height: auto;
         i{
-          font-size: 18px;
+          font-size: 16px;
+          line-height: 32px;
         }
       }
     }
@@ -141,7 +148,7 @@ html,body{
   }
   .ant-layout-content{
     background-color: #0c171e;
-    .container {
+    .container-fluid {
       min-height: calc(100vh - 70px);
       margin-top: 70px;
       padding: 0 20px;
@@ -153,19 +160,27 @@ html,body{
     background-color: #1d1e21;
     .ant-drawer-wrapper-body{
       .ant-drawer-header{
-        padding: 20px 10px;
+        padding: 18px 10px;
         border-radius: 0;
         background: #000000;
-        color: rgb(255, 255, 255);
         border-bottom: 1px solid #0f171e;
         .ant-drawer-title{
           font-weight: 700;
-          color: rgba(255, 255, 255, 0.85);
+          color: rgb(226, 226, 226);
         }
       }
       .ant-drawer-body{
         padding: 10px;
       }
+    }
+  }
+  .ant-drawer-close{
+    padding: 18px 0px;
+    .ant-drawer-close-x{
+      color: white;
+      height: auto;
+      line-height: 22px;
+      width: 45px;
     }
   }
 }
@@ -175,6 +190,7 @@ html,body{
   margin: -70px -20px 0 -20px;
   position: relative;
   height: calc(100vh - 0px);
+  overflow: hidden;
   .plyr{
     max-height: 100%;
     position: absolute;
