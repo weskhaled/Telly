@@ -1,0 +1,356 @@
+html,body{
+    font-family: "Raleway", sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    font-weight: 400;
+    color: #fff;
+  }
+  .ant-layout{
+    // reset
+    .menuitem{
+      button, 
+      .ant-avatar{
+        >i,
+        .anticon{
+          margin-right: 0;
+        }
+      }
+    }
+    .ant-layout-sider{
+      background-color: #131c25;
+      .ant-layout-sider-children{
+        .logo{
+          width: 100%;
+          height: 100px;
+          // background: #555;
+          .logo-text {
+            color: #fff;
+            padding: 5px 15px;
+            border: 2px solid;
+            font-weight: 600;
+            letter-spacing: 2px;
+            line-height: 26px;
+            height: max-content;
+            display: block;
+            margin: 15px auto;
+            box-sizing: border-box;
+          }
+        }
+        >.ant-menu{
+          max-height: calc(100vh - 100px);
+          overflow: auto;
+          background-color: #131c25;
+          .ant-menu-item{
+            background-color: transparent;
+            height: 32px;
+            line-height: 32px;
+            .anticon + span{
+              font-weight: 700;
+              text-transform: uppercase;
+            }
+            svg{
+              width: 14px;
+              height: 14px;
+            }
+            &.ant-menu-item-selected{
+              color: #10d5ff;
+              // box-shadow: -2px 0px 0px 0px rgba(0, 114, 255, 0), inset 2px 0px 0px 0px #0072ff;
+              &::before{
+                content: '';
+                width: 2px;
+                height: 26px;
+                background: #10d5ff;
+                left: 0;
+                position: absolute;
+                top: calc(50% - 13px);
+              }
+            }
+          }
+          &.ant-menu-inline-collapsed > .ant-menu-item .anticon{
+            line-height: 32px;
+          }
+        }
+      }
+      .ant-layout-sider-trigger {
+        height: 45px;
+        line-height: 45px;
+        background: #131c25;
+      }
+    }
+    .ant-layout-header {
+      background: transparent;
+      padding: 0 30px;
+      line-height: 45px;
+      height: auto;
+      position: fixed;
+      width: calc(100% - 260px);
+      transition: all .2s;
+      z-index: 1;
+      box-shadow: inset 0px 65px 65px -35px rgb(19, 28, 37);
+      .navbar {
+        padding: 0;
+      }
+      .ant-menu-dark.ant-menu-horizontal{
+        background-color: transparent;
+      }
+      .btnmenu{
+        padding: 0 15px;
+        background: transparent;
+        i{
+          margin: 0;
+          font-size: 18px;
+        }
+      }
+      .user {
+        display: inline-block;
+        line-height: 22px;
+        vertical-align: middle;
+        margin-left: 15px;
+        .ant-avatar{
+          .anticon{
+            margin-right: 0;
+          }
+        }
+        .username{
+          display: block;
+          line-height: 10px;
+          margin-top: 9px;
+          font-size: 14px;
+          text-transform: capitalize;
+          letter-spacing: 0.2px;
+          font-weight: 700;
+          color: white;
+        }
+        .userinfo{
+          font-size: 12px;
+        }
+      }
+      .actions{
+        line-height: 70px;
+        button{
+          background-color: transparent;
+          border: 0;
+          color: white;
+          i{
+            font-size: 16px;
+            line-height: 32px;
+          }
+        }
+      }
+    }
+    &.collapsed{
+      .ant-layout-header {
+        width: calc(100% - 80px);
+      }
+    }
+    .ant-layout-content{
+      background-color: #0c171e;
+      .container-fluid {
+        min-height: calc(100vh - 70px);
+        margin-top: 70px;
+        padding: 0 20px;
+      }
+    }
+  }
+  .ant-drawer-content-wrapper{
+    .ant-drawer-content{
+      background-color: #1d1e21;
+      .ant-drawer-wrapper-body{
+        .ant-drawer-header{
+          padding: 18px 10px;
+          border-radius: 0;
+          background: #000000;
+          border-bottom: 1px solid #0f171e;
+          .ant-drawer-title{
+            font-weight: 700;
+            color: rgb(226, 226, 226);
+          }
+        }
+        .ant-drawer-body{
+          padding: 10px;
+        }
+      }
+    }
+    .ant-drawer-close{
+      padding: 18px 0px;
+      .ant-drawer-close-x{
+        color: white;
+        height: auto;
+        line-height: 22px;
+        width: 45px;
+      }
+    }
+  }
+  
+  // slider
+  .cardslider {
+    height: 320px;
+    background: transparent;
+    border: none;
+    &.ant-card-hoverable:hover {
+      box-shadow: none;
+    }
+    .ant-card-cover {
+      position: relative;
+      height: calc(100% - 45px);
+      overflow: hidden;
+      cursor: grab;
+      box-shadow: 0px 0px 20px 0px #000;
+      img {
+        position: absolute;
+        width: calc(100% + 0px);
+        height: calc(100% - 0px);
+      }
+    }
+    .ant-card-body{
+      padding: 5px;
+      color: white;
+      text-align: center;
+      font-weight: 600;
+      font-size: 16px;
+      text-transform: capitalize;
+    }
+  }
+
+  .swiper-container{
+    .swiper-pagination{
+        position: absolute;
+        left: 50%!important;
+        z-index: 2;
+        bottom: 15px!important;
+        border-radius: 15px;
+        padding: 5px;
+        width: auto!important;
+        background-color: rgba(0, 0, 0, 0.75);
+        transform: translateX(-50%);
+        text-align: center;
+        .swiper-pagination-bullet {
+            position: relative;
+            display: block;
+            opacity: 1 !important;
+            float: left;
+            margin: 3px !important;
+            width: 8px;
+            height: 8px;
+            border-radius: 50% !important;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0);
+            transition: box-shadow 0.3s ease;
+            background: #fff;
+            &:before {
+                content: '';
+                top: 0px;
+                left: 0px;
+                width: calc(100%);
+                height: calc(100%);
+                outline: none;
+                background-color: #fff;
+                text-indent: -999em;
+                border-radius: 50% !important;
+                cursor: pointer;
+                position: absolute;
+            }
+            &.swiper-pagination-bullet-active:before {
+                transform: scale(0.6);
+                background-color: #000;
+            }
+        }
+    }
+    nav{
+        a{
+            position: absolute;
+            top: 50%;
+            display: block;
+            outline: none;
+            text-align: left;
+            z-index: 1000;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.65);
+            transition: all 0.15s ease;
+            padding: 25px 10px;
+            color: white;
+            &:hover{
+                background-color: rgba(0, 0, 0, 0.95);
+                padding: 25px 15px; 
+            }
+            &.prev{
+                left: 0;
+            }
+            &.next{
+                right: 0;
+            }
+            &.swiper-button-disabled{
+                opacity: 0.2;
+                cursor: no-drop;
+            }
+        }
+    }
+  }
+
+
+  // reset
+  // video
+  .videoplayer{
+    margin: -70px -20px 0 -20px;
+    position: relative;
+    height: calc(100vh - 0px);
+    overflow: hidden;
+    .plyr{
+      max-height: 100%;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      // bottom: 0;
+      transform: translate(-50%, -50%);
+      top: 50%;
+      left: 50%;
+      background: #0c171e;
+      .plyr__video-wrapper {
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+      }
+    }
+  }
+  /*change scroll css*/
+  :root {
+    --scroll-bar-size: 10px;
+    /**
+  * Background color for custom scroll bars.
+  * The color is applied to the thumb part of the scrollbar.
+  */
+    --scroll-bar-thumb-background-color: rgba(255, 255, 255, 0.2);
+    /**
+  * Background color for custom scroll bars in their active state.
+  * The color is applied to the thumb part of the scrollbar.
+  */
+    --scroll-bar-thumb-background-color-active: rgba(255, 255, 255, 0.5);
+  }
+  
+  ::-webkit-scrollbar {
+    width: var(--scroll-bar-size);
+    height: var(--scroll-bar-size);
+    background: transparent;
+    cursor: pointer;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--scroll-bar-thumb-background-color);
+    border-radius: var(--scroll-bar-size);
+    border-color: transparent;
+    border-style: solid;
+    border-width: calc(var(--scroll-bar-size)/3);
+    background-clip: padding-box;
+  }
+  
+  ::-webkit-scrollbar-thumb:active {
+    background-color: var(--scroll-bar-thumb-background-color-active);
+  }
+  
+  ::-webkit-scrollbar-thumb:hover,
+  ::-webkit-scrollbar-thumb:active {
+    border-width: 1px;
+    background-color: var(--scroll-bar-thumb-background-color-active);
+    cursor: pointer;
+  }

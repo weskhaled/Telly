@@ -99,7 +99,7 @@
                   key="2"
                   class="btnmenu">
                   <a-badge>
-                    <a-icon type="search" />
+                    <i class="pg-search"/>
                   </a-badge>
                 </a-menu-item>
                 <a-menu-item 
@@ -160,7 +160,6 @@
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
 import { TvIcon } from 'vue-feather-icons'
 export default {
   components: {

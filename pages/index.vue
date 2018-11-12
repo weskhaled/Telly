@@ -45,11 +45,11 @@
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
+// import Logo from '~/components/Logo.vue'
 // import Plyr from 'plyr';
 export default {
   components: {
-    Logo
+    // Logo
   },
   data() {
     return {
@@ -66,10 +66,9 @@ export default {
     let self = this
     // console.log(self.$refs.plyr)
     self.player = new Plyr.setup('#player', {})[0]
-    // console.log(self.player)
     self.player.on('ready', function(event) {
       event.detail.plyr.on('playing', function(event) {
-        console.log('playing')
+        console.log('playing ...')
       })
     })
     // this.$auth.loginWith('laravel.passport')
@@ -80,12 +79,10 @@ export default {
     // console.log(process.env.LARAVEL_ENDPOINT)
   },
   beforeRouteLeave(to, from, next) {
-    console.log('route ', this.$route)
-    console.log('from ', from)
-    if (from.name == 'index' && to.name != 'index') {
-      console.log('index')
+    this.$nextTick(function() {
       this.player.destroy()
-    } else console.log('not index')
+      this.player = null
+    })
     next()
   },
   methods: {

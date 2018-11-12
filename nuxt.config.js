@@ -32,7 +32,7 @@ module.exports = {
     // 'element-ui/lib/theme-chalk/index.css'
     'ant-design-vue/dist/antd.css',
     // {src: '@/assets/plyr/plyr.scss', lang: 'scss'},
-    '@/assets/telly.scss'
+    '@/assets/styles/telly.scss'
   ],
   /*
   ** Plugins to load before mounting the App

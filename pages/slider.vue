@@ -7,17 +7,29 @@
           <!-- Additional required wrapper -->
           <div class="swiper-wrapper">
             <!-- Slides -->
-            <div class="swiper-slide">Slide 1</div>
-            <div class="swiper-slide">Slide 2</div>
-            <div class="swiper-slide">Slide 3</div>
+            <div 
+              v-for="(slider, index) in sliders" 
+              :key="index" 
+              class="swiper-slide">
+              <SlideCard :slide="slider"/>
+            </div>
           </div>
-          <!-- If we need pagination -->
-          <div class="swiper-pagination" />
+          <!-- If we need pagination 
+          <div class="swiper-pagination"/>  -->
+
           <!-- If we need navigation buttons -->
-          <div class="swiper-button-prev" />
-          <div class="swiper-button-next" />
-          <!-- If we need scrollbar -->
-          <div class="swiper-scrollbar" />
+          <nav class="">
+            <a 
+              class="prev text-right" 
+              href="javascript:void(0)">
+              <span class="icon-wrap"><i class="icon fa fa-angle-left"/></span>
+            </a>
+            <a 
+              class="next text-left" 
+              href="javascript:void(0)">
+              <span class="icon-wrap"><i class="icon fa fa-angle-right"/></span>
+            </a>
+          </nav>
         </div>
       </a-col>
     </a-row>
@@ -25,16 +37,65 @@
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
+import SlideCard from '~/components/index/SlideCard.vue'
 import Swiper from 'swiper'
 export default {
   components: {
-    Logo
+    SlideCard
   },
   data() {
     return {
-      drawervisible: false,
-      swiper: null
+      swiper: null,
+      sliders: [
+        {
+          name: 'slider 1',
+          cat: 'Cat name',
+          year: '2009',
+          time: '1:09:00'
+        },
+        {
+          name: 'slider 2',
+          cat: 'Cat name',
+          year: '2009',
+          time: '1:09:00'
+        },
+        {
+          name: 'slider 3',
+          cat: 'Cat name',
+          year: '2009',
+          time: '1:09:00'
+        },
+        {
+          name: 'slider 4',
+          cat: 'Cat name',
+          year: '2009',
+          time: '1:09:00'
+        },
+        {
+          name: 'slider 4',
+          cat: 'Cat name',
+          year: '2009',
+          time: '1:09:00'
+        },
+        {
+          name: 'slider 4',
+          cat: 'Cat name',
+          year: '2009',
+          time: '1:09:00'
+        },
+        {
+          name: 'slider 4',
+          cat: 'Cat name',
+          year: '2009',
+          time: '1:09:00'
+        },
+        {
+          name: 'slider 4',
+          cat: 'Cat name',
+          year: '2009',
+          time: '1:09:00'
+        }
+      ]
     }
   },
   computed: {},
@@ -44,7 +105,20 @@ export default {
       this.swiper = new Swiper('.swiper-container', {
         // Optional parameters
         init: false,
-        loop: true
+        loop: false,
+        slidesPerView: 5,
+        grabCursor: true,
+        navigation: {
+          nextEl: '.next',
+          prevEl: '.prev'
+        },
+        grabCursor: true,
+        // pagination: {
+        //   el: '.swiper-pagination',
+        //   type: 'bullets',
+        //   clickable: true
+        // },
+        freeMode: true
       })
       this.swiper.init()
     })
