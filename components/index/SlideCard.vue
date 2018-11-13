@@ -1,6 +1,6 @@
 <template>
   <a-card
-    class="cardslider m-2 px-2"
+    class="cardslider m-2 p-2"
     hoverable
   >
     <img      
@@ -9,8 +9,11 @@
       src="~assets/images/film-cover.jpg"
     >
     <div class="sliderinfo">
-      <div>
+      <div class="title">
         {{ slide.name }}
+      </div>
+      <div class="info">
+        <span class="cat">{{ slide.cat }} - {{ slide.time }} - {{ slide.year }}</span>
       </div>
     </div>
     <template 

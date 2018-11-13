@@ -101,23 +101,52 @@ export default {
   computed: {},
   mounted() {
     let self = this
+    this.$root.$on('togglemenu', data => {
+      console.log(data)
+      this.swiper.update()
+    })
     this.$nextTick(function() {
       this.swiper = new Swiper('.swiper-container', {
         // Optional parameters
         init: false,
         loop: false,
-        slidesPerView: 5,
+        slidesPerView: 6,
         grabCursor: true,
         navigation: {
           nextEl: '.next',
           prevEl: '.prev'
         },
         grabCursor: true,
-        // pagination: {
-        //   el: '.swiper-pagination',
-        //   type: 'bullets',
-        //   clickable: true
-        // },
+        spaceBetween: 0,
+        breakpointsInverse: true,
+        // Responsive breakpoints
+        breakpoints: {
+          // when window width is >= 320px
+          320: {
+            slidesPerView: 2,
+            spaceBetween: 0
+          },
+          // when window width is >= 480px
+          480: {
+            slidesPerView: 2,
+            spaceBetween: 0
+          },
+          // when window width is >= 640px
+          640: {
+            slidesPerView: 4,
+            spaceBetween: 0
+          },
+          // when window width is >= 1280px
+          1200: {
+            slidesPerView: 6,
+            spaceBetween: 0
+          },
+          // when window width is >= 1280px
+          1800: {
+            slidesPerView: 8,
+            spaceBetween: 0
+          }
+        },
         freeMode: true
       })
       this.swiper.init()

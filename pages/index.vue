@@ -110,7 +110,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// .video-player-box {
-//   min-height: 200px;
-// }
 </style>

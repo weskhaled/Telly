@@ -151,6 +151,8 @@ html,body{
         min-height: calc(100vh - 70px);
         margin-top: 70px;
         padding: 0 20px;
+        max-height: calc(100vh - 70px);
+        overflow: auto;
       }
     }
   }
@@ -186,11 +188,21 @@ html,body{
   
   // slider
   .cardslider {
-    height: 320px;
     background: transparent;
     border: none;
+    box-shadow: none;
     &.ant-card-hoverable:hover {
-      box-shadow: none;
+      box-shadow: 0px 0px 20px 0px #000;
+      background: #182027;
+      .ant-card-cover {
+        box-shadow: none;
+      }
+      .ant-card-body{
+        .info{
+          transform: translate3d(0,0,0);
+          opacity: 1;
+        }
+      }
     }
     .ant-card-cover {
       position: relative;
@@ -199,7 +211,6 @@ html,body{
       cursor: grab;
       box-shadow: 0px 0px 20px 0px #000;
       img {
-        position: absolute;
         width: calc(100% + 0px);
         height: calc(100% - 0px);
       }
@@ -211,10 +222,35 @@ html,body{
       font-weight: 600;
       font-size: 16px;
       text-transform: capitalize;
+      .info{
+        transform: translate3d(0,50%,0);
+        opacity: 0;
+        transition: transform 0.15s, opacity 0.15s;
+        .cat{
+          font-size: 13px;
+          line-height: 13px;
+          font-weight: 400;
+        }
+      }
+    }
+    .ant-card-actions{
+      margin: 0 -7px;
+      margin-bottom: -7px;
+      border: none;
+      background: #131c25;
+      position: relative;
+      z-index: 2;
+      >li{
+        color: white;
+        border-right-color: #22282d;
+      }
     }
   }
 
   .swiper-container{
+    .swiper-slide{
+      transition: width .3s;
+    }
     .swiper-pagination{
         position: absolute;
         left: 50%!important;
@@ -266,13 +302,14 @@ html,body{
             text-align: left;
             z-index: 1000;
             transform: translateY(-50%);
-            background-color: rgba(0, 0, 0, 0.65);
+            background-color: rgb(19, 28, 37);
             transition: all 0.15s ease;
-            padding: 25px 10px;
+            padding: 15px 10px;
             color: white;
+            box-shadow: 0px 0px 20px 0px #000;
             &:hover{
-                background-color: rgba(0, 0, 0, 0.95);
-                padding: 25px 15px; 
+                background-color: rgb(19, 28, 37);
+                padding: 15px 20px; 
             }
             &.prev{
                 left: 0;

@@ -71,7 +71,7 @@
                 <a-button 
                   size="default"
                   type="default"
-                  @click="()=> collapsed = !collapsed">
+                  @click="togglemenu">
                   <a-icon
                     :type="collapsed ? 'menu-unfold' : 'menu-fold'"
                     class="trigger"
@@ -177,6 +177,14 @@ export default {
     },
     onClose() {
       this.drawervisible = false
+    },
+    togglemenu() {
+      let self = this
+      self.collapsed = !self.collapsed
+      // ()=> collapsed = !collapsed
+      setTimeout(function() {
+        self.$root.$emit('togglemenu', self.collapsed)
+      }, 300)
     }
   }
 }
