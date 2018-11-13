@@ -10,10 +10,16 @@
     >
     <div class="sliderinfo">
       <div class="title">
-        {{ slide.name }}
+        <h5>{{ slide.name }}</h5>
       </div>
       <div class="info">
         <span class="cat">{{ slide.cat }} - {{ slide.time }} - {{ slide.year }}</span>
+      </div>
+      <div class="infoplus">
+        <h6>
+          <span class="badge">+18</span>
+          <span class="badge badge-primary">New</span>
+        </h6>
       </div>
     </div>
     <template 
@@ -43,7 +49,7 @@ export default {
   },
   computed: {},
   mounted() {
-    console.log(this.slide)
+    // console.log(this.slide)
   },
   methods: {}
 }

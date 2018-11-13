@@ -198,9 +198,12 @@ html,body{
         box-shadow: none;
       }
       .ant-card-body{
-        .info{
-          transform: translate3d(0,0,0);
+        .info,.infoplus{
+          transform: translate3d(0, 0, 0);
           opacity: 1;
+          height: auto;
+          max-height: 100px;
+          transition: max-height .35s;
         }
       }
     }
@@ -216,20 +219,46 @@ html,body{
       }
     }
     .ant-card-body{
-      padding: 5px;
+      padding: 0px;
       color: white;
       text-align: center;
       font-weight: 600;
       font-size: 16px;
       text-transform: capitalize;
-      .info{
-        transform: translate3d(0,50%,0);
+      .sliderinfo{
+        .title{
+          margin-top: 5px;
+          h5{
+            font-size: 16px;
+            margin-bottom: 5px;
+          }
+        }
+        h6{
+           margin: 5px 0; 
+        }
+      }
+      .info,.infoplus{
+        margin: 0 -10px;
+        transform: translate3d(0, 20%, 0);
         opacity: 0;
-        transition: transform 0.15s, opacity 0.15s;
+        transition: all 0.25s, opacity 0.25s, max-height 0.45s;
+        max-height: 0px;
         .cat{
           font-size: 13px;
           line-height: 13px;
           font-weight: 400;
+        }
+      }
+      .badge{
+        border-radius: 0;
+        text-transform: uppercase;
+        padding: 5px;
+        font-weight: 600;
+        background: black;
+        color: #5f5f5f;
+        &.badge-primary{
+          color: white;
+          background-color: #10d5ff;
         }
       }
     }
@@ -304,12 +333,12 @@ html,body{
             transform: translateY(-50%);
             background-color: rgb(19, 28, 37);
             transition: all 0.15s ease;
-            padding: 15px 10px;
+            padding: 20px 10px;
             color: white;
             box-shadow: 0px 0px 20px 0px #000;
             &:hover{
                 background-color: rgb(19, 28, 37);
-                padding: 15px 20px; 
+                padding: 20px 20px; 
             }
             &.prev{
                 left: 0;

@@ -48,8 +48,26 @@ export default {
       swiper: null,
       sliders: [
         {
-          name: 'slider 1',
-          cat: 'Cat name',
+          name: 'Children Of The Corn',
+          cat: 'Thriller',
+          year: '2009',
+          time: '1:09:00'
+        },
+        {
+          name: 'Children Of The Corn',
+          cat: 'Thriller',
+          year: '2009',
+          time: '1:09:00'
+        },
+        {
+          name: 'Children Of The Corn',
+          cat: 'Thriller',
+          year: '2009',
+          time: '1:09:00'
+        },
+        {
+          name: 'Children Of The Corn',
+          cat: 'Thriller',
           year: '2009',
           time: '1:09:00'
         },
@@ -102,7 +120,6 @@ export default {
   mounted() {
     let self = this
     this.$root.$on('togglemenu', data => {
-      console.log(data)
       this.swiper.update()
     })
     this.$nextTick(function() {
@@ -147,7 +164,11 @@ export default {
             spaceBetween: 0
           }
         },
-        freeMode: true
+        freeMode: true,
+        mousewheel: {
+          invert: true,
+          forceToAxis: true
+        }
       })
       this.swiper.init()
     })
