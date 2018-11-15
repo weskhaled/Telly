@@ -34,8 +34,12 @@
           </nuxt-link>
         </a-menu-item>
         <a-menu-item key="3">
-          <tv-icon class="anticon"/>
-          <span>Watch Later</span>
+          <nuxt-link 
+            to="/watchlater"
+            tag="div">
+            <tv-icon class="anticon"/>
+            <span>Watch Later</span>
+          </nuxt-link>
         </a-menu-item>
         <a-sub-menu key="sub2">
           <span slot="title"><a-icon type="appstore" /><span>Navigation Two</span></span>
@@ -185,7 +189,7 @@ export default {
       // ()=> collapsed = !collapsed
       setTimeout(function() {
         self.$root.$emit('togglemenu', self.collapsed)
-      }, 300)
+      }, 200)
     }
   }
 }
