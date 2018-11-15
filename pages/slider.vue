@@ -2,6 +2,11 @@
   <section class="container-fluid">
     <a-row type="flex">
       <a-col :span="24">
+        <h4 class="text-capitalize">Recommended to you</h4>
+      </a-col>
+    </a-row>
+    <a-row type="flex">
+      <a-col :span="24">
         <!-- Slider main container -->
         <div class="swiper-container">
           <!-- Additional required wrapper -->
