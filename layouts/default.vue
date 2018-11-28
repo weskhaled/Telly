@@ -9,9 +9,6 @@
         </span>
       </div>
       <a-menu
-        :default-selected-keys="['3']"
-        :default-open-keys="['sub1']"
-        :inline-collapsed="collapsed"
         mode="vertical"
         theme="dark"
       >
@@ -56,7 +53,7 @@
     </a-layout-sider>
     <a-layout>
       <a-layout-header>
-        <nav class="navbar navbar-expand-lg navbar-dark">
+        <nav class="navbar navbar-expand-sm navbar-dark">
           <button 
             class="navbar-toggler" 
             type="button" 
@@ -75,7 +72,7 @@
                 <a-button 
                   size="default"
                   type="default"
-                  @click="togglemenu">
+                  @click="()=> {collapsed = !collapsed;$root.$emit('togglingmenu',collapsed)}">
                   <a-icon
                     :type="collapsed ? 'menu-unfold' : 'menu-fold'"
                     class="trigger"
@@ -95,7 +92,6 @@
             <div class="menu my-2 my-lg-0">
               <a-menu
                 :style="{ lineHeight: '70px' }"
-                :default-selected-keys="['2']"
                 theme="dark"
                 mode="horizontal"
                 class="ant-row-flex ant-row-flex-end">
@@ -110,7 +106,7 @@
                 <a-menu-item 
                   key="1"
                   class="btnmenu"
-                  @click="showDrawer()">
+                  @click="drawervisible = true;">
                   <a-badge 
                     dot >
                     <a-icon type="notification" />
@@ -155,7 +151,7 @@
       width="35vw"
       title="Basic Drawer"
       placement="right"
-      @close="onClose"
+      @close="drawervisible = false;"
     >
       <p>Some contents...</p>
       <p>Some contents...</p>
@@ -176,22 +172,7 @@ export default {
       drawervisible: false
     }
   },
-  methods: {
-    showDrawer() {
-      this.drawervisible = true
-    },
-    onClose() {
-      this.drawervisible = false
-    },
-    togglemenu() {
-      let self = this
-      self.collapsed = !self.collapsed
-      // ()=> collapsed = !collapsed
-      setTimeout(function() {
-        self.$root.$emit('togglemenu', self.collapsed)
-      }, 200)
-    }
-  }
+  methods: {}
 }
 </script>
 <style>

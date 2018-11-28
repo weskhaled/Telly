@@ -2,7 +2,7 @@
   <section class="container-fluid">
     <a-row type="flex">
       <a-col :span="24">
-        <h4 class="text-capitalize">Recommended to you</h4>
+        <h4 class="text-capitalize font-weight-bold">Recommended to you</h4>
       </a-col>
     </a-row>
     <a-row type="flex">
@@ -124,9 +124,6 @@ export default {
   computed: {},
   mounted() {
     let self = this
-    this.$root.$on('togglemenu', data => {
-      this.swiper.update()
-    })
     this.$nextTick(function() {
       this.swiper = new Swiper('.swiper-container', {
         // Optional parameters
@@ -176,7 +173,24 @@ export default {
         }
       })
       this.swiper.init()
+      this.$root.$on('togglingmenu', data => {
+        console.log(data)
+        if (self.swiper !== null) {
+          setTimeout(function() {
+            self.swiper.update()
+          }, 200)
+        }
+      })
     })
+  },
+  beforeRouteLeave(to, from, next) {
+    if (this.swiper !== null) {
+      this.swiper.destroy()
+      this.swiper = null
+      next()
+    } else {
+      next()
+    }
   },
   methods: {}
 }
