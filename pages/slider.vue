@@ -2,7 +2,7 @@
   <section class="container-fluid">
     <a-row type="flex">
       <a-col :span="24">
-        <h4 class="text-capitalize font-weight-bold">Recommended to you</h4>
+        <h4 class="text-capitalize font-weight-bold text-light">Recommended to you</h4>
       </a-col>
     </a-row>
     <a-row type="flex">

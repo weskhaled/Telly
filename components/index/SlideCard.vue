@@ -12,14 +12,16 @@
       <div class="title">
         <h5>{{ slide.name }}</h5>
       </div>
-      <div class="info">
-        <span class="cat">{{ slide.cat }} - {{ slide.time }} - {{ slide.year }}</span>
-      </div>
-      <div class="infoplus">
-        <h6>
-          <span class="badge">+18</span>
-          <span class="badge badge-primary">New</span>
-        </h6>
+      <div class="plushover">
+        <div class="info">
+          <span class="cat">{{ slide.cat }} - {{ slide.time }} - {{ slide.year }}</span>
+        </div>
+        <div class="infoplus">
+          <h6>
+            <span class="badge">+18</span>
+            <span class="badge badge-primary">New</span>
+          </h6>
+        </div>
       </div>
     </div>
     <template 

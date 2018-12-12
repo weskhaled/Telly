@@ -30,8 +30,10 @@ module.exports = {
   */
   css: [
     // 'element-ui/lib/theme-chalk/index.css'
-    'ant-design-vue/dist/antd.css',
+    // 'ant-design-vue/dist/antd.css',
     // {src: '@/assets/plyr/plyr.scss', lang: 'scss'},
+    'ant-design-vue/dist/antd.css',
+    'swiper/dist/css/swiper.min.css',
     '@/assets/styles/telly.scss'
   ],
   /*

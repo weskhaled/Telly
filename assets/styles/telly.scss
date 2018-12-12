@@ -7,5 +7,22 @@
 @import './fonts/themify-icons.css';
 @import "./plyr/plyr.scss";
 @import "~bootstrap/scss/bootstrap";
-@import '~swiper/dist/css/swiper.min.css';
+@font-face {
+    font-family: 'anticon';
+    font-display: fallback;
+    src: url('../fonts/ant-icon/ant_font.eot');
+    /* IE9*/
+    src: url('../fonts/ant-icon/ant_font.woff') format('woff'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('../fonts/ant-icon/ant_font.ttf') format('truetype'), /* iOS 4.1- */ url('../fonts/ant-icon/ant_font.svg#iconfont') format('svg');
+  }
+  .anticon {
+    display: inline-block;
+    font-style: normal;
+    vertical-align: baseline;
+    text-align: center;
+    text-transform: none;
+    line-height: 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 @import './layout.scss';
