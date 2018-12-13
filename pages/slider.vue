@@ -181,6 +181,56 @@ export default {
           }, 200)
         }
       })
+      let EVENTSTOPNAV = [
+        {
+          name: 'event-prev',
+          callback: () => {
+            this.swiper.slidePrev()
+          },
+          hide: true,
+          disabled: this.swiper.isBeginning,
+          icon_classes: 'anticon anticon-left'
+        },
+        {
+          name: 'event-next',
+          callback: () => {
+            this.swiper.slideNext()
+          },
+          hide: false,
+          disabled: this.swiper.isEnd,
+          icon_classes: 'anticon anticon-right'
+        }
+      ]
+      this.$root.$emit('rebindnavevents', EVENTSTOPNAV)
+      this.swiper.on('slideChange', function() {
+        let EVENTSTOPNAV = [
+          {
+            name: 'event-prev',
+            callback: () => {
+              this.isBeginning
+                ? self.$message.info('This is a the first one')
+                : this.slidePrev()
+            },
+            hide: true,
+            disabled: this.isBeginning,
+            icon_classes: 'anticon anticon-left'
+            // disabled: false
+          },
+          {
+            name: 'event-next',
+            callback: () => {
+              this.isEnd
+                ? self.$message.info('This is a the last one')
+                : this.slideNext()
+            },
+            hide: false,
+            // disabled: this.isEnd
+            disabled: false,
+            icon_classes: 'anticon anticon-right'
+          }
+        ]
+        self.$root.$emit('rebindnavevents', EVENTSTOPNAV)
+      })
     })
   },
   beforeRouteLeave(to, from, next) {

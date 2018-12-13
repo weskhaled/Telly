@@ -80,12 +80,19 @@
                 </a-button>
               </div>
               <a-button-group
+                v-if="eventstopnav.length > 0"
                 class="btnnavig">
-                <a-button type="primary">
-                  <a-icon type="left" />
+                <a-button 
+                  :disabled="eventstopnav.length > 0 ? eventstopnav.find( ev => {return ev.name === 'event-prev'} ).disabled : true"
+                  type="primary"
+                  @click="$emit('event-prev')">
+                  <i :class="eventstopnav.find( ev => {return ev.name === 'event-prev'} ).icon_classes"/>
                 </a-button>
-                <a-button type="primary">
-                  <a-icon type="right" />
+                <a-button 
+                  :disabled="eventstopnav.length > 0 ? eventstopnav.find( ev => {return ev.name === 'event-next'} ).disabled : true"
+                  type="primary"
+                  @click="$emit('event-next')">
+                  <i :class="eventstopnav.find( ev => {return ev.name === 'event-next'} ).icon_classes"/>
                 </a-button>
               </a-button-group>
             </div>
@@ -169,8 +176,28 @@ export default {
   data() {
     return {
       collapsed: false,
-      drawervisible: false
+      drawervisible: false,
+      eventstopnav: []
     }
+  },
+  created() {
+    for (let e of this.eventstopnav) {
+      this.$on(e.name, e.callback) // Add event listeners
+    }
+    this.$root.$on('rebindnavevents', data => {
+      this.eventstopnav = data
+      for (let e of this.eventstopnav) {
+        this.$off() // Add event listeners
+      }
+      for (let e of data) {
+        this.$on(e.name, e.callback) // Add event listeners
+      }
+      // console.log(
+      //   this.eventstopnav.find(ev => {
+      //     return ev.name == 'event-next'
+      //   }).disabled
+      // )
+    })
   },
   methods: {}
 }

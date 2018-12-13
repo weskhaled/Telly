@@ -10,6 +10,7 @@
         <a-form-item class="mb-2">
           <a-input
             v-decorator="['userName',{ rules: [{ required: true, message: 'Please input your username!' }] }]"
+            size="large"
             placeholder="Username">
             <a-icon 
               slot="prefix" 
@@ -20,6 +21,7 @@
         <a-form-item class="mb-2">
           <a-input 
             v-decorator="['password',{ rules: [{ required: true, message: 'Please input your Password!' }] }]"
+            size="large"
             type="password"
             placeholder="Password">
             <a-icon 

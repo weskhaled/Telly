@@ -55,6 +55,33 @@ export default {
         })
       }
     })
+    // console.log(this.$root.layout.data().EVENTSTOPNAV[0].callback)
+    // this.$root.layout.data().EVENTSTOPNAV = [
+    //   { name: 'my-event1', callback: () => console.log('event1 from child') },
+    //   { name: 'my-event2', callback: () => console.log('event2 from child') }
+    // ]
+    let EVENTSTOPNAV = [
+      {
+        name: 'event-prev',
+        callback: () => {
+          this.player.pause()
+        },
+        hide: true,
+        disabled: false,
+        icon_classes: 'anticon anticon-like-o'
+      },
+      {
+        name: 'event-next',
+        callback: () => {
+          this.player.play()
+        },
+        hide: true,
+        disabled: false,
+        icon_classes: 'anticon anticon-dislike-o'
+      }
+    ]
+    this.$root.$emit('rebindnavevents', EVENTSTOPNAV)
+    // this.$root.layout.data().EVENTSTOPNAV.find(item)my-event1
     // this.$auth.loginWith('laravel.passport').catch(e => {
     //   this.error = e + ''
     // })
