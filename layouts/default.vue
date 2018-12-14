@@ -104,7 +104,8 @@
                 class="ant-row-flex ant-row-flex-end">
                 <a-menu-item 
                   key="2"
-                  class="btnmenu">
+                  class="btnmenu"
+                  @click="$auth.logout()">
                   <a-badge>
                     <a-icon type="search" />
                     <!-- <i class="pg-search"/> -->
@@ -132,7 +133,10 @@
                     </div>
                   </div>
                   <a-menu-item-group title="Item 1">
-                    <a-menu-item key="setting:1">Option 1</a-menu-item>
+                    <a-menu-item 
+                      key="setting:1">
+                      Logout
+                    </a-menu-item>
                     <a-menu-item key="setting:2">Option 2</a-menu-item>
                   </a-menu-item-group>
                   <a-menu-item-group title="Item 2">
@@ -162,7 +166,12 @@
     >
       <p>Some contents...</p>
       <p>Some contents...</p>
-      <p>Some contents...</p>
+      <p>{{ $auth.token || '-' }}</p>
+      <a-button 
+        type="primary" 
+        @click="logout()">
+        logout
+      </a-button>
     </a-drawer>
   </a-layout>
 </template>
@@ -199,7 +208,13 @@ export default {
       // )
     })
   },
-  methods: {}
+  methods: {
+    async logout() {
+      console.log(this.$auth)
+      return await this.$auth.logout()
+      console.log(this.$auth)
+    }
+  }
 }
 </script>
 <style>

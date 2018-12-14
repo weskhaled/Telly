@@ -41,8 +41,9 @@ module.exports = {
   */
   plugins: [
     // '@/plugins/element-ui'
-    '@/plugins/antd-ui',
+    // '@/plugins/antd-ui',
     // { src: '@/plugins/swiper', ssr: false },
+    { src: '@/plugins/antd-ui', ssr: false },
     { src: '@/plugins/bootstrap', ssr: false }
   ],
 
@@ -52,66 +53,66 @@ module.exports = {
   modules: [
     // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/axios',
-    // '@nuxtjs/auth',
+    '@nuxtjs/auth',
     '@nuxtjs/dotenv'
   ],
   auth: {
     // Options
-    // strategies: {
-    //   facebook: {
-    //     client_id: '...',
-    //     userinfo_endpoint: 'https://graph.facebook.com/v2.12/me?fields=about,name,picture{url},email,birthday',
-    //     scope: ['public_profile', 'email', 'user_birthday']
-    //   },
-    //   'laravel.passport': {
-    //     url: 'https://weslati-khaled.herokuapp.com',
-    //     client_id: '6',
-    //     client_secret: 'v9IB4luyWjebXwVDXjPjGkXav0NgWmGJpplkOYgP',
-    //     endpoints: {
-    //       login: {
-    //         url: "/oauth/token",
-    //         method: "post",
-    //         propertyName: "access_token"
-    //       },
-    //     },
-    //   },
-    //   password_grant: {
-    //     _scheme: "local",
-    //     endpoints: {
-    //       login: {
-    //         url: "/oauth/token",
-    //         method: "post",
-    //         propertyName: "access_token"
-    //       },
-    //       logout: false,
-    //       user: {
-    //         url: "api/v1/user"
-    //       }
-    //     }
-    //   },
-    //   password_grant_custom: {
-    //     _scheme: "~/auth/schemes/PassportPasswordScheme.js",
-    //     client_id: process.env.PASSPORT_PASSWORD_GRANT_ID,
-    //     client_secret: process.env.PASSPORT_PASSWORD_GRANT_SECRET,
-    //     endpoints: {
-    //       login: {
-    //         url: "/oauth/token",
-    //         method: "post",
-    //         propertyName: "access_token"
-    //       },
-    //       logout: false,
-    //       user: {
-    //         url: "api/v1/user"
-    //       }
-    //     }
-    //   },
-    //   // 'laravel.passport': {
-    //   //   url: process.env.LARAVEL_ENDPOINT,
-    //   //   client_id: process.env.PASSPORT_CLIENT_ID,
-    //   //   client_secret: process.env.PASSPORT_CLIENT_SECRET,
-    //   //   userinfo_endpoint: process.env.LARAVEL_ENDPOINT + "/api/oauth/user",
-    //   // }
-    // }
+    strategies: {
+      facebook: {
+        client_id: '580650155467411',
+        userinfo_endpoint: 'https://graph.facebook.com/v2.12/me?fields=about,name,picture{url},email,birthday',
+        scope: ['public_profile', 'email', 'user_birthday']
+      },
+      // 'laravel.passport': {
+      //   url: 'https://weslati-khaled.herokuapp.com',
+      //   client_id: '6',
+      //   client_secret: 'v9IB4luyWjebXwVDXjPjGkXav0NgWmGJpplkOYgP',
+      //   endpoints: {
+      //     login: {
+      //       url: "/oauth/token",
+      //       method: "post",
+      //       propertyName: "access_token"
+      //     },
+      //   },
+      // },
+      // password_grant: {
+      //   _scheme: "local",
+      //   endpoints: {
+      //     login: {
+      //       url: "/oauth/token",
+      //       method: "post",
+      //       propertyName: "access_token"
+      //     },
+      //     logout: false,
+      //     user: {
+      //       url: "api/v1/user"
+      //     }
+      //   }
+      // },
+      password_grant_custom: {
+        _scheme: "~/auth/schemes/PassportPasswordScheme.js",
+        client_id: process.env.PASSPORT_PASSWORD_GRANT_ID,
+        client_secret: process.env.PASSPORT_PASSWORD_GRANT_SECRET,
+        endpoints: {
+          login: {
+            url: "/oauth/token",
+            method: "post",
+            propertyName: "access_token"
+          },
+          logout: false,
+          user: {
+            url: "api/v1/user"
+          }
+        }
+      },
+      // 'laravel.passport': {
+      //   url: process.env.LARAVEL_ENDPOINT,
+      //   client_id: process.env.PASSPORT_CLIENT_ID,
+      //   client_secret: process.env.PASSPORT_CLIENT_SECRET,
+      //   userinfo_endpoint: process.env.LARAVEL_ENDPOINT + "/api/oauth/user",
+      // }
+    }
   },
   /*
   ** Axios module configuration

@@ -1,15 +1,17 @@
+<!-- eslint-disable -->
 <template>
   <section class="container-fluid login d-flex align-items-center">
     <div class="loginform-wrp mx-auto">
       <h1 class="text-center color-light">Login</h1>
       <a-form       
         id="components-form-demo-normal-login"
-        :form="form" 
+        :form="form"
         class="login-form mx-auto p-3"
         @submit="handleSubmit">
         <a-form-item class="mb-2">
           <a-input
-            v-decorator="['userName',{ rules: [{ required: true, message: 'Please input your username!' }] }]"
+            v-model="user.username"
+            v-decorator="['username',{ rules: [{ type: 'email', required: true, message: 'Please input your e-mail!' }] }]"
             size="large"
             placeholder="Username">
             <a-icon 
@@ -20,6 +22,7 @@
         </a-form-item>
         <a-form-item class="mb-2">
           <a-input 
+            v-model="user.password"
             v-decorator="['password',{ rules: [{ required: true, message: 'Please input your Password!' }] }]"
             size="large"
             type="password"
@@ -36,7 +39,7 @@
               'remember',
               {
                 valuePropName: 'checked',
-                initialValue: true,
+                initialValue: false,
               }
           ]">
             Remember me
@@ -48,14 +51,15 @@
           </a>
           <a-button 
             type="primary"
-            htmltype="submit"
+            htmlType="submit"
             size="large"
             class="login-form-button d-block w-100 mb-2">
             Log in
           </a-button>
           <a-button 
             class="login-fb-form-button d-block w-100 mb-2 d-flex align-items-center"
-            size="large">
+            size="large"
+            @click="$auth.loginWith('facebook')">
             <span class="d-block soc-icon fa fa-facebook w-25"/><span class="d-block w-75">Log in with facebook</span>
           </a-button>
           <a-button 
@@ -72,7 +76,6 @@
 
 <script>
 // import Logo from '~/components/Logo.vue'
-// import Plyr from 'plyr';
 export default {
   layout: 'layout_user',
   components: {
@@ -81,14 +84,20 @@ export default {
   data() {
     return {
       drawervisible: false,
-      form: {}
+      form: this.$form.createForm(this),
+      user: {
+        username: 'weskhaled@gmail.com',
+        password: '15021989'
+      }
     }
   },
   computed: {},
-  beforeCreate() {
+  created() {
     // this.form = this.$form.createForm(this)
   },
-  mounted() {},
+  mounted() {
+    console.log(this.$auth)
+  },
   // beforeRouteLeave(to, from, next) {
   // },
   methods: {
@@ -97,8 +106,22 @@ export default {
       this.form.validateFields((err, values) => {
         if (!err) {
           console.log('Received values of form: ', values)
+          this.passwordGrantLogin()
         }
       })
+    },
+    async passwordGrantLogin() {
+      await this.$auth.loginWith('password_grant', {
+        data: {
+          grant_type: 'password',
+          client_id: process.env.PASSPORT_CLIENT_ID,
+          client_secret: process.env.PASSPORT_CLIENT_SECRET,
+          scope: '*',
+          username: this.user.username,
+          password: this.user.password
+        }
+      })
+      this.$router.replace('/')
     }
   }
 }
@@ -113,8 +136,9 @@ export default {
 #components-form-demo-normal-login .login-form-button {
   width: 100%;
 } */
+/* eslint-disable no-new */
 .login {
-  height: 100vh;
+  min-height: 100vh;
   background: linear-gradient(
     -45deg,
     rgba(53, 50, 50, 0.9),

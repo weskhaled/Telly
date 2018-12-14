@@ -28,6 +28,7 @@
 // import Logo from '~/components/Logo.vue'
 // import Plyr from 'plyr';
 export default {
+  middleware: ['auth'],
   components: {
     // Logo
   },
@@ -55,11 +56,6 @@ export default {
         })
       }
     })
-    // console.log(this.$root.layout.data().EVENTSTOPNAV[0].callback)
-    // this.$root.layout.data().EVENTSTOPNAV = [
-    //   { name: 'my-event1', callback: () => console.log('event1 from child') },
-    //   { name: 'my-event2', callback: () => console.log('event2 from child') }
-    // ]
     let EVENTSTOPNAV = [
       {
         name: 'event-prev',
@@ -81,12 +77,11 @@ export default {
       }
     ]
     this.$root.$emit('rebindnavevents', EVENTSTOPNAV)
-    // this.$root.layout.data().EVENTSTOPNAV.find(item)my-event1
     // this.$auth.loginWith('laravel.passport').catch(e => {
     //   this.error = e + ''
     // })
     // this.passwordGrantLogin()
-    // console.log(process.env.LARAVEL_ENDPOINT)
+    console.log(process.env.LARAVEL_ENDPOINT)
   },
   beforeRouteLeave(to, from, next) {
     let self = this
@@ -101,25 +96,25 @@ export default {
     }
   },
   methods: {
-    // async customPasswordGrantLogin() {
-    //   await this.$auth.loginWith('password_grant_custom', {
-    //     data: this.user
-    //   })
-    //   this.$router.replace('/')
-    // },
-    // async passwordGrantLogin() {
-    //   await this.$auth.loginWith('password_grant', {
-    //     data: {
-    //       grant_type: 'password',
-    //       client_id: process.env.PASSPORT_CLIENT_ID,
-    //       client_secret: process.env.PASSPORT_CLIENT_SECRET,
-    //       scope: '*',
-    //       username: this.user.username,
-    //       password: this.user.password
-    //     }
-    //   })
-    //   this.$router.replace('/')
-    // }
+    async customPasswordGrantLogin() {
+      await this.$auth.loginWith('password_grant_custom', {
+        data: this.user
+      })
+      this.$router.replace('/')
+    },
+    async passwordGrantLogin() {
+      await this.$auth.loginWith('password_grant', {
+        data: {
+          grant_type: 'password',
+          client_id: process.env.PASSPORT_CLIENT_ID,
+          client_secret: process.env.PASSPORT_CLIENT_SECRET,
+          scope: '*',
+          username: this.user.username,
+          password: this.user.password
+        }
+      })
+      this.$router.replace('/')
+    }
   }
 }
 </script>
