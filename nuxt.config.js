@@ -60,9 +60,13 @@ module.exports = {
     // Options
     strategies: {
       facebook: {
-        client_id: '580650155467411',
+        client_id: '1671464192946675',
         userinfo_endpoint: 'https://graph.facebook.com/v2.12/me?fields=about,name,picture{url},email,birthday',
         scope: ['public_profile', 'email', 'user_birthday']
+      },
+      google: {
+        client_id:
+          '794562919364-h7pr8mic4dk647n1a71c5et3p8iumrc7.apps.googleusercontent.com'
       },
       // 'laravel.passport': {
       //   url: 'https://weslati-khaled.herokuapp.com',
@@ -76,20 +80,20 @@ module.exports = {
       //     },
       //   },
       // },
-      // password_grant: {
-      //   _scheme: "local",
-      //   endpoints: {
-      //     login: {
-      //       url: "/oauth/token",
-      //       method: "post",
-      //       propertyName: "access_token"
-      //     },
-      //     logout: false,
-      //     user: {
-      //       url: "api/v1/user"
-      //     }
-      //   }
-      // },
+      password_grant: {
+        _scheme: "local",
+        endpoints: {
+          login: {
+            url: "/oauth/token",
+            method: "post",
+            propertyName: "access_token"
+          },
+          logout: false,
+          user: {
+            url: "api/v1/user"
+          }
+        }
+      },
       password_grant_custom: {
         _scheme: "~/auth/schemes/PassportPasswordScheme.js",
         client_id: process.env.PASSPORT_PASSWORD_GRANT_ID,
@@ -142,8 +146,8 @@ module.exports = {
       // Run ESLint on save
       if (ctx.isDev && ctx.isClient) {
         config.module.rules.push({
-          enforce: 'pre',
-          test: /\.(js|vue)$/,
+          // enforce: 'pre',
+          test: /\.(js)$/,
           loader: 'eslint-loader',
           exclude: /(node_modules)/
         })
@@ -158,7 +162,7 @@ module.exports = {
     // ],
     postcss: false,
     extractCSS: true,
-    vendor:['jquery', 'bootstrap', 'plyr'],
+    vendor:['jquery', 'bootstrap', 'plyr', 'hls.js', 'DPlayer', 'moment'],
     plugins: [
       // set shortcuts as global for bootstrap
       new webpack.ProvidePlugin({
@@ -166,7 +170,12 @@ module.exports = {
         jQuery: 'jquery',
         'window.jQuery': 'jquery',
         Plyr: 'plyr',
-        'window.plyr': 'plyr'
+        'window.plyr': 'plyr',
+        Hls: 'hls.js',
+        'window.Hls': 'hls.js',
+        'window.dplayer': 'dplayer',
+        DPlayer: 'dplayer',
+        moment: 'moment',
       })
     ]
   }

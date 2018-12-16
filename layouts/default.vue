@@ -105,7 +105,7 @@
                 <a-menu-item 
                   key="2"
                   class="btnmenu"
-                  @click="$auth.logout()">
+                  @click="logout()">
                   <a-badge>
                     <a-icon type="search" />
                     <!-- <i class="pg-search"/> -->
@@ -166,7 +166,7 @@
     >
       <p>Some contents...</p>
       <p>Some contents...</p>
-      <p>{{ $auth.token || '-' }}</p>
+      <p>{{ $auth.token }}</p>
       <a-button 
         type="primary" 
         @click="logout()">
@@ -211,7 +211,11 @@ export default {
   methods: {
     async logout() {
       console.log(this.$auth)
-      return await this.$auth.logout()
+      this.$auth.logout().then(() => {
+        console.log('testttttt logout : ')
+        this.$router.replace('/login')
+      })
+      // return await this.$auth.logout()
       console.log(this.$auth)
     }
   }

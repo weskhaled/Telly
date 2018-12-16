@@ -13,6 +13,7 @@
             v-model="user.username"
             v-decorator="['username',{ rules: [{ type: 'email', required: true, message: 'Please input your e-mail!' }] }]"
             size="large"
+            name="username"
             placeholder="Username">
             <a-icon 
               slot="prefix" 
@@ -26,6 +27,7 @@
             v-decorator="['password',{ rules: [{ required: true, message: 'Please input your Password!' }] }]"
             size="large"
             type="password"
+            name="password"
             placeholder="Password">
             <a-icon 
               slot="prefix" 
@@ -64,8 +66,9 @@
           </a-button>
           <a-button 
             class="login-fb-form-button d-block w-100 mb-2 d-flex align-items-center"
-            size="large">
-            <span class="d-block soc-icon fa fa-google w-25"/><span class="d-block w-75">Log in with facebook</span>
+            size="large"
+            @click="$auth.loginWith('google')">
+            <span class="d-block soc-icon fa fa-google w-25"/><span class="d-block w-75">Log in with google</span>
           </a-button>
           Or <a href="">register now!</a>
         </a-form-item>
@@ -111,16 +114,30 @@ export default {
       })
     },
     async passwordGrantLogin() {
-      await this.$auth.loginWith('password_grant', {
-        data: {
-          grant_type: 'password',
-          client_id: process.env.PASSPORT_CLIENT_ID,
-          client_secret: process.env.PASSPORT_CLIENT_SECRET,
-          scope: '*',
-          username: this.user.username,
-          password: this.user.password
-        }
-      })
+      this.$message.loading('Action in progress..', 0)
+      await this.$auth
+        .loginWith('password_grant', {
+          data: {
+            grant_type: 'password',
+            client_id: process.env.PASSPORT_CLIENT_ID,
+            client_secret: process.env.PASSPORT_CLIENT_SECRET,
+            scope: '*',
+            username: this.user.username,
+            password: this.user.password
+          }
+        })
+        .then(() => {
+          console.log('testttttt login : ')
+          this.$message.destroy()
+          this.$message.success('Loged in', 2.5)
+          // setTimeout(function() {
+          //   this.$message.success('Loged in', 2.5)
+          // }, 200)
+        })
+        .catch(error => {
+          this.$message.destroy()
+          this.$message.error('' + error, 2.5)
+        })
       this.$router.replace('/')
     }
   }

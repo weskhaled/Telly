@@ -387,9 +387,116 @@ html,body{
         transform: translate(-50%, -50%);
         top: 50%;
         left: 50%;
+        .plyr__poster {
+          background-size: cover;
+        }
+      }
+    }
+    video{
+      height: 100%;
+      width: 100%;
+    }
+    #progress-bar{
+      position: relative;
+      top: -137px;
+      width: 100%;
+      background: #333;
+    }
+    #progress-bar-buffer{
+      position: relative;
+      top: -157px;
+      width: 100%;
+      background: rgb(207, 20, 20);
+    }
+    .dplayer{
+      height: 100%;
+    }
+  }
+
+
+  // player
+  .video_player_wpr{
+    height: 100%;
+    .ant-btn{
+      border: none;
+      >i {
+        font-size: 21px;
+      }
+    }
+    .player-controller-wrp {
+      position: absolute;
+      margin: 0px;
+      width: calc(100% - 0px);
+      bottom: 0;
+      z-index: 11;
+      .player-controller {
+        position: relative;
+        margin: 0px;
+        width: calc(100% - 0px);
+        .ply-progress{
+          .ant-slider {
+            margin: 0;
+            padding: 0;
+            z-index: 2;
+            .ant-slider-rail {
+              background-color: rgba(245, 245, 245, 0.2) !important;
+            }
+            /* &:hover .ant-slider-rail {
+              background-color: rgba(245, 245, 245, 0.5) !important;
+            } */
+          }
+          .buffered {
+            position: absolute;
+            top: 0;
+            background-color: #0064ffbd;
+            height: 4px;
+            width: 0px;
+            border-radius: 10px;
+            z-index: 1;
+          }
+        }
+        .ply-controles {
+          .ply-volume {
+            .ant-slider {
+              margin: 0;
+              width: 100px;
+            }
+            .btn-volume {
+              >i {
+                width: 32px;
+              }
+            }
+          }
+          .duration {
+            font-size: 14px;
+            font-family: sans-serif;
+          } 
+        }
+      }  
+    }
+    .mask{
+      position: absolute;
+      z-index: 10;
+      >div {
+        visibility: hidden;
+      }
+      &:hover > div {
+        visibility: visible;
+      }
+      .ant-btn{
+        background-color: #00aeff!important;
+        width: 55px;
+        height: 55px;
+        >i {
+          font-size: 22px;
+          color: white;
+        }
       }
     }
   }
+
+
+
 
   // reset ant
   .ant-checkbox-wrapper,.ant-form,.ant-form-item{
