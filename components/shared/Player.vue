@@ -9,18 +9,30 @@
       src=""/> 
     <div class="player-controller-wrp px-3 py-2">
       <div class="player-controller">
-          <div class="ply-progress">
-              <a-slider 
-              :min="videowrp.min" 
-              :max="videowrp.max" 
-              :value="videowrp.value"
-              :tipFormatter="null"
-              @change="onChange" 
-              @afterChange="onAfterChange"/>
+          <div class="ply-progress clearfix"
+            ref="progressbar"
+            @mouseover="mouseOverProgress"
+            @mouseleave="mouseleaveProgress">
+            <a-slider 
+            :min="videowrp.min" 
+            :max="videowrp.max" 
+            :value="videowrp.value"
+            :tipFormatter="null"
+            @change="onChange" 
+            @afterChange="onAfterChange"/>
             <span 
               :data-buffered="videowrp.buffered" 
               :style="[{'width': videowrp.buffered + '%'}]"
               class="buffered"/>
+            <span class="w-100 tooltipprogress">
+              <span class="tooltip-content" :class="videowrp.tooltip ? 'hover' : ''" :style="[{'left' : videowrp.tooltippos}]">
+                <span class="tooltip-text">
+                  <span class="tooltip-inner">
+                    <img src="images/bg_1.jpg" class="img-responsive" style="width: 100%; height: 100%;">
+                  </span>
+                </span>
+              </span>
+            </span>  
           </div>
           <div class="ply-controles d-flex">
             <div class="mr-auto d-flex">
@@ -81,7 +93,7 @@
           </div>
       </div>
     </div> 
-    <div class="mask w-100 h-100">
+    <div class="mask w-100 h-100" ref="mask">
       <div 
         class="d-flex align-items-center flex-column pb-5 w-100 h-100"
         :class="videowrp.state == 'pause' ? 'justify-content-end' : 'justify-content-center'"
@@ -97,6 +109,7 @@
             </a-button>
           </div>
           <div :class="videowrp.state == 'pause' ? 'd-flex' : 'd-none'" class="bd-highlight w-100 justify-content-center p-3">
+            <!-- <div class="d-flex w-100 align-items-end flex-column">x</div> -->
             <!-- Slider main container -->
             <div class="swiper-container">
               <!-- Additional required wrapper -->
@@ -188,7 +201,10 @@ export default {
         volumevisible: false,
         duration: 0,
         currentTime: 0,
-        extras: false
+        extras: false,
+        tooltip: false,
+        tooltippos: '0%',
+        scrolled: false
       }
     }
   },
@@ -196,7 +212,7 @@ export default {
   mounted() {
     let self = this
     this.$nextTick(function() {
-      var hlsUrl = 'videos/1/1.m3u8'
+      var hlsUrl = 'https://content.jwplatform.com/manifests/vM7nH0Kl.m3u8'
       let video = document.querySelector('video')
       // let video = self.$refs.videoref
       if (Hls.isSupported()) {
@@ -211,8 +227,8 @@ export default {
       video.addEventListener(
         'loadedmetadata',
         function() {
-          console.log('loaded')
-          console.log('moment duration : ' + moment.utc(self.player.duration * 1000).format('HH:mm:ss'))
+          // console.log('loaded')
+          // console.log('moment duration : ' + moment.utc(self.player.duration * 1000).format('HH:mm:ss'))
           self.videowrp.duration = moment.utc(self.player.duration * 1000).format('HH:mm:ss')
         },
         { once: false }
@@ -235,16 +251,18 @@ export default {
         var range = 0
         var bf = video.buffered
         var time = video.currentTime
-        while (!(bf.start(range) <= time && time <= bf.end(range))) {
-          range += 1
-        }
-        var loadStartPercentage = bf.start(range) / self.player.duration
-        var loadEndPercentage = bf.end(range) / self.player.duration
-        var loadPercentage = loadEndPercentage - loadStartPercentage
+        if (bf.length>0) {
+          while (!(bf.start(range) <= time && time <= bf.end(range))) {
+            range += 1
+          }
+          var loadStartPercentage = bf.start(range) / self.player.duration
+          var loadEndPercentage = bf.end(range) / self.player.duration
+          var loadPercentage = loadEndPercentage - loadStartPercentage
 
-        // let progressBarbf = document.getElementById('progress-bar-buffer')
-        // progressBarbf.value = loadEndPercentage * 100
-        self.videowrp.buffered = loadEndPercentage * 100
+          // let progressBarbf = document.getElementById('progress-bar-buffer')
+          // progressBarbf.value = loadEndPercentage * 100
+          self.videowrp.buffered = loadEndPercentage * 100
+        }
       })
 
       // swiper
@@ -336,7 +354,37 @@ export default {
           self.videowrp.pip = false
         })
       }
+    },
+    mouseOverProgress(event) {
+      let self = this
+      this.videowrp.tooltip = true
+      const root = document.documentElement;
+      this.$refs.progressbar.addEventListener('mousemove', evt => {
+          if (evt.target.className != 'ant-slider-handle' && evt.target.className != 'ant-slider-handle ant-slider-handle-click-focused') {
+            let x = evt.layerX / this.$refs.progressbar.clientWidth
+            // root.style.setProperty('--mouse-x-progress', x * 100 +'%')
+            self.videowrp.tooltippos = Number(x * 100).toFixed(2) + '%'
+          }
+          else {
+            this.videowrp.tooltip = false
+          }
+      })
+    },
+    mouseleaveProgress(event) {
+      this.videowrp.tooltip = false
+      event.target.removeEventListener('mousemove', evt => {
+        console.log('removeevent')
+      });
+    },
+    handleScroll () {
+      console.log('this.videowrp.scrolled')
     }
+  },
+  beforeMount () {
+    // window.addEventListener('scroll', this.handleScroll);
+  },
+  beforeDestroy () {
+    window.removeEventListener('scroll', this.handleScroll);
   }
 }
 </script>
