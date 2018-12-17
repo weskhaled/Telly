@@ -426,9 +426,10 @@ html,body{
     .player-controller-wrp {
       position: absolute;
       margin: 0px;
+      z-index: 11;
       width: calc(100% - 0px);
       bottom: 0;
-      z-index: 11;
+      box-shadow: inset 0px -45px 50px -40px black;
       .player-controller {
         position: relative;
         margin: 0px;
@@ -457,9 +458,18 @@ html,body{
         }
         .ply-controles {
           .ply-volume {
-            .ant-slider {
-              margin: 0;
-              width: 100px;
+            >.ant-slider{
+              visibility: hidden;
+              width: 0px;
+              opacity: 0;
+              transition: width 0.4s ,visibility 0.4s,opacity 0.4s;
+            }
+            &:hover {
+              >.ant-slider{
+                visibility: visible;
+                opacity: 1;
+                width: 100px;
+              }
             }
             .btn-volume {
               >i {
@@ -479,9 +489,13 @@ html,body{
       z-index: 10;
       >div {
         visibility: hidden;
+        opacity: 0;
+        transition: visibility 0.4s, opacity 0.4s;
+        background: rgba(0, 0, 0, 0.45);
       }
       &:hover > div {
         visibility: visible;
+        opacity: 0.9;
       }
       .ant-btn{
         background-color: #00aeff!important;
@@ -491,6 +505,43 @@ html,body{
           font-size: 22px;
           color: white;
         }
+      }
+      .ant-card{
+        border: none;
+        border-radius: 0;
+        .ant-card-cover img {
+          border-radius: 0;
+        }
+      }
+    }
+    video {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      // transform: translateY(calc(-100% + 250px));
+      transition: transform 0.4s;
+      object-fit: contain;
+      background: black;
+    }
+    .extras {
+      position: absolute;
+      bottom: 0;
+      opacity: 1;
+      transform: translateY(100%);
+      transition: transform 0.4s, opacity 1.4s;
+      margin-top: 200px;
+      height: calc(100% - 200px);
+      z-index: 12;
+      background: #131c25;
+      overflow: hidden;
+      overflow-y: auto;
+      &.open {
+        opacity: 1;
+        transform: translateY(0%);
+      }
+      .extras-header {
+        background: #0d1217;
+        border-bottom: 1px solid #0c1015;
       }
     }
   }

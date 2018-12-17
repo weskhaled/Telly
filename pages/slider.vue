@@ -189,7 +189,7 @@ export default {
           },
           hide: true,
           disabled: this.swiper.isBeginning,
-          icon_classes: 'anticon anticon-left'
+          icon_classes: 'ti-angle-double-left'
         },
         {
           name: 'event-next',
@@ -198,7 +198,7 @@ export default {
           },
           hide: false,
           disabled: this.swiper.isEnd,
-          icon_classes: 'anticon anticon-right'
+          icon_classes: 'ti-angle-double-right'
         }
       ]
       this.$root.$emit('rebindnavevents', EVENTSTOPNAV)
@@ -213,7 +213,7 @@ export default {
             },
             hide: true,
             disabled: this.isBeginning,
-            icon_classes: 'anticon anticon-left'
+            icon_classes: 'ti-angle-double-left'
             // disabled: false
           },
           {
@@ -226,7 +226,7 @@ export default {
             hide: false,
             // disabled: this.isEnd
             disabled: false,
-            icon_classes: 'anticon anticon-right'
+            icon_classes: 'ti-angle-double-right'
           }
         ]
         self.$root.$emit('rebindnavevents', EVENTSTOPNAV)

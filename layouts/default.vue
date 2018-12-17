@@ -73,10 +73,7 @@
                   size="default"
                   type="default"
                   @click="()=> {collapsed = !collapsed;$root.$emit('togglingmenu',collapsed)}">
-                  <a-icon
-                    :type="collapsed ? 'menu-unfold' : 'menu-fold'"
-                    class="trigger"
-                  />
+                  <i :class="collapsed ? 'ti-shift-right' : 'ti-shift-left'"/>
                 </a-button>
               </div>
               <a-button-group

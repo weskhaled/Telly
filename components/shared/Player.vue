@@ -1,9 +1,12 @@
 <template>
   <div class="video_player_wpr d-flex align-items-center" id="player">
     <video
-      crossorigin 
-      playsinline 
-      poster="images/bg_1.jpg"/>
+      class="" 
+      webkit-playsinline="" 
+      playsinline="" 
+      poster="images/bg_1.jpg" 
+      preload="none" 
+      src=""/> 
     <div class="player-controller-wrp px-3 py-2">
       <div class="player-controller">
           <div class="ply-progress">
@@ -25,33 +28,31 @@
                   class="d-flex justify-content-start">
                   <a-button 
                     ghost
-                    class="d-flex justify-content-center align-items-center mr-1"
-                    @click="">
+                    class="px-1 d-flex justify-content-center align-items-center mr-1">
                     <i :class="'ti-control-backward'"/>
                   </a-button>
                   <a-button 
                     ghost
-                    class="d-flex justify-content-center align-items-center mr-1"
+                    class="px-2 d-flex justify-content-center align-items-center mr-1"
                     @click="toggleplay()">
                     <i :class="videowrp.state == 'pause' ? 'ti-control-play' : 'ti-control-pause'"/>
                   </a-button>
                   <a-button 
                     ghost
-                    class="d-flex justify-content-center align-items-center mr-1"
-                    @click="">
+                    class="px-1 d-flex justify-content-center align-items-center mr-1">
                     <i :class="'ti-control-forward'"/>
                   </a-button>
                 </a-button-group>
                 <div class="ply-volume d-flex justify-content-start align-items-center">
                   <a-button 
                     ghost
-                    class="d-flex justify-content-center align-items-center mr-1 btn-volume"
+                    class="d-flex justify-content-center align-items-center mr-1 btn-volume px-1"
                     @click="togglemuted()">
                     <i v-if="videowrp.volume == 0" class="fa fa-volume-off"/>
                     <i v-else-if="60 >= videowrp.volume > 0" class="fa fa-volume-down"/>
                     <i v-else-if="videowrp.volume > 60" class="fa fa-volume-up"/>
                   </a-button>
-                  <a-slider class="m-0" @change="onChangeVolume" v-model="videowrp.volume" :tipFormatter="() => {return `${videowrp.volume}%`;}" />
+                  <a-slider class="m-0 mr-3" @change="onChangeVolume" v-model="videowrp.volume" :tipFormatter="() => {return `${videowrp.volume}%`;}" />
                 </div>
             </div>
             <div class="d-flex ml-auto">
@@ -60,7 +61,19 @@
               </div>
               <a-button 
                 ghost 
-                class="d-flex justify-content-center align-items-center"
+                class="px-2 mr-1 d-flex justify-content-center align-items-center"
+                @click="() => {videowrp.extras = !videowrp.extras}">
+                <i :class="videowrp.extras ? 'ti-close' : 'ti-more'"/>
+              </a-button>
+              <a-button 
+                ghost 
+                class="px-2 mr-1 d-flex justify-content-center align-items-center"
+                @click="togglepipscreen()">
+                <i :class="videowrp.pip ? 'ti-close' : 'ti-layers'"/>
+              </a-button>
+              <a-button 
+                ghost 
+                class="px-2 mr-2 d-flex justify-content-center align-items-center"
                 @click="togglefullscreen()">
                 <i :class="videowrp.fullscreen ? 'ti-close' : 'ti-layout-media-center-alt'"/>
               </a-button>
@@ -69,33 +82,89 @@
       </div>
     </div> 
     <div class="mask w-100 h-100">
-      <div class="d-flex justify-content-center align-items-center flex-column w-100 h-100">
-          <a-button 
-            ghost
-            shape="circle"
-            size="large"
-            class="d-flex justify-content-center align-items-center m-2"
-            @click="toggleplay()">
-            <i :class="videowrp.state == 'pause' ? 'ml-1 fa fa-play' : 'ti-control-pause'"/>
-          </a-button>
-          <div class="d-flex bd-highlight w-100 justify-content-center p-2">
-              <a-button 
-                ghost
-                shape="circle"
-                size="large"
-                class="d-flex justify-content-center align-items-center m-2"
-                @click="toggleplay()">
-                <i :class="videowrp.state == 'pause' ? 'ml-1 fa fa-play' : 'ti-control-pause'"/>
-              </a-button>
+      <div 
+        class="d-flex align-items-center flex-column pb-5 w-100 h-100"
+        :class="videowrp.state == 'pause' ? 'justify-content-end' : 'justify-content-center'"
+        :style="[videowrp.state == 'pause' ? {'visibility' : 'visible', 'opacity' : '0.95'} : {}]">
+          <div class="w-100 align-items-center py-3 d-flex justify-content-center">
+            <a-button 
+              ghost
+              shape="circle"
+              size="large"
+              class="d-flex justify-content-center align-items-center m-2"
+              @click="toggleplay()">
+              <i :class="videowrp.state == 'pause' ? 'ml-1 fa fa-play' : 'ti-control-pause'"/>
+            </a-button>
+          </div>
+          <div :class="videowrp.state == 'pause' ? 'd-flex' : 'd-none'" class="bd-highlight w-100 justify-content-center p-3">
+            <!-- Slider main container -->
+            <div class="swiper-container">
+              <!-- Additional required wrapper -->
+              <div class="swiper-wrapper">
+                <!-- Slides -->
+                <div v-for="index in 14"
+                  :key="index"
+                  class="swiper-slide">
+                  <a-card hoverable class="">
+                    <img
+                      alt="example"
+                      class="img-fluid"
+                      src="images/bg_1.jpg"
+                      slot="cover"
+                    />
+                    <template class="ant-card-actions" slot="actions">
+                      <a-icon type="setting" />
+                      <a-icon type="edit" />
+                      <a-icon type="ellipsis" />
+                    </template>
+                    <a-card-meta
+                      title="Card title"
+                      description="This is the description">
+                      <a-avatar slot="avatar" src="images/bg_1.jpg" />
+                    </a-card-meta>
+                  </a-card>
+                </div>
+              </div>
+              <!-- If we need pagination 
+              <div class="swiper-pagination"/>  -->
+
+              <!-- If we need navigation buttons -->
+              <nav class="">
+                <a 
+                  class="prev text-right" 
+                  href="javascript:void(0)">
+                  <span class="icon-wrap"><i class="icon fa fa-angle-left"/></span>
+                </a>
+                <a 
+                  class="next text-left" 
+                  href="javascript:void(0)">
+                  <span class="icon-wrap"><i class="icon fa fa-angle-right"/></span>
+                </a>
+              </nav>
+            </div>
           </div>
       </div>
+    </div>
+    <div class="extras w-100 p-0" :class="videowrp.extras ? 'open' : ''">
+      <div class="extras-header d-flex px-1 py-2">
+        <h3 class="text-center title d-flex m-0">test</h3>
+        <a-button 
+          ghost 
+          class="p-1 ml-auto d-flex justify-content-center align-items-center"
+          @click="videowrp.extras = false">
+          <i class="ti-close"/>
+        </a-button>
+      </div>
+      <h1 class="text-center">test</h1>
     </div>
   </div>
 </template>
 
 
 <script>
+import Swiper from 'swiper'
 export default {
+  name: 'Player',
   props: {
     video: {
       type: Object,
@@ -105,6 +174,7 @@ export default {
   data() {
     return {
       player: false,
+      swiper: null,
       videowrp: {
         value: 0,
         min: 0,
@@ -112,11 +182,13 @@ export default {
         buffered: 0,
         state: 'pause',
         fullscreen: false,
+        pip: false,
         volume: 30,
         muted: false,
         volumevisible: false,
-        duration: '00:00:00',
-        currentTime: '00:00:00'
+        duration: 0,
+        currentTime: 0,
+        extras: false
       }
     }
   },
@@ -125,7 +197,8 @@ export default {
     let self = this
     this.$nextTick(function() {
       var hlsUrl = 'videos/1/1.m3u8'
-      var video = document.querySelector('video')
+      let video = document.querySelector('video')
+      // let video = self.$refs.videoref
       if (Hls.isSupported()) {
         var hls = new Hls({ autoStartLoad: false })
         hls.loadSource(hlsUrl)
@@ -145,8 +218,6 @@ export default {
         { once: false }
       )
       self.player = video
-      // console.log('moment duration : ' + moment.utc(self.player.duration * 1000).format('HH:mm:ss'))
-      // self.videowrp.max = (self.player.currentTime / self.player.duration) * 100
       self.player.addEventListener(
         'timeupdate',
         event => {
@@ -162,8 +233,8 @@ export default {
       )
       self.player.addEventListener('progress', () => {
         var range = 0
-        var bf = self.player.buffered
-        var time = self.player.currentTime
+        var bf = video.buffered
+        var time = video.currentTime
         while (!(bf.start(range) <= time && time <= bf.end(range))) {
           range += 1
         }
@@ -174,6 +245,35 @@ export default {
         // let progressBarbf = document.getElementById('progress-bar-buffer')
         // progressBarbf.value = loadEndPercentage * 100
         self.videowrp.buffered = loadEndPercentage * 100
+      })
+
+      // swiper
+      this.swiper = new Swiper('.swiper-container', {
+        // Optional parameters
+        init: false,
+        loop: false,
+        slidesPerView: 5,
+        grabCursor: true,
+        navigation: {
+          nextEl: '.next',
+          prevEl: '.prev'
+        },
+        grabCursor: true,
+        spaceBetween: 10,
+        breakpointsInverse: true,
+        freeMode: true,
+        mousewheel: {
+          invert: true,
+          forceToAxis: true
+        }
+      })
+      this.swiper.init()
+      this.$root.$on('togglingmenu', data => {
+        if (self.swiper !== null) {
+          setTimeout(function() {
+            self.swiper.update()
+          }, 200)
+        }
       })
     })
   },
@@ -218,6 +318,24 @@ export default {
     togglemuted() {
       this.player.muted = !this.player.muted
       this.player.muted ? this.videowrp.volume = 0 : this.videowrp.volume = 30
+    },
+    togglepipscreen() {
+      let self = this;
+      if (document.pictureInPictureEnabled) {
+        if (document.pictureInPictureElement) {
+            document.exitPictureInPicture().catch(console.error)
+            this.videowrp.pip = false
+        } else {
+            this.player.requestPictureInPicture().catch(console.error)
+            this.videowrp.pip = true
+        }
+        this.player.addEventListener('enterpictureinpicture', () => {
+          self.videowrp.pip = true
+        })
+        this.player.addEventListener('leavepictureinpicture', () => {
+          self.videowrp.pip = false
+        })
+      }
     }
   }
 }

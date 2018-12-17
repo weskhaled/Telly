@@ -162,7 +162,7 @@ export default {
         },
         hide: true,
         disabled: false,
-        icon_classes: 'anticon anticon-like-o'
+        icon_classes: 'anticon anticon-like'
       },
       {
         name: 'event-next',
@@ -171,7 +171,7 @@ export default {
         },
         hide: true,
         disabled: false,
-        icon_classes: 'anticon anticon-dislike-o'
+        icon_classes: 'anticon anticon-dislike',
       }
     ]
     this.$root.$emit('rebindnavevents', EVENTSTOPNAV)
