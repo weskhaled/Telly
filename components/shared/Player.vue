@@ -49,6 +49,7 @@
                   </a-button>
                   <a-button 
                     ghost
+                    :disabled="videowrp.loading"
                     class="px-2 d-flex justify-content-center align-items-center mr-1"
                     @click="toggleplay()">
                     <i :class="videowrp.state == 'pause' ? 'ti-control-play' : 'ti-control-pause'"/>
@@ -101,6 +102,7 @@
       class="mask w-100 h-100" 
       ref="mask"
       @mousemove="mouseMoveMask"
+      @mouseover="mouseOverMask"
       @mouseleave="mouseleaveMask">
       <div 
         class="d-flex align-items-center flex-column justify-content-end pb-5 w-100 h-100"
@@ -111,6 +113,7 @@
               shape="circle"
               size="large"
               class="d-flex justify-content-center align-items-center m-2"
+              :disabled="videowrp.loading"
               @click="toggleplay()">
               <i :class="videowrp.state == 'pause' ? 'ml-1 fa fa-play' : 'ti-control-pause'"/>
             </a-button>
@@ -225,8 +228,8 @@ export default {
           hided: true
         },
         mouse: {
-          delay: null,
-          time_delay: 1,
+          timer: false,
+          fadeInBuffer: false,
           hiden: false,
           x: 0,
           y: 0
@@ -238,7 +241,8 @@ export default {
   mounted() {
     let self = this
     this.$nextTick(function() {
-      var hlsUrl = 'https://content.jwplatform.com/manifests/vM7nH0Kl.m3u8'
+      // var hlsUrl = 'https://content.jwplatform.com/manifests/vM7nH0Kl.m3u8'
+      var hlsUrl = 'videos/1/1.m3u8'
       let video = document.querySelector('video')
       // let video = self.$refs.videoref
       if (Hls.isSupported()) {
@@ -408,41 +412,49 @@ export default {
     },
     mouseMoveMask(evt) {
       let self = this
-
+      if(self.videowrp.state == 'play') {
+        if (!self.videowrp.mouse.hiden) {
+          if (self.videowrp.mouse.timer) {
+            console.log("clearTimer")
+            clearTimeout(self.videowrp.mouse.timer)
+            self.videowrp.mouse.timer = 0
+          }
+        } else {
+              self.videowrp.mouse.hiden = false
+              self.videowrp.mouse.fadeInBuffer = false;
+        }
+        self.videowrp.mouse.timer = setTimeout(function() {
+          console.log("fadeout")
+          self.videowrp.mouse.hiden = true
+          self.videowrp.mouse.fadeInBuffer = true
+        }, 3000)
+      } else {
         self.videowrp.mouse.hiden = false
-        console.log('show')
-        self.videowrp.mouse.time_delay = 1;
-        clearInterval(self.videowrp.mouse.delay)
-        self.videowrp.mouse.delay = setInterval(self.delayCheck, 500);
-
+      } 
     },
     delayCheck() {
       let self = this
-      if(self.videowrp.mouse.time_delay == 5)
-      {
-        self.videowrp.mouse.hiden = true
-        console.log('hide')
-        document.body.style.cursor = "none";
-        self.videowrp.mouse.time_delay = 1
-      }
-      if(self.videowrp.mouse.hiden) {
-         clearInterval(self.videowrp.mouse.delay)
-      }
-      self.videowrp.mouse.time_delay = self.videowrp.mouse.time_delay + 1
-    },    
-    mouseleaveMask(event) {
-      let self = this
-      clearInterval(self.videowrp.mouse.delay)
-      self.videowrp.mouse.hide = false
-      event.target.removeEventListener('mousemove', evt => {
-        console.log('removeevent')
-      })
-    }
+    },
+    mouseOverMask(event) {
+      this.videowrp.mouse.hiden = false
+      // let self = this
+      // if(!self.videowrp.mouse.hiden) {
+      //   self.videowrp.mouse.delay = setTimeout(function() {
+      //       self.videowrp.mouse.hiden = true
+      //       console.log('over and hide mouse')
+      //   }, 1000)
+      // } else {
+      //   self.videowrp.mouse.hiden = false
+      // }
+    },
+    mouseleaveMask(event) {}
   },
   beforeMount () {
     let self = this
-    // window.addEventListener('scroll', this.handleScroll);
-    self.videowrp.mouse.delay = setInterval(self.delayCheck, 500)
+    // var timer;
+    // var fadeInBuffer = false;
+    $(document).mousemove(function() {})
+    // self.videowrp.mouse.hiden = false
   },
   beforeDestroy () {
     window.removeEventListener('scroll', this.handleScroll);

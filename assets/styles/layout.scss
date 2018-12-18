@@ -688,6 +688,9 @@ html,body{
   .ant-checkbox-wrapper,.ant-form,.ant-form-item{
     color: #fff;
   }
+  .ant-btn[disabled] > i{
+    color: rgba(255, 255, 255, 0.5)
+  }
   /*change scroll css*/
   :root {
     --scroll-bar-size: 10px;
