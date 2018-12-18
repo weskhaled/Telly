@@ -1,5 +1,5 @@
 <template>
-  <div class="video_player_wpr d-flex align-items-center" id="player">
+  <div class="video_player_wpr d-flex align-items-center" id="player" :style="videowrp.mouse.hiden ? {'cursor' : 'none'} : {}">
     <video
       class="" 
       webkit-playsinline="" 
@@ -14,6 +14,7 @@
             @mouseover="mouseOverProgress"
             @mouseleave="mouseleaveProgress">
             <a-slider 
+            :disabled="videowrp.loading"
             :min="videowrp.min" 
             :max="videowrp.max" 
             :value="videowrp.value"
@@ -24,6 +25,9 @@
               :data-buffered="videowrp.buffered" 
               :style="[{'width': videowrp.buffered + '%'}]"
               class="buffered"/>
+            <span  
+              :style="[videowrp.loading ? {'opacity': '1'} : {}]"
+              class="onload progress-bar-striped progress-bar-animated"/>
             <span class="w-100 tooltipprogress">
               <span class="tooltip-content" :class="videowrp.tooltip ? 'hover' : ''" :style="[{'left' : videowrp.tooltippos}]">
                 <span class="tooltip-text">
@@ -93,10 +97,13 @@
           </div>
       </div>
     </div> 
-    <div class="mask w-100 h-100" ref="mask">
+    <div 
+      class="mask w-100 h-100" 
+      ref="mask"
+      @mousemove="mouseMoveMask"
+      @mouseleave="mouseleaveMask">
       <div 
-        class="d-flex align-items-center flex-column pb-5 w-100 h-100"
-        :class="videowrp.state == 'pause' ? 'justify-content-end' : 'justify-content-center'"
+        class="d-flex align-items-center flex-column justify-content-end pb-5 w-100 h-100"
         :style="[videowrp.state == 'pause' ? {'visibility' : 'visible', 'opacity' : '0.95'} : {}]">
           <div class="w-100 align-items-center py-3 d-flex justify-content-center">
             <a-button 
@@ -108,8 +115,15 @@
               <i :class="videowrp.state == 'pause' ? 'ml-1 fa fa-play' : 'ti-control-pause'"/>
             </a-button>
           </div>
-          <div :class="videowrp.state == 'pause' ? 'd-flex' : 'd-none'" class="bd-highlight w-100 justify-content-center p-3">
-            <!-- <div class="d-flex w-100 align-items-end flex-column">x</div> -->
+          <div :class="{'d-flex' : videowrp.state == 'pause', 'hided' : videowrp.slider.hided }" class="slider-wrp bd-highlight w-100 justify-content-center p-3 position-relative">
+            <div class="toggleslider d-flex align-items-end flex-column" :style="[videowrp.slider.hided ? {'bottom': '15px', 'top': 'auto'} : {}]">
+              <button 
+                ghost
+                class="text-light action action--close m-1"
+                @click="videowrp.slider.hided = !videowrp.slider.hided">
+                <svg :style="[videowrp.slider.hided ? {'transform': 'rotate(180deg)'} : {}]" class="icon icon--close"><use :xlink:href="videowrp.slider.hided ? '#icon-caret' : '#icon-caret'"></use></svg>
+              </button>
+            </div>
             <!-- Slider main container -->
             <div class="swiper-container">
               <!-- Additional required wrapper -->
@@ -189,6 +203,7 @@ export default {
       player: false,
       swiper: null,
       videowrp: {
+        loading: true,
         value: 0,
         min: 0,
         max: 100,
@@ -204,7 +219,18 @@ export default {
         extras: false,
         tooltip: false,
         tooltippos: '0%',
-        scrolled: false
+        scrolled: false,
+        mousehidden: false,
+        slider: {
+          hided: true
+        },
+        mouse: {
+          delay: null,
+          time_delay: 1,
+          hiden: false,
+          x: 0,
+          y: 0
+        }
       }
     }
   },
@@ -227,9 +253,7 @@ export default {
       video.addEventListener(
         'loadedmetadata',
         function() {
-          // console.log('loaded')
-          // console.log('moment duration : ' + moment.utc(self.player.duration * 1000).format('HH:mm:ss'))
-          self.videowrp.duration = moment.utc(self.player.duration * 1000).format('HH:mm:ss')
+          self.videowrp.duration = moment.utc(self.player.duration * 1000).format('HH') > 0 ? moment.utc(self.player.duration * 1000).format('HH:mm:ss') : moment.utc(self.player.duration * 1000).format('mm:ss')
         },
         { once: false }
       )
@@ -237,7 +261,7 @@ export default {
       self.player.addEventListener(
         'timeupdate',
         event => {
-          self.videowrp.currentTime = moment.utc(self.player.currentTime * 1000).format('HH:mm:ss')
+          self.videowrp.currentTime = moment.utc(self.player.currentTime * 1000).format('HH') > 0 ? moment.utc(self.player.currentTime * 1000).format('HH:mm:ss') : moment.utc(self.player.currentTime * 1000).format('mm:ss')
           let percentage = Math.floor(
             (100 / self.player.duration) * self.player.currentTime
           )
@@ -251,7 +275,8 @@ export default {
         var range = 0
         var bf = video.buffered
         var time = video.currentTime
-        if (bf.length>0) {
+        if (bf.length > 0) {
+          self.videowrp.loading = false
           while (!(bf.start(range) <= time && time <= bf.end(range))) {
             range += 1
           }
@@ -261,7 +286,9 @@ export default {
 
           // let progressBarbf = document.getElementById('progress-bar-buffer')
           // progressBarbf.value = loadEndPercentage * 100
-          self.videowrp.buffered = loadEndPercentage * 100
+          self.videowrp.buffered = Number(loadEndPercentage * 100).toFixed(2)
+        } else {
+          self.videowrp.loading = true
         }
       })
 
@@ -376,12 +403,46 @@ export default {
         console.log('removeevent')
       });
     },
-    handleScroll () {
+    handleScroll() {
       console.log('this.videowrp.scrolled')
+    },
+    mouseMoveMask(evt) {
+      let self = this
+
+        self.videowrp.mouse.hiden = false
+        console.log('show')
+        self.videowrp.mouse.time_delay = 1;
+        clearInterval(self.videowrp.mouse.delay)
+        self.videowrp.mouse.delay = setInterval(self.delayCheck, 500);
+
+    },
+    delayCheck() {
+      let self = this
+      if(self.videowrp.mouse.time_delay == 5)
+      {
+        self.videowrp.mouse.hiden = true
+        console.log('hide')
+        document.body.style.cursor = "none";
+        self.videowrp.mouse.time_delay = 1
+      }
+      if(self.videowrp.mouse.hiden) {
+         clearInterval(self.videowrp.mouse.delay)
+      }
+      self.videowrp.mouse.time_delay = self.videowrp.mouse.time_delay + 1
+    },    
+    mouseleaveMask(event) {
+      let self = this
+      clearInterval(self.videowrp.mouse.delay)
+      self.videowrp.mouse.hide = false
+      event.target.removeEventListener('mousemove', evt => {
+        console.log('removeevent')
+      })
     }
   },
   beforeMount () {
+    let self = this
     // window.addEventListener('scroll', this.handleScroll);
+    self.videowrp.mouse.delay = setInterval(self.delayCheck, 500)
   },
   beforeDestroy () {
     window.removeEventListener('scroll', this.handleScroll);

@@ -459,6 +459,17 @@ html,body{
             border-radius: 10px;
             z-index: 1;
           }
+          .onload{
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+            animation-duration: 0.2s;
+            position: absolute;
+            top: 0;
+            height: 4px;
+            border-radius: 10px;
+            opacity: 0;
+          }
           .tooltipprogress{
             position: absolute;
             top: -4px;
@@ -577,6 +588,39 @@ html,body{
         opacity: 0;
         transition: visibility 0.4s, opacity 0.4s;
         background: rgba(0, 0, 0, 0.45);
+        .toggleslider {
+          position: absolute;
+          right: 0;
+          text-align: center;
+          z-index: 3;
+          top: auto;
+          bottom: 15px;
+          transition: all 0.3s;
+          .action {
+            height: auto;
+            background: #131c25;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            &:hover, &:focus {
+              border: none;
+              outline: 0;
+            }
+            svg.icon {
+              width: 16px;
+              height: 16px;
+              transition: 0.3s transform;
+            }
+          }
+        }
+        .slider-wrp{
+          .swiper-container {
+            transition: 0.3s transform;
+          }
+          &.hided > .swiper-container{
+            transform: translateY(calc(100% + 75px));
+          }
+        }
       }
       &:hover > div {
         visibility: visible;
@@ -631,7 +675,13 @@ html,body{
     }
   }
 
-
+  svg.icon {
+    display: block;
+    width: 1.5em;
+    height: 1.5em;
+    margin: 0 auto;
+    fill: currentColor;
+  }
 
 
   // reset ant
