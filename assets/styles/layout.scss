@@ -431,6 +431,26 @@ html,body{
       width: calc(100% - 0px);
       bottom: 0;
       box-shadow: inset 0px -45px 50px -40px black;
+      &.playing {
+        >.player-controller{
+          animation-name: slideOutDown;
+        }
+      }
+      &:not(.playing) {
+        >.player-controller{
+          animation-name: slideInUp;
+        }
+      }
+      &.move {
+        >.player-controller {
+          animation-name: slideInUp!important;
+        }
+      }
+      &:hover {
+        >.player-controller {    
+          animation-name: slideInUp;
+        }
+      }
       .player-controller {
         position: relative;
         margin: 0px;
@@ -502,7 +522,7 @@ html,body{
               width: 160px;
               left: var(--mouse-x-progress); 
               // left: 50%;
-              bottom: 100%;
+              bottom: 5px;
               font-size: 20px;
               line-height: 1.4;
               text-align: center;
@@ -583,6 +603,32 @@ html,body{
     .mask{
       position: absolute;
       z-index: 10;
+      &:not(.paused) {
+        >.animated{
+          animation-name: fadeOut;
+        }
+      }
+      &.move {
+        >.animated {
+          animation-name: fadeIn!important;
+        }
+      }
+      &.paused:hover:not(.playing) {
+        >.animated {
+          animation-name: fadeIn!important;
+        }
+      }
+      
+      .overflow {
+        display: block;
+        cursor: none!important;
+        z-index: 11;
+        top: 0;
+        left: 0;
+      }
+      &.move> .overflow {
+        display: none;
+      }
       >div {
         visibility: hidden;
         opacity: 0;

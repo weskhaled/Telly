@@ -1,5 +1,5 @@
 <template>
-  <div class="video_player_wpr d-flex align-items-center" id="player" :style="videowrp.mouse.hiden ? {'cursor' : 'none'} : {}">
+  <div class="video_player_wpr d-flex align-items-center" id="player">
     <video
       class="" 
       webkit-playsinline="" 
@@ -7,106 +7,107 @@
       poster="images/bg_1.jpg" 
       preload="none" 
       src=""/> 
-    <div class="player-controller-wrp px-3 py-2">
-      <div class="player-controller">
-          <div class="ply-progress clearfix"
-            ref="progressbar"
-            @mouseover="mouseOverProgress"
-            @mouseleave="mouseleaveProgress">
-            <a-slider 
-            :disabled="videowrp.loading"
-            :min="videowrp.min" 
-            :max="videowrp.max" 
-            :value="videowrp.value"
-            :tipFormatter="null"
-            @change="onChange" 
-            @afterChange="onAfterChange"/>
-            <span 
-              :data-buffered="videowrp.buffered" 
-              :style="[{'width': videowrp.buffered + '%'}]"
-              class="buffered"/>
-            <span  
-              :style="[videowrp.loading ? {'opacity': '1'} : {}]"
-              class="onload progress-bar-striped progress-bar-animated"/>
-            <span class="w-100 tooltipprogress">
-              <span class="tooltip-content" :class="videowrp.tooltip ? 'hover' : ''" :style="[{'left' : videowrp.tooltippos}]">
-                <span class="tooltip-text">
-                  <span class="tooltip-inner">
-                    <img src="images/bg_1.jpg" class="img-responsive" style="width: 100%; height: 100%;">
-                  </span>
+    <div class="player-controller-wrp px-3 py-2" :class="{'playing' : (videowrp.state == 'play'), 'move' : videowrp.mouse.move}">
+      <div class="player-controller"
+        :class="(videowrp.state == 'play') ? 'animated fast' : 'animated fast'">
+        <div class="ply-progress clearfix"
+          ref="progressbar"
+          @mouseover="mouseOverProgress"
+          @mouseleave="mouseleaveProgress">
+          <a-slider 
+          :disabled="videowrp.loading"
+          :min="videowrp.min" 
+          :max="videowrp.max" 
+          :value="videowrp.value"
+          :tipFormatter="null"
+          @change="onChange" 
+          @afterChange="onAfterChange"/>
+          <span 
+            :data-buffered="videowrp.buffered" 
+            :style="[{'width': videowrp.buffered + '%'}]"
+            class="buffered"/>
+          <span  
+            :style="[videowrp.loading ? {'opacity': '1'} : {}]"
+            class="onload progress-bar-striped progress-bar-animated"/>
+          <span class="w-100 tooltipprogress">
+            <span class="tooltip-content" :class="videowrp.tooltip ? 'hover' : ''" :style="[{'left' : videowrp.tooltippos}]">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <img src="images/bg_1.jpg" class="img-responsive" style="width: 100%; height: 100%;">
                 </span>
               </span>
-            </span>  
-          </div>
-          <div class="ply-controles d-flex">
-            <div class="mr-auto d-flex">
-                <a-button-group
-                  class="d-flex justify-content-start">
-                  <a-button 
-                    ghost
-                    class="px-1 d-flex justify-content-center align-items-center mr-1">
-                    <i :class="'ti-control-backward'"/>
-                  </a-button>
-                  <a-button 
-                    ghost
-                    :disabled="videowrp.loading"
-                    class="px-2 d-flex justify-content-center align-items-center mr-1"
-                    @click="toggleplay()">
-                    <i :class="videowrp.state == 'pause' ? 'ti-control-play' : 'ti-control-pause'"/>
-                  </a-button>
-                  <a-button 
-                    ghost
-                    class="px-1 d-flex justify-content-center align-items-center mr-1">
-                    <i :class="'ti-control-forward'"/>
-                  </a-button>
-                </a-button-group>
-                <div class="ply-volume d-flex justify-content-start align-items-center">
-                  <a-button 
-                    ghost
-                    class="d-flex justify-content-center align-items-center mr-1 btn-volume px-1"
-                    @click="togglemuted()">
-                    <i v-if="videowrp.volume == 0" class="fa fa-volume-off"/>
-                    <i v-else-if="60 >= videowrp.volume > 0" class="fa fa-volume-down"/>
-                    <i v-else-if="videowrp.volume > 60" class="fa fa-volume-up"/>
-                  </a-button>
-                  <a-slider class="m-0 mr-3" @change="onChangeVolume" v-model="videowrp.volume" :tipFormatter="() => {return `${videowrp.volume}%`;}" />
-                </div>
-            </div>
-            <div class="d-flex ml-auto">
-              <div class="duration d-flex justify-content-center align-items-center">
-                <span>{{videowrp.currentTime}} </span> / <span> {{videowrp.duration}}</span>
+            </span>
+          </span>  
+        </div>
+        <div class="ply-controles d-flex">
+          <div class="mr-auto d-flex">
+              <a-button-group
+                class="d-flex justify-content-start">
+                <a-button 
+                  ghost
+                  class="px-1 d-flex justify-content-center align-items-center mr-1">
+                  <i :class="'ti-control-backward'"/>
+                </a-button>
+                <a-button 
+                  ghost
+                  :disabled="videowrp.loading"
+                  class="px-2 d-flex justify-content-center align-items-center mr-1"
+                  @click="toggleplay()">
+                  <i :class="videowrp.state == 'pause' ? 'ti-control-play' : 'ti-control-pause'"/>
+                </a-button>
+                <a-button 
+                  ghost
+                  class="px-1 d-flex justify-content-center align-items-center mr-1">
+                  <i :class="'ti-control-forward'"/>
+                </a-button>
+              </a-button-group>
+              <div class="ply-volume d-flex justify-content-start align-items-center">
+                <a-button 
+                  ghost
+                  class="d-flex justify-content-center align-items-center mr-1 btn-volume px-1"
+                  @click="togglemuted()">
+                  <i v-if="videowrp.volume == 0" class="fa fa-volume-off"/>
+                  <i v-else-if="60 >= videowrp.volume > 0" class="fa fa-volume-down"/>
+                  <i v-else-if="videowrp.volume > 60" class="fa fa-volume-up"/>
+                </a-button>
+                <a-slider class="m-0 mr-3" @change="onChangeVolume" v-model="videowrp.volume" :tipFormatter="() => {return `${videowrp.volume}%`;}" />
               </div>
-              <a-button 
-                ghost 
-                class="px-2 mr-1 d-flex justify-content-center align-items-center"
-                @click="() => {videowrp.extras = !videowrp.extras}">
-                <i :class="videowrp.extras ? 'ti-close' : 'ti-more'"/>
-              </a-button>
-              <a-button 
-                ghost 
-                class="px-2 mr-1 d-flex justify-content-center align-items-center"
-                @click="togglepipscreen()">
-                <i :class="videowrp.pip ? 'ti-close' : 'ti-layers'"/>
-              </a-button>
-              <a-button 
-                ghost 
-                class="px-2 mr-2 d-flex justify-content-center align-items-center"
-                @click="togglefullscreen()">
-                <i :class="videowrp.fullscreen ? 'ti-close' : 'ti-layout-media-center-alt'"/>
-              </a-button>
-            </div>
           </div>
+          <div class="d-flex ml-auto">
+            <div class="duration d-flex justify-content-center align-items-center">
+              <span>{{videowrp.currentTime}} </span> / <span> {{videowrp.duration}}</span>
+            </div>
+            <a-button 
+              ghost 
+              class="px-2 mr-1 d-flex justify-content-center align-items-center"
+              @click="() => {videowrp.extras = !videowrp.extras}">
+              <i :class="videowrp.extras ? 'ti-close' : 'ti-more'"/>
+            </a-button>
+            <a-button 
+              ghost 
+              class="px-2 mr-1 d-flex justify-content-center align-items-center"
+              @click="togglepipscreen()">
+              <i :class="videowrp.pip ? 'ti-close' : 'ti-layers'"/>
+            </a-button>
+            <a-button 
+              ghost 
+              class="px-2 mr-2 d-flex justify-content-center align-items-center"
+              @click="togglefullscreen()">
+              <i :class="videowrp.fullscreen ? 'ti-close' : 'ti-layout-media-center-alt'"/>
+            </a-button>
+          </div>
+        </div>
       </div>
     </div> 
-    <div 
-      class="mask w-100 h-100" 
+    <div class="mask w-100 h-100" 
       ref="mask"
+      :class="{'paused' : (videowrp.state == 'pause'), 'playing' : (videowrp.state == 'play'), 'move' : videowrp.mouse.move}"
       @mousemove="mouseMoveMask"
       @mouseover="mouseOverMask"
       @mouseleave="mouseleaveMask">
       <div 
-        class="d-flex align-items-center flex-column justify-content-end pb-5 w-100 h-100"
-        :style="[videowrp.state == 'pause' ? {'visibility' : 'visible', 'opacity' : '0.95'} : {}]">
+        class="d-flex align-items-center flex-column justify-content-end pb-5 w-100 h-100 animated fast"
+        :style="[videowrp.state ? {'visibility' : 'visible', 'opacity' : '0.95'} : {}]">
           <div class="w-100 align-items-center py-3 d-flex justify-content-center">
             <a-button 
               ghost
@@ -118,7 +119,10 @@
               <i :class="videowrp.state == 'pause' ? 'ml-1 fa fa-play' : 'ti-control-pause'"/>
             </a-button>
           </div>
-          <div :class="{'d-flex' : videowrp.state == 'pause', 'hided' : videowrp.slider.hided }" class="slider-wrp bd-highlight w-100 justify-content-center p-3 position-relative">
+          <div :class="{'d-flex' : videowrp.state == 'pause', 'hided' : videowrp.slider.hided }" 
+            class="slider-wrp bd-highlight w-100 justify-content-center p-3 position-relative"
+            @mouseover="videowrp.slider.mouse.hover = true"
+            @mouseleave="videowrp.slider.mouse.hover = false">
             <div class="toggleslider d-flex align-items-end flex-column" :style="[videowrp.slider.hided ? {'bottom': '15px', 'top': 'auto'} : {}]">
               <button 
                 ghost
@@ -174,6 +178,7 @@
             </div>
           </div>
       </div>
+      <span v-if="videowrp.state == 'play'" class="overflow position-absolute w-100 h-100"></span>
     </div>
     <div class="extras w-100 p-0" :class="videowrp.extras ? 'open' : ''">
       <div class="extras-header d-flex px-1 py-2">
@@ -225,11 +230,15 @@ export default {
         scrolled: false,
         mousehidden: false,
         slider: {
-          hided: true
+          hided: true,
+          mouse: {
+            hover: false
+          }
         },
         mouse: {
           timer: false,
           fadeInBuffer: false,
+          move: false,
           hiden: false,
           x: 0,
           y: 0
@@ -413,30 +422,46 @@ export default {
     mouseMoveMask(evt) {
       let self = this
       if(self.videowrp.state == 'play') {
-        if (!self.videowrp.mouse.hiden) {
-          if (self.videowrp.mouse.timer) {
-            console.log("clearTimer")
-            clearTimeout(self.videowrp.mouse.timer)
-            self.videowrp.mouse.timer = 0
-          }
-        } else {
-              self.videowrp.mouse.hiden = false
-              self.videowrp.mouse.fadeInBuffer = false;
+        if(!self.videowrp.mouse.move) {
+          console.log('move')
+          self.videowrp.mouse.move = true
+          clearTimeout(self.videowrp.mouse.timer)
+          self.videowrp.mouse.timer = setTimeout(function() {
+            self.videowrp.mouse.move = false
+            console.log('hide')
+          }, 5000)
         }
-        self.videowrp.mouse.timer = setTimeout(function() {
-          console.log("fadeout")
-          self.videowrp.mouse.hiden = true
-          self.videowrp.mouse.fadeInBuffer = true
-        }, 3000)
       } else {
         self.videowrp.mouse.hiden = false
-      } 
+      }
+
+      // if(self.videowrp.state == 'play') {
+      //   if (!self.videowrp.mouse.hiden) {
+      //     if (self.videowrp.mouse.timer) {
+      //       console.log("clearTimer")
+      //       clearTimeout(self.videowrp.mouse.timer)
+      //       self.videowrp.mouse.timer = 0
+      //     }
+      //   } else {
+      //         self.videowrp.mouse.hiden = false
+      //         self.videowrp.mouse.fadeInBuffer = false;
+      //   }
+      //   self.videowrp.mouse.timer = setTimeout(function() {
+      //     console.log("fadeout")
+      //     self.videowrp.mouse.hiden = true
+      //     self.videowrp.mouse.fadeInBuffer = true
+      //   }, 3000)
+      // } else {
+      //   self.videowrp.mouse.hiden = false
+      // } 
     },
     delayCheck() {
       let self = this
     },
     mouseOverMask(event) {
+      this.videowrp.mouse.move = false
       this.videowrp.mouse.hiden = false
+      // this.videowrp.mouse.hiden = false
       // let self = this
       // if(!self.videowrp.mouse.hiden) {
       //   self.videowrp.mouse.delay = setTimeout(function() {
@@ -447,7 +472,13 @@ export default {
       //   self.videowrp.mouse.hiden = false
       // }
     },
-    mouseleaveMask(event) {}
+    mouseleaveMask(event) {
+      let self = this
+      this.videowrp.mouse.move = false
+      if(self.videowrp.mouse.timer) {
+          clearTimeout(self.videowrp.mouse.timer)
+      }
+    }
   },
   beforeMount () {
     let self = this
