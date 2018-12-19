@@ -418,6 +418,26 @@ html,body{
   // player
   .video_player_wpr{
     height: 100%;
+    >video,
+      >.player-controller-wrp,
+      >.mask {
+      transition: .4s transform;
+    }
+    >video {
+      z-index: 2;
+      transition: .5s transform;
+    }
+    &.open-extras {
+      >video {
+        transform: translateY(calc(-50vh + 200px));
+      }
+      >.player-controller-wrp {
+        transform: translateY(calc(-50vh));
+      }
+      >.mask {
+        transform: translateY(calc(-50vh + 200px));
+      }
+    }
     .ant-btn{
       border: none;
       >i {
@@ -431,26 +451,26 @@ html,body{
       width: calc(100% - 0px);
       bottom: 0;
       box-shadow: inset 0px -45px 50px -40px black;
-      &.playing {
-        >.player-controller{
-          animation-name: slideOutDown;
-        }
-      }
-      &:not(.playing) {
-        >.player-controller{
-          animation-name: slideInUp;
-        }
-      }
-      &.move {
-        >.player-controller {
-          animation-name: slideInUp!important;
-        }
-      }
-      &:hover {
-        >.player-controller {    
-          animation-name: slideInUp;
-        }
-      }
+      // &.playing {
+      //   >.player-controller{
+      //     animation-name: slideOutDown;
+      //   }
+      // }
+      // &:not(.playing) {
+      //   >.player-controller{
+      //     animation-name: slideInUp;
+      //   }
+      // }
+      // &.move {
+      //   >.player-controller {
+      //     animation-name: slideInUp!important;
+      //   }
+      // }
+      // &:hover {
+      //   >.player-controller {    
+      //     animation-name: slideInUp;
+      //   }
+      // }
       .player-controller {
         position: relative;
         margin: 0px;
@@ -603,21 +623,21 @@ html,body{
     .mask{
       position: absolute;
       z-index: 10;
-      &:not(.paused) {
-        >.animated{
-          animation-name: fadeOut;
-        }
-      }
-      &.move {
-        >.animated {
-          animation-name: fadeIn!important;
-        }
-      }
-      &.paused:hover:not(.playing) {
-        >.animated {
-          animation-name: fadeIn!important;
-        }
-      }
+      // &:not(.paused) {
+      //   >.animated{
+      //     animation-name: fadeOut;
+      //   }
+      // }
+      // &.move {
+      //   >.animated {
+      //     animation-name: fadeIn!important;
+      //   }
+      // }
+      // &.paused:hover:not(.playing) {
+      //   >.animated {
+      //     animation-name: fadeIn!important;
+      //   }
+      // }
       
       .overflow {
         display: block;
@@ -659,14 +679,6 @@ html,body{
             }
           }
         }
-        .slider-wrp{
-          .swiper-container {
-            transition: 0.3s transform;
-          }
-          &.hided > .swiper-container{
-            transform: translateY(calc(100% + 75px));
-          }
-        }
       }
       &:hover > div {
         visibility: visible;
@@ -679,13 +691,6 @@ html,body{
         >i {
           font-size: 22px;
           color: white;
-        }
-      }
-      .ant-card{
-        border: none;
-        border-radius: 0;
-        .ant-card-cover img {
-          border-radius: 0;
         }
       }
     }
@@ -704,12 +709,11 @@ html,body{
       opacity: 1;
       transform: translateY(100%);
       transition: transform 0.4s, opacity 1.4s;
-      margin-top: 200px;
-      height: calc(100% - 200px);
+      height: calc(50vh);
+      max-height: calc(50vh);
       z-index: 12;
       background: #131c25;
       overflow: hidden;
-      overflow-y: auto;
       &.open {
         opacity: 1;
         transform: translateY(0%);
@@ -717,6 +721,27 @@ html,body{
       .extras-header {
         background: #0d1217;
         border-bottom: 1px solid #0c1015;
+      }
+      .extras-cont {
+        overflow: auto;
+        height: auto;
+        max-height: calc(50vh - 50px);
+        position: relative;
+        .slider-wrp{
+          .swiper-container {
+            transition: 0.3s transform;
+          }
+          &.hided > .swiper-container{
+            transform: translateY(calc(100% + 75px));
+          }
+        }
+        .ant-card {
+          border: none;
+          border-radius: 0;
+          .ant-card-cover img {
+            border-radius: 0;
+          }
+        }
       }
     }
   }

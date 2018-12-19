@@ -1,10 +1,9 @@
 <template>
-  <div class="video_player_wpr d-flex align-items-center" id="player">
+  <div class="video_player_wpr d-flex align-items-center" id="player" :class="{'open-extras' : videowrp.extras }">
     <video
       class="" 
       webkit-playsinline="" 
-      playsinline="" 
-      poster="images/bg_1.jpg" 
+      playsinline=""
       preload="none" 
       src=""/> 
     <div class="player-controller-wrp px-3 py-2" :class="{'playing' : (videowrp.state == 'play'), 'move' : videowrp.mouse.move}">
@@ -81,13 +80,14 @@
               ghost 
               class="px-2 mr-1 d-flex justify-content-center align-items-center"
               @click="() => {videowrp.extras = !videowrp.extras}">
-              <i :class="videowrp.extras ? 'ti-close' : 'ti-more'"/>
+              <i :class="videowrp.extras ? 'ti-minus' : 'ti-layout-cta-left'"/>
             </a-button>
             <a-button 
               ghost 
               class="px-2 mr-1 d-flex justify-content-center align-items-center"
               @click="togglepipscreen()">
-              <i :class="videowrp.pip ? 'ti-close' : 'ti-layers'"/>
+              <i :class="videowrp.pip ? 'ti-layout-width-full' : 'ti-new-window'"
+                :style="[!videowrp.pip ? {'margin-top' : '-5px'} : {}]"/>
             </a-button>
             <a-button 
               ghost 
@@ -106,7 +106,7 @@
       @mouseover="mouseOverMask"
       @mouseleave="mouseleaveMask">
       <div 
-        class="d-flex align-items-center flex-column justify-content-end pb-5 w-100 h-100 animated fast"
+        class="d-flex align-items-center flex-column justify-content-center pb-5 w-100 h-100 animated fast"
         :style="[videowrp.state ? {'visibility' : 'visible', 'opacity' : '0.95'} : {}]">
           <div class="w-100 align-items-center py-3 d-flex justify-content-center">
             <a-button 
@@ -119,79 +119,75 @@
               <i :class="videowrp.state == 'pause' ? 'ml-1 fa fa-play' : 'ti-control-pause'"/>
             </a-button>
           </div>
-          <div :class="{'d-flex' : videowrp.state == 'pause', 'hided' : videowrp.slider.hided }" 
-            class="slider-wrp bd-highlight w-100 justify-content-center p-3 position-relative"
-            @mouseover="videowrp.slider.mouse.hover = true"
-            @mouseleave="videowrp.slider.mouse.hover = false">
-            <div class="toggleslider d-flex align-items-end flex-column" :style="[videowrp.slider.hided ? {'bottom': '15px', 'top': 'auto'} : {}]">
-              <button 
-                ghost
-                class="text-light action action--close m-1"
-                @click="videowrp.slider.hided = !videowrp.slider.hided">
-                <svg :style="[videowrp.slider.hided ? {'transform': 'rotate(180deg)'} : {}]" class="icon icon--close"><use :xlink:href="videowrp.slider.hided ? '#icon-caret' : '#icon-caret'"></use></svg>
-              </button>
-            </div>
-            <!-- Slider main container -->
-            <div class="swiper-container">
-              <!-- Additional required wrapper -->
-              <div class="swiper-wrapper">
-                <!-- Slides -->
-                <div v-for="index in 14"
-                  :key="index"
-                  class="swiper-slide">
-                  <a-card hoverable class="">
-                    <img
-                      alt="example"
-                      class="img-fluid"
-                      src="images/bg_1.jpg"
-                      slot="cover"
-                    />
-                    <template class="ant-card-actions" slot="actions">
-                      <a-icon type="setting" />
-                      <a-icon type="edit" />
-                      <a-icon type="ellipsis" />
-                    </template>
-                    <a-card-meta
-                      title="Card title"
-                      description="This is the description">
-                      <a-avatar slot="avatar" src="images/bg_1.jpg" />
-                    </a-card-meta>
-                  </a-card>
-                </div>
-              </div>
-              <!-- If we need pagination 
-              <div class="swiper-pagination"/>  -->
-
-              <!-- If we need navigation buttons -->
-              <nav class="">
-                <a 
-                  class="prev text-right" 
-                  href="javascript:void(0)">
-                  <span class="icon-wrap"><i class="icon fa fa-angle-left"/></span>
-                </a>
-                <a 
-                  class="next text-left" 
-                  href="javascript:void(0)">
-                  <span class="icon-wrap"><i class="icon fa fa-angle-right"/></span>
-                </a>
-              </nav>
-            </div>
-          </div>
       </div>
       <span v-if="videowrp.state == 'play'" class="overflow position-absolute w-100 h-100"></span>
     </div>
-    <div class="extras w-100 p-0" :class="videowrp.extras ? 'open' : ''">
-      <div class="extras-header d-flex px-1 py-2">
-        <h3 class="text-center title d-flex m-0">test</h3>
-        <a-button 
-          ghost 
-          class="p-1 ml-auto d-flex justify-content-center align-items-center"
-          @click="videowrp.extras = false">
-          <i class="ti-close"/>
-        </a-button>
-      </div>
-      <h1 class="text-center">test</h1>
+    <div class="extras w-100 p-0" :class="{'open' : videowrp.extras }">
+        <div class="extras-header d-flex px-1 py-2">
+          <h4 class="text-center title d-flex m-0">list episodes</h4>
+          <a-button 
+            ghost 
+            class="p-1 ml-auto d-flex justify-content-center align-items-center"
+            @click="videowrp.extras = false">
+            <i class="ti-angle-down"/>
+          </a-button>
+        </div>
+        <div class="extras-cont">
+            <div class="d-flex slider-wrp bd-highlight w-100 justify-content-center p-3 position-relative"
+                @mouseover="sliderOver"
+                @mouseleave="videowrp.slider.mouse.hover = false;">
+                <!-- Slider main container -->
+                <div class="swiper-container">
+                  <!-- Additional required wrapper -->
+                  <div class="swiper-wrapper">
+                    <!-- Slides -->
+                    <div v-for="index in 14"
+                      :key="index"
+                      class="swiper-slide">
+                      <a-card hoverable class="">
+                        <img
+                          alt="example"
+                          class="img-fluid"
+                          src="images/bg_1.jpg"
+                          slot="cover"
+                        />
+                        <template class="ant-card-actions" slot="actions">
+                          <a-icon type="setting" />
+                          <a-icon type="edit" />
+                          <a-icon type="ellipsis" />
+                        </template>
+                        <a-card-meta
+                          title="Card title"
+                          description="This is the description">
+                          <a-avatar slot="avatar" src="images/bg_1.jpg" />
+                        </a-card-meta>
+                      </a-card>
+                    </div>
+                  </div>
+                  <!-- If we need pagination 
+                  <div class="swiper-pagination"/>  -->
+    
+                  <!-- If we need navigation buttons -->
+                  <nav class="">
+                    <a 
+                      class="prev text-right" 
+                      href="javascript:void(0)">
+                      <span class="icon-wrap"><i class="icon fa fa-angle-left"/></span>
+                    </a>
+                    <a 
+                      class="next text-left" 
+                      href="javascript:void(0)">
+                      <span class="icon-wrap"><i class="icon fa fa-angle-right"/></span>
+                    </a>
+                  </nav>
+                </div>
+            </div>
+        </div>
     </div>
+    <span 
+      class="position-absolute w-100 h-100 bg-v-poster"
+      style="background-image: url('images/bg_1.jpg');background-size: cover;"
+      :style="[{'z-index': videowrp.poster.zindex}]" />
   </div>
 </template>
 
@@ -242,6 +238,9 @@ export default {
           hiden: false,
           x: 0,
           y: 0
+        },
+        poster: {
+          zindex: 3,
         }
       }
     }
@@ -284,25 +283,33 @@ export default {
         },
         false
       )
-      self.player.addEventListener('progress', () => {
-        var range = 0
-        var bf = video.buffered
-        var time = video.currentTime
-        if (bf.length > 0) {
-          self.videowrp.loading = false
-          while (!(bf.start(range) <= time && time <= bf.end(range))) {
-            range += 1
-          }
-          var loadStartPercentage = bf.start(range) / self.player.duration
-          var loadEndPercentage = bf.end(range) / self.player.duration
-          var loadPercentage = loadEndPercentage - loadStartPercentage
-
-          // let progressBarbf = document.getElementById('progress-bar-buffer')
-          // progressBarbf.value = loadEndPercentage * 100
-          self.videowrp.buffered = Number(loadEndPercentage * 100).toFixed(2)
-        } else {
-          self.videowrp.loading = true
+      self.player.addEventListener(
+        'play',
+        () => {
+          self.videowrp.poster.zindex = 1
         }
+      )
+      self.player.addEventListener(
+        'progress', 
+        () => {
+          var range = 0
+          var bf = video.buffered
+          var time = video.currentTime
+          if (bf.length > 0) {
+            self.videowrp.loading = false
+            while (!(bf.start(range) <= time && time <= bf.end(range))) {
+              range += 1
+            }
+            var loadStartPercentage = bf.start(range) / self.player.duration
+            var loadEndPercentage = bf.end(range) / self.player.duration
+            var loadPercentage = loadEndPercentage - loadStartPercentage
+
+            // let progressBarbf = document.getElementById('progress-bar-buffer')
+            // progressBarbf.value = loadEndPercentage * 100
+            self.videowrp.buffered = Number(loadEndPercentage * 100).toFixed(2)
+          } else {
+            self.videowrp.loading = true
+          }
       })
 
       // swiper
@@ -423,13 +430,17 @@ export default {
       let self = this
       if(self.videowrp.state == 'play') {
         if(!self.videowrp.mouse.move) {
-          console.log('move')
+          console.log('move on mask')
           self.videowrp.mouse.move = true
           clearTimeout(self.videowrp.mouse.timer)
           self.videowrp.mouse.timer = setTimeout(function() {
             self.videowrp.mouse.move = false
-            console.log('hide')
+            console.log('hide the mouse')
           }, 5000)
+        }
+        if(self.videowrp.slider.mouse.hover) {
+          clearTimeout(self.videowrp.mouse.timer)
+          self.videowrp.mouse.move = true
         }
       } else {
         self.videowrp.mouse.hiden = false
@@ -478,13 +489,24 @@ export default {
       if(self.videowrp.mouse.timer) {
           clearTimeout(self.videowrp.mouse.timer)
       }
+    },
+    sliderOver() {
+      if(this.videowrp.state == 'play') {
+        if(this.videowrp.mouse.timer) {
+          if(!this.videowrp.slider.mouse.hover) {
+            this.videowrp.slider.mouse.hover = true;
+            clearTimeout(this.videowrp.mouse.timer) 
+            console.log('over the slider')
+          }
+        }
+      }
     }
   },
   beforeMount () {
     let self = this
     // var timer;
     // var fadeInBuffer = false;
-    $(document).mousemove(function() {})
+    // $(document).mousemove(function() {})
     // self.videowrp.mouse.hiden = false
   },
   beforeDestroy () {
