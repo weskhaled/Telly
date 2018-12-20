@@ -489,6 +489,12 @@ html,body{
             .ant-slider-rail {
               background-color: rgba(245, 245, 245, 0.2) !important;
             }
+            .ant-slider-track {
+              background-color: #00aaff !important;
+            }
+            .ant-slider-handle {
+              border-color: #00aaff !important;
+            }
             /* &:hover .ant-slider-rail {
               background-color: rgba(245, 245, 245, 0.5) !important;
             } */
@@ -592,7 +598,8 @@ html,body{
                     background-position-x: 0;
                     background-origin: initial;
                     background-position-y: center;
-                    background-size: auto 100%;
+                    // background-size: auto 100%;
+                    background-size: 16000px 100%;
                     background-repeat: no-repeat;
                   }
                   .tooltip-title {

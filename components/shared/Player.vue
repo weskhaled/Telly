@@ -38,7 +38,7 @@
               <span class="tooltip-text">
                 <span class="tooltip-inner">
                   <span 
-                    style="background-image: url(images/test-thumb.jpg);" 
+                    style="background-image: url(images/response.jpeg);" 
                     :style="[{'background-position-x' : bgpositionx}]"
                     class="img-thumb position-relative w-100" />
                   <!-- <img src="images/bg_1.jpg" class="img-responsive"> -->
@@ -240,6 +240,7 @@ export default {
           width: 0,
           thumb: {
             x: 0,
+            time: '00:00'
           }
         },
         tooltip: false,
@@ -285,13 +286,14 @@ export default {
       if(this.videowrp.progress.width) {
         x = (this.videowrp.progress.thumb.x *  this.videowrp.progress.width ) / 100
       }
-      return (x * 100) / this.videowrp.progress.width + '%' 
+      return '-' + ((Math.round((x * 100) / this.videowrp.progress.width)) * 160) + 'px'
     }
   },
   mounted() {
     let self = this
     this.$nextTick(function() {
       // var hlsUrl = 'https://content.jwplatform.com/manifests/vM7nH0Kl.m3u8'
+      // var hlsUrl = 'https://moeplayer.b0.upaiyun.com/dplayer/hls/hikarunara.m3u8'
       var hlsUrl = 'videos/1/1.m3u8'
       let video = document.querySelector('video')
       // let video = self.$refs.videoref
