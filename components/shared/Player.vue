@@ -1,14 +1,19 @@
 <template>
-  <div class="video_player_wpr d-flex align-items-center" id="player" :class="{'open-extras' : videowrp.extras }">
+  <div 
+    class="video_player_wpr d-flex align-items-center" 
+    id="player" 
+    :class="{'open-extras' : videowrp.extras }"
+    @contextmenu="rightClick($event)"
+    v-on:dblclick="doubleClick($event)">
     <video
       class="" 
       webkit-playsinline="" 
       playsinline=""
       preload="none" 
       src=""/> 
-    <div class="player-controller-wrp px-3 py-2" :class="{'playing' : (videowrp.state == 'play'), 'move' : videowrp.mouse.move}">
+    <div class="player-controller-wrp px-3 py-3" :class="{'playing' : (videowrp.state == 'play'), 'move' : videowrp.mouse.move}">
       <div class="player-controller"
-        :class="(videowrp.state == 'play') ? 'animated fast' : 'animated fast'">
+        :class="(videowrp.state == 'play') ? 'animated fast' : ''">
         <div class="ply-progress clearfix"
           ref="progressbar"
           @mouseover="mouseOverProgress"
@@ -29,10 +34,17 @@
             :style="[videowrp.loading ? {'opacity': '1'} : {}]"
             class="onload progress-bar-striped progress-bar-animated"/>
           <span class="w-100 tooltipprogress">
-            <span class="tooltip-content" :class="videowrp.tooltip ? 'hover' : ''" :style="[{'left' : videowrp.tooltippos}]">
+            <span class="tooltip-content" :class="videowrp.tooltip ? 'hover' : ''" :style="[{'left' : progressx}]">
               <span class="tooltip-text">
                 <span class="tooltip-inner">
-                  <img src="images/bg_1.jpg" class="img-responsive" style="width: 100%; height: 100%;">
+                  <span 
+                    style="background-image: url(images/test-thumb.jpg);" 
+                    :style="[{'background-position-x' : bgpositionx}]"
+                    class="img-thumb position-relative w-100" />
+                  <!-- <img src="images/bg_1.jpg" class="img-responsive"> -->
+                  <h5 class="tooltip-title m-0 w-100">
+                      00:00:00
+                  </h5>
                 </span>
               </span>
             </span>
@@ -93,7 +105,9 @@
               ghost 
               class="px-2 mr-2 d-flex justify-content-center align-items-center"
               @click="togglefullscreen()">
-              <i :class="videowrp.fullscreen ? 'ti-close' : 'ti-layout-media-center-alt'"/>
+              <!-- <i :class="videowrp.fullscreen ? 'ti-close' : 'ti-layout-media-center-alt'"/> -->
+              <a-icon v-if="videowrp.fullscreen" type="fullscreen-exit" />
+              <a-icon v-else-if="!videowrp.fullscreen" type="fullscreen" />
             </a-button>
           </div>
         </div>
@@ -107,6 +121,7 @@
       @mouseleave="mouseleaveMask">
       <div 
         class="d-flex align-items-center flex-column justify-content-center pb-5 w-100 h-100 animated fast"
+        :class="(videowrp.state == 'play') ? 'animated fast' : ''"
         :style="[videowrp.state ? {'visibility' : 'visible', 'opacity' : '0.95'} : {}]">
           <div class="w-100 align-items-center py-3 d-flex justify-content-center">
             <a-button 
@@ -221,8 +236,13 @@ export default {
         duration: 0,
         currentTime: 0,
         extras: false,
+        progress: {
+          width: 0,
+          thumb: {
+            x: 0,
+          }
+        },
         tooltip: false,
-        tooltippos: '0%',
         scrolled: false,
         mousehidden: false,
         slider: {
@@ -245,7 +265,29 @@ export default {
       }
     }
   },
-  computed: {},
+  computed: {
+    // un accesseur (getter) calculé
+    progressx() {
+      let x = 0
+      if(this.videowrp.progress.width) {
+        x = (this.videowrp.progress.thumb.x *  this.videowrp.progress.width ) / 100
+        if((this.videowrp.progress.thumb.x *  this.videowrp.progress.width ) / 100 < 80 ) {
+          return (80 * 100) / this.videowrp.progress.width + '%'
+        }
+        else if((this.videowrp.progress.thumb.x *  this.videowrp.progress.width ) / 100 > (this.videowrp.progress.width - 80) ) {
+          return ((this.videowrp.progress.width - 80) * 100) / this.videowrp.progress.width + '%' 
+        }
+        return (x * 100) / this.videowrp.progress.width + '%'
+      }
+    },
+    bgpositionx() {
+      let x = 0
+      if(this.videowrp.progress.width) {
+        x = (this.videowrp.progress.thumb.x *  this.videowrp.progress.width ) / 100
+      }
+      return (x * 100) / this.videowrp.progress.width + '%' 
+    }
+  },
   mounted() {
     let self = this
     this.$nextTick(function() {
@@ -405,12 +447,13 @@ export default {
     mouseOverProgress(event) {
       let self = this
       this.videowrp.tooltip = true
+      this.videowrp.progress.width = this.$refs.progressbar.clientWidth
       const root = document.documentElement;
       this.$refs.progressbar.addEventListener('mousemove', evt => {
           if (evt.target.className != 'ant-slider-handle' && evt.target.className != 'ant-slider-handle ant-slider-handle-click-focused') {
             let x = evt.layerX / this.$refs.progressbar.clientWidth
             // root.style.setProperty('--mouse-x-progress', x * 100 +'%')
-            self.videowrp.tooltippos = Number(x * 100).toFixed(2) + '%'
+            self.videowrp.progress.thumb.x = Number(x * 100).toFixed(2)
           }
           else {
             this.videowrp.tooltip = false
@@ -419,9 +462,7 @@ export default {
     },
     mouseleaveProgress(event) {
       this.videowrp.tooltip = false
-      event.target.removeEventListener('mousemove', evt => {
-        console.log('removeevent')
-      });
+      event.target.removeEventListener('mousemove', evt => {});
     },
     handleScroll() {
       console.log('this.videowrp.scrolled')
@@ -445,26 +486,6 @@ export default {
       } else {
         self.videowrp.mouse.hiden = false
       }
-
-      // if(self.videowrp.state == 'play') {
-      //   if (!self.videowrp.mouse.hiden) {
-      //     if (self.videowrp.mouse.timer) {
-      //       console.log("clearTimer")
-      //       clearTimeout(self.videowrp.mouse.timer)
-      //       self.videowrp.mouse.timer = 0
-      //     }
-      //   } else {
-      //         self.videowrp.mouse.hiden = false
-      //         self.videowrp.mouse.fadeInBuffer = false;
-      //   }
-      //   self.videowrp.mouse.timer = setTimeout(function() {
-      //     console.log("fadeout")
-      //     self.videowrp.mouse.hiden = true
-      //     self.videowrp.mouse.fadeInBuffer = true
-      //   }, 3000)
-      // } else {
-      //   self.videowrp.mouse.hiden = false
-      // } 
     },
     delayCheck() {
       let self = this
@@ -472,16 +493,6 @@ export default {
     mouseOverMask(event) {
       this.videowrp.mouse.move = false
       this.videowrp.mouse.hiden = false
-      // this.videowrp.mouse.hiden = false
-      // let self = this
-      // if(!self.videowrp.mouse.hiden) {
-      //   self.videowrp.mouse.delay = setTimeout(function() {
-      //       self.videowrp.mouse.hiden = true
-      //       console.log('over and hide mouse')
-      //   }, 1000)
-      // } else {
-      //   self.videowrp.mouse.hiden = false
-      // }
     },
     mouseleaveMask(event) {
       let self = this
@@ -500,6 +511,16 @@ export default {
           }
         }
       }
+    },
+    rightClick(e) {
+      //do stuff
+      console.log('log right click',e)
+      e.preventDefault()
+    },
+    doubleClick(e) {
+      console.log('db right click',e)
+      this.togglefullscreen()
+      e.preventDefault()
     }
   },
   beforeMount () {

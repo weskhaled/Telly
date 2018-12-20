@@ -432,16 +432,17 @@ html,body{
         transform: translateY(calc(-50vh + 200px));
       }
       >.player-controller-wrp {
-        transform: translateY(calc(-50vh));
+        transform: translateY(calc(-50vh + 1px));
       }
       >.mask {
         transform: translateY(calc(-50vh + 200px));
       }
     }
-    .ant-btn{
+    .ant-btn {
       border: none;
       >i {
         font-size: 21px;
+        line-height: 0;
       }
     }
     .player-controller-wrp {
@@ -451,26 +452,26 @@ html,body{
       width: calc(100% - 0px);
       bottom: 0;
       box-shadow: inset 0px -45px 50px -40px black;
-      // &.playing {
-      //   >.player-controller{
-      //     animation-name: slideOutDown;
-      //   }
-      // }
-      // &:not(.playing) {
-      //   >.player-controller{
-      //     animation-name: slideInUp;
-      //   }
-      // }
-      // &.move {
-      //   >.player-controller {
-      //     animation-name: slideInUp!important;
-      //   }
-      // }
-      // &:hover {
-      //   >.player-controller {    
-      //     animation-name: slideInUp;
-      //   }
-      // }
+      &.playing {
+        >.player-controller{
+          animation-name: slideOutDown;
+        }
+      }
+      &:not(.playing) {
+        >.player-controller{
+          animation-name: slideInUp;
+        }
+      }
+      &.move {
+        >.player-controller {
+          animation-name: slideInUp!important;
+        }
+      }
+      &:hover {
+        >.player-controller {    
+          animation-name: slideInUp;
+        }
+      }
       .player-controller {
         position: relative;
         margin: 0px;
@@ -478,11 +479,13 @@ html,body{
         .ply-progress{
           // height: 16px;
           margin: 8px 0;
+          margin-top: 0;
+          
           .ant-slider {
             margin: 0;
             padding: 0;
             z-index: 2;
-            height: 8px;
+            // height: 8px;
             .ant-slider-rail {
               background-color: rgba(245, 245, 245, 0.2) !important;
             }
@@ -572,11 +575,8 @@ html,body{
               .tooltip-text {
                 border-bottom: 2px solid #fffaf0;
                 overflow: hidden;
-                -webkit-transform: scale3d(0,1,1);
                 transform: scale3d(0,1,1);
-                transition: -webkit-transform .3s .3s;
                 transition: transform .3s .3s;
-                transition: transform .3s .3s,-webkit-transform .3s .3s;
                 .tooltip-inner {
                   background: #000;
                   padding: 0;
@@ -584,8 +584,23 @@ html,body{
                   max-width: inherit;
                   transform: translate3d(0,100%,0);
                   transition: transform .3s;
-                  img {
+                  img, 
+                  span.img-thumb {
                     opacity: .65;
+                    height: 85px;
+                    bottom: 0;
+                    background-position-x: 0;
+                    background-origin: initial;
+                    background-position-y: center;
+                    background-size: auto 100%;
+                    background-repeat: no-repeat;
+                  }
+                  .tooltip-title {
+                    background: white;
+                    color: black;
+                    padding: 0 5px;
+                    font-size: 14px;
+                    line-height: 20px;
                   }
                 }
               }
@@ -623,21 +638,21 @@ html,body{
     .mask{
       position: absolute;
       z-index: 10;
-      // &:not(.paused) {
-      //   >.animated{
-      //     animation-name: fadeOut;
-      //   }
-      // }
-      // &.move {
-      //   >.animated {
-      //     animation-name: fadeIn!important;
-      //   }
-      // }
-      // &.paused:hover:not(.playing) {
-      //   >.animated {
-      //     animation-name: fadeIn!important;
-      //   }
-      // }
+      &:not(.paused) {
+        >.animated{
+          animation-name: fadeOut;
+        }
+      }
+      &.move {
+        >.animated {
+          animation-name: fadeIn!important;
+        }
+      }
+      &.paused:hover:not(.paused) {
+        >.animated {
+          animation-name: fadeIn!important;
+        }
+      }
       
       .overflow {
         display: block;
