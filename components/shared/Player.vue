@@ -3,17 +3,19 @@
     class="video_player_wpr d-flex align-items-center" 
     id="player" 
     :class="{'open-extras' : videowrp.extras }"
-    @contextmenu="rightClick($event)"
-    v-on:dblclick="doubleClick($event)">
+    @contextmenu="rightClick($event)">
     <video
       class="" 
       webkit-playsinline="" 
       playsinline=""
       preload="none" 
       src=""/> 
-    <div class="player-controller-wrp px-3 py-3" :class="{'playing' : (videowrp.state == 'play'), 'move' : videowrp.mouse.move}">
-      <div class="player-controller"
-        :class="(videowrp.state == 'play') ? 'animated fast' : ''">
+    <div 
+      class="player-controller-wrp px-3 py-3" 
+      :class="{'paused' : (videowrp.state == 'pause'), 'playing' : (videowrp.state == 'play'), 'move' : videowrp.mouse.move}"
+      @mouseover="videowrp.mouse.move= true">
+      <div class="player-controller animated"
+        :class="{'' : (videowrp.state == 'play')}">
         <div class="ply-progress clearfix"
           ref="progressbar"
           @mouseover="mouseOverProgress"
@@ -24,8 +26,7 @@
           :max="videowrp.max" 
           :value="videowrp.value"
           :tipFormatter="null"
-          @change="onChange" 
-          @afterChange="onAfterChange"/>
+          @change="onChange"/>
           <span 
             :data-buffered="videowrp.buffered" 
             :style="[{'width': videowrp.buffered + '%'}]"
@@ -43,7 +44,7 @@
                     class="img-thumb position-relative w-100" />
                   <!-- <img src="images/bg_1.jpg" class="img-responsive"> -->
                   <h5 class="tooltip-title m-0 w-100">
-                      00:00:00
+                      {{hovertime}}
                   </h5>
                 </span>
               </span>
@@ -97,6 +98,12 @@
             <a-button 
               ghost 
               class="px-2 mr-1 d-flex justify-content-center align-items-center"
+              @click="() => {videowrp.settings.open = !videowrp.settings.open}">
+              <i :class="videowrp.settings.open ? 'ti-settings' : 'ti-settings'"/>
+            </a-button>
+            <a-button 
+              ghost 
+              class="px-2 mr-1 d-flex justify-content-center align-items-center"
               @click="togglepipscreen()">
               <i :class="videowrp.pip ? 'ti-layout-width-full' : 'ti-new-window'"
                 :style="[!videowrp.pip ? {'margin-top' : '-5px'} : {}]"/>
@@ -118,7 +125,8 @@
       :class="{'paused' : (videowrp.state == 'pause'), 'playing' : (videowrp.state == 'play'), 'move' : videowrp.mouse.move}"
       @mousemove="mouseMoveMask"
       @mouseover="mouseOverMask"
-      @mouseleave="mouseleaveMask">
+      @mouseleave="mouseleaveMask"
+      v-on:dblclick="doubleClick($event)">
       <div 
         class="d-flex align-items-center flex-column justify-content-center pb-5 w-100 h-100 animated fast"
         :class="(videowrp.state == 'play') ? 'animated fast' : ''"
@@ -230,7 +238,7 @@ export default {
         state: 'pause',
         fullscreen: false,
         pip: false,
-        volume: 30,
+        volume: 5,
         muted: false,
         volumevisible: false,
         duration: 0,
@@ -262,6 +270,9 @@ export default {
         },
         poster: {
           zindex: 3,
+        },
+        settings: {
+          open: false
         }
       }
     }
@@ -287,14 +298,23 @@ export default {
         x = (this.videowrp.progress.thumb.x *  this.videowrp.progress.width ) / 100
       }
       return '-' + ((Math.round((x * 100) / this.videowrp.progress.width)) * 160) + 'px'
+    },
+    hovertime() {
+      let duration = this.player.duration
+      let x = 0
+      if(this.videowrp.progress.width) {
+        x = (this.videowrp.progress.thumb.x *  this.videowrp.progress.width ) / 100
+      }
+      let time = duration * Math.round((x * 100000) / this.videowrp.progress.width) / 100000
+      return moment.utc(time * 1000).format('HH') > 0 ? moment.utc(time * 1000).format('HH:mm:ss') : moment.utc(time * 1000).format('mm:ss')
     }
   },
   mounted() {
     let self = this
     this.$nextTick(function() {
-      // var hlsUrl = 'https://content.jwplatform.com/manifests/vM7nH0Kl.m3u8'
+      var hlsUrl = 'https://content.jwplatform.com/manifests/vM7nH0Kl.m3u8'
       // var hlsUrl = 'https://moeplayer.b0.upaiyun.com/dplayer/hls/hikarunara.m3u8'
-      var hlsUrl = 'videos/1/1.m3u8'
+      // var hlsUrl = 'videos/1/1.m3u8'
       let video = document.querySelector('video')
       // let video = self.$refs.videoref
       if (Hls.isSupported()) {
@@ -391,9 +411,6 @@ export default {
       this.videowrp.value = value
       this.player.currentTime = (value * this.player.duration) / 100
     },
-    onAfterChange(value) {
-      console.log('afterChange: ', value)
-    },
     toggleplay() {
       let playState = this.player.paused ? 'play' : 'pause'
       this.player[playState](); // Call play or paused method 
@@ -489,9 +506,6 @@ export default {
         self.videowrp.mouse.hiden = false
       }
     },
-    delayCheck() {
-      let self = this
-    },
     mouseOverMask(event) {
       this.videowrp.mouse.move = false
       this.videowrp.mouse.hiden = false
@@ -517,7 +531,7 @@ export default {
     rightClick(e) {
       //do stuff
       console.log('log right click',e)
-      e.preventDefault()
+      // e.preventDefault()
     },
     doubleClick(e) {
       console.log('db right click',e)
