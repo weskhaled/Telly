@@ -37,36 +37,27 @@
       <div class="logo ant-row-flex">
         <span class="logo-text text-light">{{ collapsed ? 'T' : 'Tellyming' }}</span>
       </div>
-      <a-menu mode="vertical" theme="dark">
-        <a-menu-item key="1">
-          <nuxt-link to="/" tag="div">
-            <a-icon type="home"/>
-            <span>Discover</span>
-          </nuxt-link>
+      <a-menu
+        mode="inline"
+        theme="dark">
+        <a-menu-item key="/" @click="$router.replace('/')">
+          <a-icon type="pie-chart" />
+          <span>Index</span>
         </a-menu-item>
-        <a-menu-item key="2">
-          <nuxt-link to="/slider" tag="div">
-            <a-icon type="desktop"/>
-            <span>TV & Movies</span>
-          </nuxt-link>
+        <a-menu-item key="/slider" @click="$router.replace('/slider')">
+          <a-icon type="desktop" />
+          <span>Slider</span>
         </a-menu-item>
-        <a-menu-item key="3">
-          <nuxt-link to="/watchlater" tag="div">
-            <tv-icon class="anticon"/>
-            <span>Watch Later</span>
-          </nuxt-link>
+        <a-menu-item key="/watchlater" @click="$router.replace('/watchlater')">
+          <a-icon type="inbox" />
+          <span>Watchlater</span>
         </a-menu-item>
-        <a-sub-menu key="sub2">
-          <span slot="title">
-            <a-icon type="appstore"/>
-            <span>Navigation Two</span>
-          </span>
-          <a-menu-item key="9">Option 9</a-menu-item>
-          <a-menu-item key="10">Option 10</a-menu-item>
-          <a-sub-menu key="sub3" title="Submenu">
-            <a-menu-item key="11">Option 11</a-menu-item>
-            <a-menu-item key="12">Option 12</a-menu-item>
-          </a-sub-menu>
+        <a-sub-menu key="sub1">
+          <span slot="title"><a-icon type="mail" /><span>Navigation One</span></span>
+          <a-menu-item key="5" @click="$router.replace('/slider')">Slider</a-menu-item>
+          <a-menu-item key="6">Option 6</a-menu-item>
+          <a-menu-item key="7">Option 7</a-menu-item>
+          <a-menu-item key="8">Option 8</a-menu-item>
         </a-sub-menu>
       </a-menu>
     </a-layout-sider>
@@ -123,7 +114,7 @@
                 mode="horizontal"
                 class="ant-row-flex ant-row-flex-end"
               >
-                <a-menu-item key="2" class="btnmenu" @click="logout()">
+                <a-menu-item key="2" class="btnmenu">
                   <a-badge>
                     <a-icon type="search"/>
                     <!-- <i class="pg-search"/> -->
@@ -147,13 +138,11 @@
                       </span>
                     </div>
                   </div>
-                  <a-menu-item-group title="Item 1">
-                    <a-menu-item key="setting:1">Logout</a-menu-item>
-                    <a-menu-item key="setting:2">Option 2</a-menu-item>
+                  <a-menu-item-group title="Account">
+                    <a-menu-item key="setting:1" @click="logout">Logout</a-menu-item>
                   </a-menu-item-group>
-                  <a-menu-item-group title="Item 2">
-                    <a-menu-item key="setting:3">Option 3</a-menu-item>
-                    <a-menu-item key="setting:4">Option 4</a-menu-item>
+                  <a-menu-item-group title="Profile">
+                    <a-menu-item key="setting:3">setting</a-menu-item>
                   </a-menu-item-group>
                 </a-sub-menu>
               </a-menu>
@@ -209,22 +198,21 @@ export default {
       for (let e of data) {
         this.$on(e.name, e.callback) // Add event listeners
       }
-      // console.log(
-      //   this.eventstopnav.find(ev => {
-      //     return ev.name == 'event-next'
-      //   }).disabled
-      // )
     })
   },
   methods: {
+    linked({ item, key, keyPath }) {
+      this.$router.replace(key)
+    },
     async logout() {
-      console.log(this.$auth)
-      this.$auth.logout().then(() => {
-        console.log('testttttt logout : ')
-        this.$router.replace('/login')
+      // console.log(this.$auth)
+      return this.$auth.logout().then(() => {
+        this.$nextTick(function() {
+          this.$router.replace('/login')
+        })
       })
       // return await this.$auth.logout()
-      console.log(this.$auth)
+      // console.log(this.$auth)
     }
   }
 }

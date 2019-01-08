@@ -24,9 +24,11 @@
           :disabled="videowrp.loading"
           :min="videowrp.min" 
           :max="videowrp.max" 
+          :step="0.001"
           :value="videowrp.value"
           :tipFormatter="null"
-          @change="onChange"/>
+          @change="onChange"
+          @afterChange="onAfterChange"/>
           <span 
             :data-buffered="videowrp.buffered" 
             :style="[{'width': videowrp.buffered + '%'}]"
@@ -57,20 +59,10 @@
                 class="d-flex justify-content-start">
                 <a-button 
                   ghost
-                  class="px-1 d-flex justify-content-center align-items-center mr-1">
-                  <i :class="'ti-control-backward'"/>
-                </a-button>
-                <a-button 
-                  ghost
                   :disabled="videowrp.loading"
                   class="px-2 d-flex justify-content-center align-items-center mr-1"
                   @click="toggleplay()">
                   <i :class="videowrp.state == 'pause' ? 'ti-control-play' : 'ti-control-pause'"/>
-                </a-button>
-                <a-button 
-                  ghost
-                  class="px-1 d-flex justify-content-center align-items-center mr-1">
-                  <i :class="'ti-control-forward'"/>
                 </a-button>
               </a-button-group>
               <div class="ply-volume d-flex justify-content-start align-items-center">
@@ -95,12 +87,22 @@
               @click="() => {videowrp.extras = !videowrp.extras}">
               <i :class="videowrp.extras ? 'ti-minus' : 'ti-layout-cta-left'"/>
             </a-button>
-            <a-button 
-              ghost 
-              class="px-2 mr-1 d-flex justify-content-center align-items-center"
-              @click="() => {videowrp.settings.open = !videowrp.settings.open}">
-              <i :class="videowrp.settings.open ? 'ti-settings' : 'ti-settings'"/>
-            </a-button>
+            <a-popover 
+              title="Title"
+              trigger="click"
+              :getPopupContainer="modalcontainer"
+              v-model="videowrp.settings.open">
+              <template slot="content">
+                  <a-slider :defaultValue="30"/>
+                  <a-slider range :defaultValue="[20, 50]"/>
+                  Disabled: <a-switch size="small" v-model="visible"/>
+              </template>
+              <a-button 
+                ghost 
+                class="px-2 mr-1 d-flex justify-content-center align-items-center">
+                <i :class="videowrp.settings.open ? 'ti-settings fa-spin' : 'ti-settings'"/>
+              </a-button>
+            </a-popover>
             <a-button 
               ghost 
               class="px-2 mr-1 d-flex justify-content-center align-items-center"
@@ -116,6 +118,20 @@
               <a-icon v-if="videowrp.fullscreen" type="fullscreen-exit" />
               <a-icon v-else-if="!videowrp.fullscreen" type="fullscreen" />
             </a-button>
+            <div class="tolltips">
+                <span data-v-0b7c0140="" class="tooltip-content">
+                  <span data-v-0b7c0140="" class="tooltip-text">
+                    <span data-v-0b7c0140="" class="tooltip-inner">
+                        <div class="tool-content">
+                            <a-slider :defaultValue="30"/>
+                            <a-slider range :defaultValue="[20, 50]"/>
+                            Disabled: <a-switch size="small" v-model="visible"/>
+                        </div>
+                      <h5 data-v-0b7c0140="" class="tooltip-title m-0 w-100">settings</h5>
+                    </span>
+                  </span>
+                </span>
+            </div>
           </div>
         </div>
       </div>
@@ -128,7 +144,7 @@
       @mouseleave="mouseleaveMask"
       v-on:dblclick="doubleClick($event)">
       <div 
-        class="d-flex align-items-center flex-column justify-content-center pb-5 w-100 h-100 animated fast"
+        class="d-flex align-items-center flex-column justify-content-center w-100 h-100 animated fast"
         :class="(videowrp.state == 'play') ? 'animated fast' : ''"
         :style="[videowrp.state ? {'visibility' : 'visible', 'opacity' : '0.95'} : {}]">
           <div class="w-100 align-items-center py-3 d-flex justify-content-center">
@@ -180,9 +196,7 @@
                           <a-icon type="ellipsis" />
                         </template>
                         <a-card-meta
-                          title="Card title"
-                          description="This is the description">
-                          <a-avatar slot="avatar" src="images/bg_1.jpg" />
+                          title="Card title">
                         </a-card-meta>
                       </a-card>
                     </div>
@@ -211,6 +225,15 @@
       class="position-absolute w-100 h-100 bg-v-poster"
       style="background-image: url('images/bg_1.jpg');background-size: cover;"
       :style="[{'z-index': videowrp.poster.zindex}]" />
+    <a-modal
+      title="Basic Modal"
+      v-model="visible"
+      :maskClosable="true"
+      :getContainer="modalcontainer">
+      <div class="modalcontent">
+        <slot name="modalcontent" />
+      </div>
+    </a-modal>
   </div>
 </template>
 
@@ -229,6 +252,8 @@ export default {
     return {
       player: false,
       swiper: null,
+      hls: false,
+      visible: false,
       videowrp: {
         loading: true,
         value: 0,
@@ -312,64 +337,97 @@ export default {
   mounted() {
     let self = this
     this.$nextTick(function() {
-      var hlsUrl = 'https://content.jwplatform.com/manifests/vM7nH0Kl.m3u8'
+      // var hlsUrl = 'https://content.jwplatform.com/manifests/vM7nH0Kl.m3u8'
       // var hlsUrl = 'https://moeplayer.b0.upaiyun.com/dplayer/hls/hikarunara.m3u8'
-      // var hlsUrl = 'videos/1/1.m3u8'
-      let video = document.querySelector('video')
+      let hlsUrl = 'videos/1/1.m3u8'
+      self.player = document.querySelector('video')
       // let video = self.$refs.videoref
       if (Hls.isSupported()) {
-        var hls = new Hls({ autoStartLoad: false })
-        hls.loadSource(hlsUrl)
-        hls.attachMedia(video)
+        self.hls = new Hls({ autoStartLoad: false })
+        self.hls.loadSource(hlsUrl)
+        self.hls.attachMedia(self.player)
       } else {
-        var nativeHLS = video.canPlayType('application/vnd.apple.mpegurl')
-        video.src = nativeHLS ? hlsUrl : fallbackUrl
+        let nativeHLS = self.player.canPlayType('application/vnd.apple.mpegurl')
+        self.player.src = nativeHLS ? hlsUrl : fallbackUrl
       }
-      hls.startLoad()
-      video.addEventListener(
+      self.hls.startLoad()
+      self.player.addEventListener(
         'loadedmetadata',
         function() {
           self.videowrp.duration = moment.utc(self.player.duration * 1000).format('HH') > 0 ? moment.utc(self.player.duration * 1000).format('HH:mm:ss') : moment.utc(self.player.duration * 1000).format('mm:ss')
+          self.player.volume = self.videowrp.volume/100
         },
         { once: false }
       )
-      self.player = video
       self.player.addEventListener(
         'timeupdate',
         event => {
+          // console.log('timeup evt current Time: ',self.player.currentTime)
           self.videowrp.currentTime = moment.utc(self.player.currentTime * 1000).format('HH') > 0 ? moment.utc(self.player.currentTime * 1000).format('HH:mm:ss') : moment.utc(self.player.currentTime * 1000).format('mm:ss')
           let percentage = Math.floor(
             (100 / self.player.duration) * self.player.currentTime
           )
-          // progressBar.value = percentage
           self.videowrp.value =
             (self.player.currentTime / self.player.duration) * 100
         },
         false
       )
+      let range = 0
+
       self.player.addEventListener(
         'play',
         () => {
           self.videowrp.poster.zindex = 1
+
+          // let range = 0
+          let bf = self.player.buffered
+          let time = self.player.currentTime
+          if (bf.length > 0) {
+            self.videowrp.loading = false
+            try {
+              while (!(bf.start(range) <= time && time <= bf.end(range))) {
+                range += 1
+              }
+            }
+            catch(error) {
+              // expected output: ReferenceError: nonExistentFunction is not defined
+              // Note - error messages will vary depending on browser
+              range = 0
+            }
+
+            let loadStartPercentage = bf.start(range) / self.player.duration
+            let loadEndPercentage = bf.end(range) / self.player.duration
+            let loadPercentage = loadEndPercentage - loadStartPercentage
+
+            self.videowrp.buffered = Number(loadEndPercentage * 100).toFixed(2)
+          } else {
+            self.videowrp.loading = true
+          }
         }
       )
       self.player.addEventListener(
         'progress', 
         () => {
-          var range = 0
-          var bf = video.buffered
-          var time = video.currentTime
+          // let range = 0
+          let bf = self.player.buffered
+          let time = self.player.currentTime
           if (bf.length > 0) {
             self.videowrp.loading = false
-            while (!(bf.start(range) <= time && time <= bf.end(range))) {
-              range += 1
+            try {
+              while (!(bf.start(range) <= time && time <= bf.end(range))) {
+                range += 1
+              }
             }
-            var loadStartPercentage = bf.start(range) / self.player.duration
-            var loadEndPercentage = bf.end(range) / self.player.duration
-            var loadPercentage = loadEndPercentage - loadStartPercentage
+            catch(error) {
+              // expected output: ReferenceError: nonExistentFunction is not defined
+              // Note - error messages will vary depending on browser
+              range = 0
+            }
 
-            // let progressBarbf = document.getElementById('progress-bar-buffer')
-            // progressBarbf.value = loadEndPercentage * 100
+            let loadStartPercentage = bf.start(range) / self.player.duration
+            let loadEndPercentage = bf.end(range) / self.player.duration
+            let loadPercentage = loadEndPercentage - loadStartPercentage
+
             self.videowrp.buffered = Number(loadEndPercentage * 100).toFixed(2)
           } else {
             self.videowrp.loading = true
@@ -409,7 +467,12 @@ export default {
   methods: {
     onChange(value) {
       this.videowrp.value = value
-      this.player.currentTime = (value * this.player.duration) / 100
+      this.player.currentTime = Math.floor(Number((this.player.duration * value) / 100).toFixed(7) * 1000000) / 1000000
+      // this.player.currentTime = (value * this.player.duration) / 100
+    },
+    onAfterChange(value) {
+      // console.log('timeup evt current Time after chage: ',this.player.currentTime)
+      // console.log('new current time change value * percent : ', Math.floor(Number((this.player.duration * value) / 100).toFixed(7) * 1000000) / 1000000)
     },
     toggleplay() {
       let playState = this.player.paused ? 'play' : 'pause'
@@ -490,12 +553,13 @@ export default {
       let self = this
       if(self.videowrp.state == 'play') {
         if(!self.videowrp.mouse.move) {
-          console.log('move on mask')
+          // console.log('move on mask')
           self.videowrp.mouse.move = true
           clearTimeout(self.videowrp.mouse.timer)
+          self.videowrp.mouse.timer = false
           self.videowrp.mouse.timer = setTimeout(function() {
             self.videowrp.mouse.move = false
-            console.log('hide the mouse')
+            // console.log('hide the mouse')
           }, 5000)
         }
         if(self.videowrp.slider.mouse.hover) {
@@ -537,6 +601,9 @@ export default {
       console.log('db right click',e)
       this.togglefullscreen()
       e.preventDefault()
+    },
+    modalcontainer() {
+      return document.getElementById("player")
     }
   },
   beforeMount () {
