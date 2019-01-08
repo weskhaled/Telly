@@ -41,12 +41,16 @@
         mode="inline"
         theme="dark">
         <a-menu-item key="/" @click="$router.replace('/')">
-          <a-icon type="pie-chart" />
-          <span>Index</span>
+          <a-icon type="home" />
+          <span>Home</span>
         </a-menu-item>
         <a-menu-item key="/slider" @click="$router.replace('/slider')">
           <a-icon type="desktop" />
-          <span>Slider</span>
+          <span>Movies</span>
+        </a-menu-item>
+        <a-menu-item key="/tv-show" @click="$router.replace('/slider')">
+          <a-icon type="video-camera" />          
+          <span>TV Shows</span>
         </a-menu-item>
         <a-menu-item key="/watchlater" @click="$router.replace('/watchlater')">
           <a-icon type="inbox" />
