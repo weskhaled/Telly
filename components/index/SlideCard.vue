@@ -14,10 +14,11 @@
       </div>
       <div class="plushover">
         <div class="info">
-          <span class="cat">{{ slide.cat }} - {{ slide.time }} - {{ slide.year }}</span>
+          <span class="cat">{{ slide.cat }} - {{ slide.time }}</span>
         </div>
         <div class="infoplus">
           <h6>
+            <span class="badge">{{ slide.year }}</span>
             <span class="badge">+18</span>
             <span class="badge badge-primary">New</span>
           </h6>
@@ -46,7 +47,7 @@ export default {
   },
   data() {
     return {
-      admin: true
+      admin: this.$auth.$state.loggedIn
     }
   },
   computed: {},

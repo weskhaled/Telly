@@ -98,9 +98,7 @@ export default {
   created() {
     // this.form = this.$form.createForm(this)
   },
-  mounted() {
-    console.log(this.$auth)
-  },
+  mounted() {},
   // beforeRouteLeave(to, from, next) {
   // },
   methods: {
@@ -108,7 +106,6 @@ export default {
       e.preventDefault()
       this.form.validateFields((err, values) => {
         if (!err) {
-          console.log('Received values of form: ', values)
           this.passwordGrantLogin()
         }
       })
@@ -127,7 +124,6 @@ export default {
           }
         })
         .then(() => {
-          console.log('testttttt login : ')
           this.$message.destroy()
           this.$message.success('Loged in', 2.5)
           // setTimeout(function() {

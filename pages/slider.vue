@@ -1,8 +1,15 @@
 <template>
   <section class="container-fluid">
     <a-row type="flex">
-      <a-col :span="24">
-        <h4 class="text-capitalize font-weight-bold text-light">Recommended to you</h4>
+      <a-col class="d-flex" :span="24">
+        <h4 class="d-inline text-capitalize font-weight-bold text-light">Recommended to you</h4>
+        <div class="d-inline ml-auto" v-if="$auth.$state.loggedIn">
+          <a-button 
+            type="primary" 
+            size="small"
+            @click="visible = true"
+            > Add new </a-button>
+        </div>
       </a-col>
     </a-row>
     <a-row type="flex">
@@ -38,6 +45,137 @@
         </div>
       </a-col>
     </a-row>
+    <a-row type="flex">
+      <a-col class="d-flex" :span="24">
+        <h4 class="d-inline text-capitalize font-weight-bold text-light">News Movies</h4>
+      </a-col>
+    </a-row>
+    <a-modal
+      title="Basic Modal"
+      v-model="visible"
+      :maskClosable="true"
+      :getContainer="modalcontainer">
+      <div class="modalcontent">
+
+        <a-form id='components-form-demo-validate-other' @submit="handleSubmit" :form="form">
+          <a-form-item
+            v-bind="formItemLayout"
+          >
+            <span slot="label">
+              Nickname&nbsp;
+              <a-tooltip title='What do you want others to call you?'>
+                <a-icon type='question-circle-o' />
+              </a-tooltip>
+            </span>
+            <a-input
+              v-decorator="[
+                'nickname',
+                {
+                  rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }]
+                }
+              ]"
+            />
+          </a-form-item>
+          <a-form-item
+            v-bind="formItemLayout"
+            label='Select'
+            hasFeedback
+          >
+            <a-select
+              v-decorator="[
+                'select',
+                {rules: [{ required: true, message: 'Please select your country!' }]}
+              ]"
+              placeholder='Please select a country'
+            >
+              <a-select-option value='china'>China</a-select-option>
+              <a-select-option value='usa'>U.S.A</a-select-option>
+            </a-select>
+          </a-form-item>
+
+          <a-form-item
+            v-bind="formItemLayout"
+            label='Select[multiple]'
+          >
+            <a-select
+              v-decorator="[
+                'select-multiple', {
+                rules: [{ required: true, message: 'Please select your favourite colors!', type: 'array' }],
+              }]"
+              mode='multiple'
+              placeholder='Please select favourite colors'
+            >
+              <a-select-option value='red'>Red</a-select-option>
+              <a-select-option value='green'>Green</a-select-option>
+              <a-select-option value='blue'>Blue</a-select-option>
+            </a-select>
+          </a-form-item>
+
+          <a-form-item
+            v-bind="formItemLayout"
+            label='MonthPicker'
+          >
+            <a-monthPicker/>
+          </a-form-item>
+
+          <a-form-item
+            v-bind="formItemLayout"
+            label='Switch'
+          >
+            <a-switch v-decorator="['switch', { valuePropName: 'checked' }]"/>
+          </a-form-item>
+
+          <a-form-item
+            v-bind="formItemLayout"
+            label='Rate'
+          >
+            <a-rate allowHalf v-decorator="['rate', {initialValue: 3.5}]"/>
+          </a-form-item>
+
+          <a-form-item
+            v-bind="formItemLayout"
+            label='Dragger'
+          >
+            <div class='dropbox'>
+              <a-upload-dragger
+                v-decorator="['dragger', {
+                  valuePropName: 'fileList',
+                  getValueFromEvent: normFile,
+                }]"
+                name='files'
+                action='/upload.do'
+              >
+                <p class='ant-upload-drag-icon'>
+                  <a-icon type='inbox' />
+                </p>
+                <p class='ant-upload-text'>Click or drag file to this area to upload</p>
+                <p class='ant-upload-hint'>Support for a single or bulk upload.</p>
+              </a-upload-dragger>
+            </div>
+          </a-form-item>
+
+          <a-form-item
+            v-bind="formItemLayout"
+          >
+            <span slot="label">
+              Nickname&nbsp;
+              <a-tooltip title='What do you want others to call you?'>
+                <a-icon type='question-circle-o' />
+              </a-tooltip>
+            </span>
+            <a-input type="texterea"
+              v-decorator="[
+                'nickname',
+                {
+                  rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }]
+                }
+              ]"
+            />
+          </a-form-item>
+        </a-form>
+
+      </div>
+    </a-modal>
   </section>
 </template>
 
@@ -51,6 +189,11 @@ export default {
   data() {
     return {
       swiper: null,
+      visible: false,
+      formItemLayout: {
+        labelCol: { span: 6 },
+        wrapperCol: { span: 18 }
+      },
       sliders: [
         {
           name: 'Children Of The Corn',

@@ -35,7 +35,7 @@
     </svg>
     <a-layout-sider :width="260" v-model="collapsed">
       <div class="logo ant-row-flex">
-        <span class="logo-text text-light">{{ collapsed ? 'T' : 'Tellyming' }}</span>
+        <span class="logo-text">{{ collapsed ? 'T' : 'Tellyming' }}</span>
       </div>
       <a-menu
         mode="inline"
@@ -129,15 +129,15 @@
                     <a-icon type="notification"/>
                   </a-badge>
                 </a-menu-item>
-                <a-sub-menu>
+                <a-sub-menu v-if="$auth.$state.loggedIn">
                   <div slot="title">
                     <div class="user">
                       <a-avatar
                         :size="46"
-                        src="https://weskhaled.herokuapp.com/assets/img/photos/developer/avatar-sm.jpg"
+                        src="images/bg_1.jpg"
                       />
                       <span class="user">
-                        <span class="username">weslati khaled</span>
+                        <span class="username">{{$auth.user.name}}</span>
                         <span class="userinfo">Manage Account</span>
                       </span>
                     </div>
@@ -146,9 +146,12 @@
                     <a-menu-item key="setting:1" @click="logout">Logout</a-menu-item>
                   </a-menu-item-group>
                   <a-menu-item-group title="Profile">
-                    <a-menu-item key="setting:3">setting</a-menu-item>
+                    <a-menu-item key="setting:3">Settings</a-menu-item>
                   </a-menu-item-group>
                 </a-sub-menu>
+                <a-menu-item class="btnmenu" v-else>
+                  <a-button @click="$router.replace('/login')" size="small" type="primary">Login</a-button>
+                </a-menu-item>
               </a-menu>
             </div>
           </div>

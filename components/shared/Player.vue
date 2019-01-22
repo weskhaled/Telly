@@ -88,7 +88,7 @@
               <i :class="videowrp.extras ? 'ti-minus' : 'ti-layout-cta-left'"/>
             </a-button>
             <a-popover 
-              title="Title"
+              title="Settings"
               trigger="click"
               :getPopupContainer="modalcontainer"
               v-model="videowrp.settings.open">

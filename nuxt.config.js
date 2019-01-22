@@ -88,7 +88,9 @@ module.exports = {
             method: "post",
             propertyName: "access_token"
           },
-          logout: false,
+          logout: {
+            url: 'api/v1/logout'
+          },
           user: {
             url: "api/v1/user"
           }
@@ -104,7 +106,9 @@ module.exports = {
             method: "post",
             propertyName: "access_token"
           },
-          logout: false,
+          logout: {
+            url: 'api/v1/logout'
+          },
           user: {
             url: "api/v1/user"
           }
@@ -123,7 +127,7 @@ module.exports = {
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
-    baseURL: 'https://weslati-khaled.herokuapp.com'
+    baseURL: 'http://telly.test'
   },
   router: {
     extendRoutes (routes, resolve) {
