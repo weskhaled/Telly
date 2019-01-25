@@ -3,11 +3,12 @@
     class="cardslider m-2 p-2"
     hoverable
   >
-    <img      
-      slot="cover"
-      alt="example"
-      src="~assets/images/film-cover.jpg"
-    >
+    <template slot="cover">
+      <img  
+        alt="example"
+        src="~assets/images/film-cover.jpg"
+      >
+    </template>
     <div class="sliderinfo">
       <div class="title">
         <h5>{{ slide.name }}</h5>

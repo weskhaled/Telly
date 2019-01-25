@@ -54,7 +54,13 @@
       title="Basic Modal"
       v-model="visible"
       :maskClosable="true"
-      :getContainer="modalcontainer">
+      onOk="handleOk">
+      <template slot="footer">
+        <a-button key="back" @click="handleCancel">Return</a-button>
+        <a-button key="submit" type="primary" :loading="loading" @click="handleOk">
+          Submit
+        </a-button>
+      </template>
       <div class="modalcontent">
 
         <a-form id='components-form-demo-validate-other' @submit="handleSubmit" :form="form">
@@ -62,16 +68,16 @@
             v-bind="formItemLayout"
           >
             <span slot="label">
-              Nickname&nbsp;
+              Title&nbsp;
               <a-tooltip title='What do you want others to call you?'>
                 <a-icon type='question-circle-o' />
               </a-tooltip>
             </span>
             <a-input
               v-decorator="[
-                'nickname',
+                'title',
                 {
-                  rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }]
+                  rules: [{ required: true, message: 'Please input your Title!', whitespace: true }]
                 }
               ]"
             />
@@ -83,13 +89,12 @@
           >
             <a-select
               v-decorator="[
-                'select',
-                {rules: [{ required: true, message: 'Please select your country!' }]}
+                'year',
+                {rules: [{ required: true, message: 'Please select the year!' }]}
               ]"
               placeholder='Please select a country'
             >
-              <a-select-option value='china'>China</a-select-option>
-              <a-select-option value='usa'>U.S.A</a-select-option>
+              <a-select-option v-for="year in years" :key="year" :value="year">{{ year }}</a-select-option>
             </a-select>
           </a-form-item>
 
@@ -98,16 +103,17 @@
             label='Select[multiple]'
           >
             <a-select
+              mode="tags"
               v-decorator="[
-                'select-multiple', {
+                'tags', {
                 rules: [{ required: true, message: 'Please select your favourite colors!', type: 'array' }],
               }]"
-              mode='multiple'
               placeholder='Please select favourite colors'
             >
               <a-select-option value='red'>Red</a-select-option>
               <a-select-option value='green'>Green</a-select-option>
               <a-select-option value='blue'>Blue</a-select-option>
+              <a-select-option v-for="i in 25" :key="(i + 9).toString(36) + i">{{(i + 9).toString(36) + i}}</a-select-option>
             </a-select>
           </a-form-item>
 
@@ -122,7 +128,7 @@
             v-bind="formItemLayout"
             label='Switch'
           >
-            <a-switch v-decorator="['switch', { valuePropName: 'checked' }]"/>
+            <a-switch v-decorator="['switch', { valuePropName: 'checked' ,initialValue: true}]"/>
           </a-form-item>
 
           <a-form-item
@@ -138,10 +144,6 @@
           >
             <div class='dropbox'>
               <a-upload-dragger
-                v-decorator="['dragger', {
-                  valuePropName: 'fileList',
-                  getValueFromEvent: normFile,
-                }]"
                 name='files'
                 action='/upload.do'
               >
@@ -163,9 +165,9 @@
                 <a-icon type='question-circle-o' />
               </a-tooltip>
             </span>
-            <a-input type="texterea"
+            <a-textarea
               v-decorator="[
-                'nickname',
+                'description',
                 {
                   rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }]
                 }
@@ -190,6 +192,8 @@ export default {
     return {
       swiper: null,
       visible: false,
+      loading: false,
+      form: this.$form.createForm(this),
       formItemLayout: {
         labelCol: { span: 6 },
         wrapperCol: { span: 18 }
@@ -264,7 +268,15 @@ export default {
       ]
     }
   },
-  computed: {},
+  // beforeCreate () {
+  //   this.form = this.$form.createForm(this);
+  // },
+  computed: {
+    years () {
+      const year = new Date().getFullYear()
+      return Array.from({length: year - 1900}, (value, index) => 1901 + index)
+    }
+  },
   mounted() {
     let self = this
     this.$nextTick(function() {
@@ -385,7 +397,31 @@ export default {
       next()
     }
   },
-  methods: {}
+  methods: {
+    handleOk(e) {
+      e.preventDefault();
+      this.form.validateFields((err, values) => {
+        if (!err) {
+          console.log('Received values of form: ', values);
+          this.loading = true;
+          setTimeout(() => {
+            this.loading = false;
+          }, 3000);
+        }
+      });
+    },
+    handleCancel(e) {
+      this.visible = false;
+    },
+    handleSubmit  (e) {
+      e.preventDefault();
+      this.form.validateFields((err, values) => {
+        if (!err) {
+          console.log('Received values of form: ', values);
+        }
+      });
+    },
+  }
 }
 </script>
 
