@@ -44,11 +44,11 @@
           <a-icon type="home" />
           <span>Home</span>
         </a-menu-item>
-        <a-menu-item key="/slider" @click="$router.replace('/slider')">
+        <a-menu-item key="/movies" @click="$router.replace('/movies')">
           <a-icon type="desktop" />
           <span>Movies</span>
         </a-menu-item>
-        <a-menu-item key="/tv-show" @click="$router.replace('/slider')">
+        <a-menu-item key="/tv-show" @click="$router.replace('/movies')">
           <a-icon type="video-camera" />          
           <span>TV Shows</span>
         </a-menu-item>

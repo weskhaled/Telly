@@ -4,18 +4,21 @@
     hoverable
   >
     <template slot="cover">
-      <img  
-        alt="example"
-        src="~assets/images/film-cover.jpg"
-      >
+      <div class="cover-wrp d-flex justify-content-center align-items-center">
+          <img  
+            :alt="slide.title"
+            :src="'http://telly.test/api/getvideothumb/'+slide.thumb"
+            @click="$router.replace('/videos/'+slide.id)"
+          >
+      </div>
     </template>
     <div class="sliderinfo">
       <div class="title">
-        <h5>{{ slide.name }}</h5>
+        <h5>{{ slide.title }}</h5>
       </div>
       <div class="plushover">
         <div class="info">
-          <span class="cat">{{ slide.cat }} - {{ slide.time }}</span>
+          <span class="cat">cat and time</span>
         </div>
         <div class="infoplus">
           <h6>
@@ -59,5 +62,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.cover-wrp {
+  min-width: 100%;
+  min-height: 100%;
+  border-radius: 2px 2px 0 0;
+}
 </style>

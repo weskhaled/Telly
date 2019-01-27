@@ -339,12 +339,19 @@ export default {
     this.$nextTick(function() {
       // var hlsUrl = 'https://content.jwplatform.com/manifests/vM7nH0Kl.m3u8'
       // var hlsUrl = 'https://moeplayer.b0.upaiyun.com/dplayer/hls/hikarunara.m3u8'
-      let hlsUrl = 'videos/1/1.m3u8'
+      // let hlsUrl = 'videos/1/1.m3u8'
+      let hlsUrl = 'http://telly.test/api/v1/getstreamvideo/53/53_.m3u8'
       self.player = document.querySelector('video')
       // let video = self.$refs.videoref
       if (Hls.isSupported()) {
-        self.hls = new Hls({ autoStartLoad: false })
+        self.hls = new Hls()
+        self.hls.config.xhrSetup = (xhr,url) =>{
+            xhr.setRequestHeader("Authorization", localStorage.getItem('auth._token.password_grant') );
+        }
+        self.hls.config.autoStartLoad = false;
+        self.hls.config.maxBufferLength = 3;
         self.hls.loadSource(hlsUrl)
+        console.log(self.hls)
         self.hls.attachMedia(self.player)
       } else {
         let nativeHLS = self.player.canPlayType('application/vnd.apple.mpegurl')

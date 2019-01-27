@@ -3,10 +3,9 @@
     <a-row type="flex">
       <a-col class="d-flex" :span="24">
         <h4 class="d-inline text-capitalize font-weight-bold text-light">Recommended to you</h4>
-        <div class="d-inline ml-auto" v-if="$auth.$state.loggedIn">
+        <div class="d-inline ml-auto my-1" v-if="$auth.$state.loggedIn">
           <a-button 
-            type="primary" 
-            size="small"
+            type="primary"
             @click="visible = true"
             > Add new </a-button>
         </div>
@@ -56,6 +55,7 @@
       :maskClosable="true"
       onOk="handleOk">
       <template slot="footer">
+        <a-button key="reset" @click="form.resetFields()">Reset</a-button>
         <a-button key="back" @click="handleCancel">Return</a-button>
         <a-button key="submit" type="primary" :loading="loading" @click="handleOk">
           Submit
@@ -85,9 +85,9 @@
           <a-form-item
             v-bind="formItemLayout"
             label='Select'
-            hasFeedback
-          >
+            >
             <a-select
+              showSearch
               v-decorator="[
                 'year',
                 {rules: [{ required: true, message: 'Please select the year!' }]}
@@ -100,13 +100,13 @@
 
           <a-form-item
             v-bind="formItemLayout"
-            label='Select[multiple]'
+            label='Tags'
           >
             <a-select
               mode="tags"
               v-decorator="[
                 'tags', {
-                rules: [{ required: true, message: 'Please select your favourite colors!', type: 'array' }],
+                rules: [{ required: false, message: 'Please select your favourite colors!', type: 'array' }],
               }]"
               placeholder='Please select favourite colors'
             >
@@ -119,16 +119,9 @@
 
           <a-form-item
             v-bind="formItemLayout"
-            label='MonthPicker'
+            label='Public'
           >
-            <a-monthPicker/>
-          </a-form-item>
-
-          <a-form-item
-            v-bind="formItemLayout"
-            label='Switch'
-          >
-            <a-switch v-decorator="['switch', { valuePropName: 'checked' ,initialValue: true}]"/>
+            <a-switch v-decorator="['public', { valuePropName: 'checked' ,initialValue: true}]"/>
           </a-form-item>
 
           <a-form-item
@@ -140,12 +133,18 @@
 
           <a-form-item
             v-bind="formItemLayout"
-            label='Dragger'
+            label='Video'
           >
             <div class='dropbox'>
               <a-upload-dragger
-                name='files'
-                action='/upload.do'
+                name='video'
+                :multiple="false"
+                :fileList="videoFile"
+                :beforeUpload="beforeUploadvideo"
+                v-decorator="[
+                  'video', {
+                  rules: [{ required: true, message: 'Please select your video!' }],
+                }]"
               >
                 <p class='ant-upload-drag-icon'>
                   <a-icon type='inbox' />
@@ -154,6 +153,30 @@
                 <p class='ant-upload-hint'>Support for a single or bulk upload.</p>
               </a-upload-dragger>
             </div>
+          </a-form-item>
+
+          <a-form-item
+            v-bind="formItemLayout"
+            label='thumb'
+          >
+              <a-upload
+                name="thumb"
+                listType="picture-card"
+                class="avatar-uploader"
+                :showUploadList="false"
+                :beforeUpload="beforeUploadthumb"
+                @change="handleChangethumb"
+                v-decorator="[
+                  'thumb', {
+                  rules: [{ required: true, message: 'Please select your thumb!' }],
+                }]"
+              >
+                <img v-if="imageThumb" :src="imageThumb" alt="avatar" style="width: 100%;"/>
+                <div v-else>
+                    <a-icon :type="loadingThumb ? 'loading' : 'plus'" />
+                    <div class="ant-upload-text">Upload</div>
+                </div>
+              </a-upload>
           </a-form-item>
 
           <a-form-item
@@ -169,21 +192,27 @@
               v-decorator="[
                 'description',
                 {
-                  rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }]
+                  rules: [{ required: false, message: 'Please input your desc!', whitespace: true }]
                 }
               ]"
             />
           </a-form-item>
         </a-form>
-
       </div>
     </a-modal>
   </section>
 </template>
 
 <script>
+function getBase64 (img, callback) {
+  const reader = new FileReader()
+  reader.addEventListener('load', () => callback(reader.result))
+  reader.readAsDataURL(img)
+}
+import moment from 'moment'
 import SlideCard from '~/components/index/SlideCard.vue'
 import Swiper from 'swiper'
+// import axios from 'axios'
 export default {
   components: {
     SlideCard
@@ -193,6 +222,10 @@ export default {
       swiper: null,
       visible: false,
       loading: false,
+      loadingThumb: false,
+      imageThumb: '',
+      imageUrl: '',
+      videoFile: [],
       form: this.$form.createForm(this),
       formItemLayout: {
         labelCol: { span: 6 },
@@ -329,7 +362,6 @@ export default {
       })
       this.swiper.init()
       this.$root.$on('togglingmenu', data => {
-        console.log(data)
         if (self.swiper !== null) {
           setTimeout(function() {
             self.swiper.update()
@@ -399,21 +431,50 @@ export default {
   },
   methods: {
     handleOk(e) {
+      let self = this;
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
-          console.log('Received values of form: ', values);
+          // this.$form.video = this.$form.video.file;
           this.loading = true;
-          setTimeout(() => {
-            this.loading = false;
-          }, 3000);
+          let formData = new FormData();
+          console.log()
+          formData.append('title', values.title);
+          formData.append('video', values.video.file);
+          formData.append('year', moment(String(values.year)).format('MM/DD/YYYY'));
+          formData.append('thumb', values.thumb.file.originFileObj);
+          formData.append('description', values.description);
+          console.log('formData: ', formData)
+          console.log('values.thumb: ', values.thumb)
+          console.log('values.video: ', values.video)
+          console.log('Received values of form: ', values);
+          // Make a request for a user with a given ID
+          this.$axios.post('/api/v1/videos', formData)
+            .then(function (response) {
+              // handle success
+              self.$message.success(response.data.message, 2.5)
+              self.loading = false;
+              // self.visible = false;
+              // self.form.resetFields();
+            })
+            .catch(function (error) {
+              // handle error
+              console.log(error);
+              self.$message.error(error, 2.5)
+              self.loading = false;
+            });
+          // setTimeout(() => {
+          //   this.loading = false;
+          // }, 3000);
+        } else {
+          self.$message.error('Form not validate vields', 2.5)
         }
       });
     },
     handleCancel(e) {
       this.visible = false;
     },
-    handleSubmit  (e) {
+    handleSubmit (e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
@@ -421,9 +482,51 @@ export default {
         }
       });
     },
+    handleChangethumb (info) {
+      if (info.file.status === 'uploading') {
+        this.loadingThumb = true
+        return
+      }
+      if (info.file.status === 'done') {
+        // Get this url from response in real world.
+        getBase64(info.file.originFileObj, (imageUrl) => {
+          this.imageThumb = imageUrl
+          this.loadingThumb = false
+        })
+      }
+    },
+    beforeUploadthumb (file) {
+      const isJPG = file.type === 'image/jpeg'
+      if (!isJPG) {
+        this.$message.error('You can only upload JPG file!')
+      }
+      const isLt2M = file.size / 1024 / 1024 < 4
+      if (!isLt2M) {
+        this.$message.error('Image must smaller than 4MB!')
+      }
+      return isJPG && isLt2M
+    },
+    beforeUploadvideo(file) {
+      this.videoFile = [file]
+      return false;
+    }
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.avatar-uploader > .ant-upload {
+  width: 100%!important;
+  max-width: 100%!important;
+  height: 128px;
+}
+.ant-upload-select-picture-card i {
+  font-size: 32px;
+  color: #999;
+}
+
+.ant-upload-select-picture-card .ant-upload-text {
+  margin-top: 8px;
+  color: #666;
+}
 </style>

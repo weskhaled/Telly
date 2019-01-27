@@ -46,7 +46,10 @@ module.exports = {
     { src: '@/plugins/antd-ui', ssr: false },
     { src: '@/plugins/bootstrap', ssr: false }
   ],
-
+  serverMiddleware: ['./api/tools'],
+  proxy: {
+    '/api': 'http://localhost:3000'
+  },
   /*
   ** Nuxt.js modules
   */
