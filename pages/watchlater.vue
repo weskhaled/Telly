@@ -26,6 +26,7 @@
 
 <script>
 import { mapMutations } from 'vuex'
+import { genThumbs } from '../plugins/gen-thumbs'
 export default {
   components: {
     // Logo
@@ -40,7 +41,9 @@ export default {
       return this.$store.state.todos.list
     }
   },
-  mounted() {},
+  mounted() {
+    genThumbs();
+  },
   methods: {
     addTodo(e) {
       this.$store.commit('todos/add', e.target.value)

@@ -159,6 +159,8 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
+      config.node = { fs: 'empty',child_process: 'empty' }
+      console.dir(config)
     },
     // loaders: [
     //   {
@@ -183,6 +185,9 @@ module.exports = {
         'window.dplayer': 'dplayer',
         DPlayer: 'dplayer',
         moment: 'moment',
+      }),
+      new webpack.DefinePlugin({
+        'process.env.FLUENTFFMPEG_COV': false
       })
     ]
   }
