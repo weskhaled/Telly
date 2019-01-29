@@ -41,7 +41,7 @@
               <span class="tooltip-text">
                 <span class="tooltip-inner">
                   <span 
-                    style="background-image: url(images/response.jpeg);" 
+                    style="background-image: url(images/response.jpg);" 
                     :style="[{'background-position-x' : bgpositionx}]"
                     class="img-thumb position-relative w-100" />
                   <!-- <img src="images/bg_1.jpg" class="img-responsive"> -->

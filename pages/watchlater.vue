@@ -26,7 +26,6 @@
 
 <script>
 import { mapMutations } from 'vuex'
-import { genThumbs } from '../plugins/gen-thumbs'
 export default {
   components: {
     // Logo
@@ -42,7 +41,16 @@ export default {
     }
   },
   mounted() {
-    genThumbs();
+    this.$axios.post('http://127.0.0.1:3000/api/tools/test',{username: 'test', file: '/Users/weskhaled/Downloads/10sv.mp4'})
+    .then((res)=>{
+      if (res.data.data) {
+        console.log(res.data.data)
+        let tt = moment.utc(res.data.data.metadata.format.duration * 1000).format('HH') > 0 ? moment.utc(res.data.data.metadata.format.duration * 1000).format('HH:mm:ss') : moment.utc(res.data.data.metadata.format.duration * 1000).format('mm:ss')
+        console.log(tt)
+      }
+      else
+        console.log(res.data)
+    })
   },
   methods: {
     addTodo(e) {

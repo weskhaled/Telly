@@ -1,6 +1,6 @@
 const pkg = require('./package')
 const webpack = require('webpack')
-require("dotenv").config();
+require('dotenv').config()
 
 module.exports = {
   mode: 'spa',
@@ -15,9 +15,7 @@ module.exports = {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: pkg.description }
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
 
   /*
@@ -46,7 +44,7 @@ module.exports = {
     { src: '@/plugins/antd-ui', ssr: false },
     { src: '@/plugins/bootstrap', ssr: false }
   ],
-  serverMiddleware: ['./api/tools'],
+  serverMiddleware: ['./api/index'],
   proxy: {
     '/api': 'http://localhost:3000'
   },
@@ -64,7 +62,8 @@ module.exports = {
     strategies: {
       facebook: {
         client_id: '1671464192946675',
-        userinfo_endpoint: 'https://graph.facebook.com/v2.12/me?fields=about,name,picture{url},email,birthday',
+        userinfo_endpoint:
+          'https://graph.facebook.com/v2.12/me?fields=about,name,picture{url},email,birthday',
         scope: ['public_profile', 'email', 'user_birthday']
       },
       google: {
@@ -84,39 +83,39 @@ module.exports = {
       //   },
       // },
       password_grant: {
-        _scheme: "local",
+        _scheme: 'local',
         endpoints: {
           login: {
-            url: "/oauth/token",
-            method: "post",
-            propertyName: "access_token"
+            url: '/oauth/token',
+            method: 'post',
+            propertyName: 'access_token'
           },
           logout: {
             url: 'api/v1/logout'
           },
           user: {
-            url: "api/v1/user"
+            url: 'api/v1/user'
           }
         }
       },
       password_grant_custom: {
-        _scheme: "~/auth/schemes/PassportPasswordScheme.js",
+        _scheme: '~/auth/schemes/PassportPasswordScheme.js',
         client_id: process.env.PASSPORT_PASSWORD_GRANT_ID,
         client_secret: process.env.PASSPORT_PASSWORD_GRANT_SECRET,
         endpoints: {
           login: {
-            url: "/oauth/token",
-            method: "post",
-            propertyName: "access_token"
+            url: '/oauth/token',
+            method: 'post',
+            propertyName: 'access_token'
           },
           logout: {
             url: 'api/v1/logout'
           },
           user: {
-            url: "api/v1/user"
+            url: 'api/v1/user'
           }
         }
-      },
+      }
       // 'laravel.passport': {
       //   url: process.env.LARAVEL_ENDPOINT,
       //   client_id: process.env.PASSPORT_CLIENT_ID,
@@ -133,11 +132,11 @@ module.exports = {
     baseURL: 'http://telly.test'
   },
   router: {
-    extendRoutes (routes, resolve) {
+    extendRoutes(routes, resolve) {
       routes.push({
         name: 'index',
         path: '*',
-        component: resolve(__dirname, 'pages/index.vue'),
+        component: resolve(__dirname, 'pages/index.vue')
       })
     },
     linkActiveClass: 'active'
@@ -159,8 +158,7 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
-      config.node = { fs: 'empty',child_process: 'empty' }
-      console.dir(config)
+      config.node = { fs: 'empty', child_process: 'empty' }
     },
     // loaders: [
     //   {
@@ -169,9 +167,10 @@ module.exports = {
     //     loader: 'babel-loader'
     //   }
     // ],
+    watch: [__dirname + '/api/index.js'],
     postcss: false,
     extractCSS: true,
-    vendor:['jquery', 'bootstrap', 'plyr', 'hls.js', 'DPlayer', 'moment'],
+    vendor: ['jquery', 'bootstrap', 'plyr', 'hls.js', 'DPlayer', 'moment'],
     plugins: [
       // set shortcuts as global for bootstrap
       new webpack.ProvidePlugin({
@@ -184,7 +183,7 @@ module.exports = {
         'window.Hls': 'hls.js',
         'window.dplayer': 'dplayer',
         DPlayer: 'dplayer',
-        moment: 'moment',
+        moment: 'moment'
       }),
       new webpack.DefinePlugin({
         'process.env.FLUENTFFMPEG_COV': false
