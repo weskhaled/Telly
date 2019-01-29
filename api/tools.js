@@ -50,17 +50,22 @@ const bodyParser = require('body-parser')
 // ffmpeg -ss 3 -i input.mp4 -vf "select=gt(scene\,0.4)" -frames:v 5 -vsync vfr -vf fps=fps=1/600 out%02d.jpg
 // Create app
 const app = express()
-app.use(bodyParser.json())
 
-// -- Routes --
+// create application/json parser
+var jsonParser = bodyParser.json()
 
-// [POST] /login
-app.post('/test', (req, res, next) => {
-	const { username, password } = req.body
-	res.json({
-		username: 'username', 
-		password: req.password
-	})
+// create application/x-www-form-urlencoded parser
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
+// POST /login gets urlencoded bodies
+app.post('/test', urlencodedParser, function (req, res) {
+  res.send('welcome, ' + req.body.username)
+})
+
+// POST /api/users gets JSON bodies
+app.post('/test2', jsonParser, function (req, res) {
+  // create user in req.body
+  res.send('welcome, ' + req.body.username)
 })
 
 // Error handler
