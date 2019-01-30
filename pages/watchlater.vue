@@ -41,7 +41,8 @@ export default {
     }
   },
   mounted() {
-    this.$axios.post('http://127.0.0.1:3000/api/tools/test',{username: 'test', file: '/Users/weskhaled/Downloads/10sv.mp4'})
+    // this.$axios.post('http://127.0.0.1:3000/api/tools/test',{username: 'test', file: '/Users/weskhaled/Downloads/10sv.mp4'})
+    this.$axios.post('http://127.0.0.1:3000/api/tools/test',{username: 'test', file: '/Users/Peaksource/Downloads/image.jpeg'})
     .then((res)=>{
       if (res.data.data) {
         console.log(res.data.data)

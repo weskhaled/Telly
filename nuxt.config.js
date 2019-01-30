@@ -44,7 +44,10 @@ module.exports = {
     { src: '@/plugins/antd-ui', ssr: false },
     { src: '@/plugins/bootstrap', ssr: false }
   ],
-  serverMiddleware: ['./api/index'],
+  serverMiddleware: [
+    // API middleware
+    '~/api/index.js'
+  ],
   proxy: {
     '/api': 'http://localhost:3000'
   },
@@ -167,7 +170,7 @@ module.exports = {
     //     loader: 'babel-loader'
     //   }
     // ],
-    watch: [__dirname + '/api/index.js'],
+    // watch: [__dirname + '/api/index.js'],
     postcss: false,
     extractCSS: true,
     vendor: ['jquery', 'bootstrap', 'plyr', 'hls.js', 'DPlayer', 'moment'],
