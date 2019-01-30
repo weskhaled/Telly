@@ -97,9 +97,9 @@ app.post('/test', jsonParser, function(req, res) {
     if (fs.existsSync(req.body.file)) {
       gthumbs(req.body.file)
         .then(meta => {
-          // res.json({ token: req.body.username, data: meta })
+          res.json({ token: req.body.username, data: meta })
           // res.json({ token: req.body.username, data: meta.filepath })
-          res.download(meta.filepath) // Set disposition and send it.
+          // res.download(meta.filepath) // Set disposition and send it.
         })
         .catch(err => res.json({ error: 'true', msg: err }))
     }
