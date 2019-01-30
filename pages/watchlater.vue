@@ -70,7 +70,7 @@ export default {
         console.log(res.data.data)
         let tt = moment.utc(res.data.data.metadata.format.duration * 1000).format('HH') > 0 ? moment.utc(res.data.data.metadata.format.duration * 1000).format('HH:mm:ss') : moment.utc(res.data.data.metadata.format.duration * 1000).format('mm:ss')
         console.log(tt)
-        this.fileList.push(
+        this.filethumb.push(
           // new File('file://'+res.data.data.filepath,{type: 'image/jpeg'})
           // {
           //   uid: '-1',
