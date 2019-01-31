@@ -69,8 +69,8 @@ export default {
   },
   mounted() {
     let self = this
-    // this.$axios.post('http://127.0.0.1:3000/api/tools/getthumb',{username: 'test', file: '/Users/weskhaled/Downloads/10sv.mp4'})
-    this.$axios.post('http://127.0.0.1:3000/api/tools/getthumb',{username: 'test', file: 'D:/VikingsS05E20/vikings_s05e20.mkv'},{ responseType: 'arraybuffer' })
+    this.$axios.post('http://127.0.0.1:3000/api/tools/getthumb',{username: 'test', file: '/Users/weskhaled/Downloads/test.mp4'},{ responseType: 'arraybuffer' })
+    // this.$axios.post('http://127.0.0.1:3000/api/tools/getthumb',{username: 'test', file: 'D:/VikingsS05E20/vikings_s05e20.mkv'},{ responseType: 'arraybuffer' })
     .then((res)=>{
       if (res.data.data) {
         console.log(res.data.data)

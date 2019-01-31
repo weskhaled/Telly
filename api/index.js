@@ -9,9 +9,9 @@ var rm = require('rimraf')
 var os = require('os')
 
 var startTime = +new Date()
-var tmp = os.tmpdir() + '/dplayer-thumbnails'
-
+var tmp = os.tmpdir() + '/api-thumbnails'
 async function gthumbs(file) {
+  console.dir(tmp)
   return await new Promise((resolve, reject) => {
     try {
       ffmpeg(file)
@@ -19,7 +19,7 @@ async function gthumbs(file) {
           count: 1,
           folder: tmp,
           filename: 'screenshot%00i.png',
-          size: '1600x?'
+          size: '160x?'
         })
         .on('progress', progress => {
           console.dir(`[ffmpeg] ${JSON.stringify(progress)}`)
@@ -45,20 +45,17 @@ async function gthumbs(file) {
                 if (err) reject(err)
                 lenna
                   .quality(parseInt(60))
-                  // .write('/Users/weskhaled/Desktop/thumbnails.jpg')
-                .write('/Users/Peaksource/Desktop/thumbnails.jpg')
+                  .write(os.tmpdir() + '/apiv1thumbnails.jpg')
+                // .write('/Users/Peaksource/Desktop/thumbnails.jpg')
                 rm(tmp, function() {
                   console.dir('[3/3] Compressing complete!')
                   console.dir(
                     `✨  Done in ${(+new Date() - startTime) / 1000}s.`
                   )
-                  ffmpeg(file).ffprobe(function(err, data) {
-                    let res = new Object()
-                    res.metadata = data
-                    // res.filepath = '/Users/weskhaled/Desktop/thumbnails.jpg'
-                    res.filepath = '/Users/Peaksource/Desktop/thumbnails.jpg'
-                    resolve(res)
-                  })
+                  // let res = new Object()
+                  // res.filepath = '/Users/weskhaled/Desktop/thumbnails.jpg'
+                  // res.filepath = '/Users/Peaksource/Desktop/thumbnails.jpg'
+                  resolve(os.tmpdir() + '/apiv1thumbnails.jpg')
                 })
               })
             }
@@ -80,10 +77,10 @@ async function getmeta(file) {
         .ffprobe(function(err, data) {
           resolve({ metadata: data })
         })
-      } catch (err) {
-        reject(err)
-      }
-    })
+    } catch (err) {
+      reject(err)
+    }
+  })
 }
 // Create app
 const app = express()
@@ -95,14 +92,14 @@ var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 // POST /login gets urlencoded bodies
-app.post('/getthumb', jsonParser, function (req, res) {
+app.post('/getthumb', jsonParser, function(req, res) {
   if (req.body.file) {
     if (fs.existsSync(req.body.file)) {
       gthumbs(req.body.file)
-        .then(meta => {
+        .then(data => {
           // res.json({ token: req.body.username, data: meta })
           // res.json({ token: req.body.username, data: meta.filepath })
-          res.sendFile(meta.filepath) // Set disposition and send it.
+          res.sendFile(data) // Set disposition and send it.
         })
         .catch(err => res.json({ error: 'true', msg: err }))
     } else {
@@ -113,7 +110,7 @@ app.post('/getthumb', jsonParser, function (req, res) {
   }
 })
 // POST /login gets urlencoded bodies
-app.post('/getvideometa', jsonParser, function (req, res) {
+app.post('/getvideometa', jsonParser, function(req, res) {
   if (req.body.file) {
     if (fs.existsSync(req.body.file)) {
       getmeta(req.body.file)
@@ -122,7 +119,7 @@ app.post('/getvideometa', jsonParser, function (req, res) {
           // res.json({ token: req.body.username, data: meta.filepath })
         })
         .catch(err => res.json({ error: 'true', msg: err }))
-    }
+    } else res.json({ error: 'true', msg: 'file not found' })
   } else res.json({ error: 'true', msg: 'file not found' })
 })
 
