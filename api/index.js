@@ -1,17 +1,16 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 
-var fs = require('fs')
-var ffmpeg = require('fluent-ffmpeg')
-var nsg = require('node-sprite-generator')
-var Jimp = require('jimp')
-var rm = require('rimraf')
-var os = require('os')
+const fs = require('fs')
+const ffmpeg = require('fluent-ffmpeg')
+const nsg = require('node-sprite-generator')
+const Jimp = require('jimp')
+const rm = require('rimraf')
+const os = require('os')
 
-var startTime = +new Date()
-var tmp = os.tmpdir() + '/api-thumbnails'
+const startTime = +new Date()
+const tmp = os.tmpdir() + '/api-thumbnails'
 async function gthumbs(file) {
-  console.dir(tmp)
   return await new Promise((resolve, reject) => {
     try {
       ffmpeg(file)
@@ -19,7 +18,7 @@ async function gthumbs(file) {
           count: 1,
           folder: tmp,
           filename: 'screenshot%00i.png',
-          size: '160x?'
+          size: '1600x?'
         })
         .on('progress', progress => {
           console.dir(`[ffmpeg] ${JSON.stringify(progress)}`)
@@ -52,10 +51,18 @@ async function gthumbs(file) {
                   console.dir(
                     `✨  Done in ${(+new Date() - startTime) / 1000}s.`
                   )
-                  // let res = new Object()
-                  // res.filepath = '/Users/weskhaled/Desktop/thumbnails.jpg'
-                  // res.filepath = '/Users/Peaksource/Desktop/thumbnails.jpg'
-                  resolve(os.tmpdir() + '/apiv1thumbnails.jpg')
+                  ffmpeg(file)
+                    .on('error', err => {
+                      console.dir(`[ffmpeg] error: ${err.message}`)
+                      reject(err)
+                    })
+                    .ffprobe(function(err, data) {
+                      resolve({
+                        metadata: data,
+                        thumbath: os.tmpdir() + '/apiv1thumbnails.jpg'
+                      })
+                    })
+                  // resolve(os.tmpdir() + '/apiv1thumbnails.jpg')
                 })
               })
             }
@@ -99,7 +106,13 @@ app.post('/getthumb', jsonParser, function(req, res) {
         .then(data => {
           // res.json({ token: req.body.username, data: meta })
           // res.json({ token: req.body.username, data: meta.filepath })
-          res.sendFile(data) // Set disposition and send it.
+          // res.sendFile(data) // Set disposition and send it.
+
+          // read binary data
+          let base64 = fs.readFileSync(data.thumbath, 'base64')
+          // convert binary data to base64 encoded string
+          // let resp = new Buffer(bitmap).toString('base64')
+          res.json({ metadata: data.metadata, imgbase64: base64 })
         })
         .catch(err => res.json({ error: 'true', msg: err }))
     } else {

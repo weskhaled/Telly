@@ -27,6 +27,9 @@
           <a-upload
             listType="picture"
             :fileList="filethumb"
+            :beforeUpload="beforeUpload"
+            @change="handleChange"
+            id="filevideo"
           >
             <a-button>
               <a-icon type="upload" /> upload
@@ -59,7 +62,8 @@ export default {
   data() {
     return {
       filethumb: [],
-      imageThumb: ''
+      imageThumb: '',
+      filepath: ''
     }
   },
   computed: {
@@ -69,26 +73,20 @@ export default {
   },
   mounted() {
     let self = this
-    this.$axios.post('http://127.0.0.1:3000/api/tools/getthumb',{username: 'test', file: '/Users/weskhaled/Downloads/test.mp4'},{ responseType: 'arraybuffer' })
-    // this.$axios.post('http://127.0.0.1:3000/api/tools/getthumb',{username: 'test', file: 'D:/VikingsS05E20/vikings_s05e20.mkv'},{ responseType: 'arraybuffer' })
-    .then((res)=>{
-      if (res.data.data) {
-        console.log(res.data.data)
-        let tt = moment.utc(res.data.data.metadata.format.duration * 1000).format('HH') > 0 ? moment.utc(res.data.data.metadata.format.duration * 1000).format('HH:mm:ss') : moment.utc(res.data.data.metadata.format.duration * 1000).format('mm:ss')
-        console.log(tt)
-      }
-      else
-        // this.imageThumb=_imageEncode(res.data)
-        // this.imageThumb=_imageEncode(new Buffer(res.data, 'binary').toString('base64'))
-        this.imageThumb= `data:${res.headers['content-type']};base64,${Buffer.from(String.fromCharCode(...new Uint8Array(res.data)), 'binary').toString('base64')}`
-        this.filethumb.push({
-          uid: '2',
-          name: 'yyy.png',
-          status: 'done',
-          url: this.imageThumb,
-        })
-    })
-
+    // this.$axios.post('http://127.0.0.1:3000/api/tools/getthumb',{username: 'test', file: '/Users/weskhaled/Downloads/test.mp4'})
+    // // this.$axios.post('http://127.0.0.1:3000/api/tools/getthumb',{username: 'test', file: 'D:/VikingsS05E20/vikings_s05e20.mkv'},{ responseType: 'arraybuffer' })
+    // .then((res)=>{
+    //     console.log(res.data)
+    //     let tt = moment.utc(res.data.metadata.format.duration * 1000).format('HH') > 0 ? moment.utc(res.data.metadata.format.duration * 1000).format('HH:mm:ss') : moment.utc(res.data.metadata.format.duration * 1000).format('mm:ss')
+    //     console.log(tt)
+    //     this.imageThumb=`data:image/jpeg;base64,${res.data.imgbase64}`
+    //     this.filethumb.push({
+    //       uid: '2',
+    //       name: 'yyy.png',
+    //       status: 'done',
+    //       url: this.imageThumb,
+    //     })
+    // })
   },
   methods: {
     addTodo(e) {
@@ -97,7 +95,32 @@ export default {
     },
     ...mapMutations({
       toggle: 'todos/toggle'
-    })
+    }),
+    beforeUpload (file) {
+      console.log('before upload',file)
+      const isJPG = file.type === 'video/mp4'
+      if (!isJPG) {
+        this.$message.error('You can only upload mp4 file!')
+      }
+      const isLt2M = file.size / 1024 / 1024 < 800
+      if (!isLt2M) {
+        this.$message.error('Image must smaller than 800MB!')
+      }
+      return isJPG && isLt2M
+    },
+    handleChange (info) {
+      console.log(info.file.originFileObj.webkitRelativePath)
+      // if (info.file.status === 'uploading') {
+      //   return
+      // }
+      // if (info.file.status === 'done') {
+      //   // Get this url from response in real world.
+      //   getBase64(info.file.originFileObj, (imageUrl) => {
+      //     this.imageUrl = imageUrl
+      //     this.loading = false
+      //   })
+      // }
+    }
   }
 }
 </script>
