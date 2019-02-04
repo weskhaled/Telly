@@ -43,17 +43,6 @@
 </template>
 
 <script>
-function _imageEncode (arrayBuffer) {
-    let u8 = new Uint8Array(arrayBuffer)
-    let b64encoded = btoa([].reduce.call(new Uint8Array(arrayBuffer),function(p,c){return p+String.fromCharCode(c)},''))
-    let mimetype="image/jpeg"
-    return "data:"+mimetype+";base64,"+b64encoded
-}
-function getBase64 (img, callback) {
-  const reader = new FileReader()
-  reader.addEventListener('load', () => callback(reader.result))
-  reader.readAsDataURL(img)
-}
 import { mapMutations } from 'vuex'
 export default {
   components: {
@@ -109,7 +98,7 @@ export default {
       return isJPG && isLt2M
     },
     handleChange (info) {
-      console.log(info.file.originFileObj.webkitRelativePath)
+      console.log(info.file.originFileObj)
       // if (info.file.status === 'uploading') {
       //   return
       // }

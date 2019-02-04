@@ -43,6 +43,7 @@ module.exports = {
     // { src: '@/plugins/swiper', ssr: false },
     { src: '@/plugins/antd-ui', ssr: false },
     { src: '@/plugins/bootstrap', ssr: false }
+    // { src: '@/plugins/gen-thumbs', ssr: true, csr: false }
   ],
   serverMiddleware: [
     // API middleware

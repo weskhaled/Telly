@@ -8,6 +8,8 @@ const Jimp = require('jimp')
 const rm = require('rimraf')
 const os = require('os')
 
+const s3FileUpload = require('./model/s3Upload')
+
 const startTime = +new Date()
 const tmp = os.tmpdir() + '/api-thumbnails'
 async function gthumbs(file) {
@@ -91,6 +93,7 @@ async function getmeta(file) {
 }
 // Create app
 const app = express()
+app.use('/s3', s3FileUpload)
 
 // create application/json parser
 var jsonParser = bodyParser.json()
