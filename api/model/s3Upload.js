@@ -63,6 +63,8 @@ function uploadFile(source, target) {
         } else {
           console.dir(err)
         }
+      }).on('httpUploadProgress', function(progress) {
+        console.dir(progress.loaded + ' of ' + progress.total + ' bytes')
       })
     }
   })

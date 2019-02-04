@@ -94,8 +94,8 @@ async function getmeta(file) {
 // Create app
 const app = express()
 
-let router = require('./routers/upload.router.js')
-app.use('/', router)
+// let router = require('./routers/upload.router.js')
+// app.use('/', router)
 
 app.use('/s3', s3FileUpload)
 
