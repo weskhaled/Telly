@@ -91,6 +91,9 @@ async function getmeta(file) {
 }
 // Create app
 const app = express()
+let router = require("./routers/upload.router.js");
+app.use("/", router);
+
 
 // create application/json parser
 var jsonParser = bodyParser.json()
@@ -138,7 +141,7 @@ app.post('/getvideometa', jsonParser, function(req, res) {
 
 // POST /api/users gets JSON bodies
 app.post('/test2', jsonParser, function(req, res) {
-  res.send('welcome, ' + req.body.username)
+  res.send('welcome, ' + 'req.body.username')
 })
 
 // Error handler
