@@ -1,6 +1,3 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-
 const fs = require('fs')
 const ffmpeg = require('fluent-ffmpeg')
 const nsg = require('node-sprite-generator')
@@ -8,10 +5,9 @@ const Jimp = require('jimp')
 const rm = require('rimraf')
 const os = require('os')
 
-const s3FileUpload = require('./model/s3Upload')
-
 const startTime = +new Date()
 const tmp = os.tmpdir() + '/api-thumbnails'
+
 async function gthumbs(file) {
   return await new Promise((resolve, reject) => {
     try {
@@ -75,49 +71,16 @@ async function gthumbs(file) {
     }
   })
 }
-async function getmeta(file) {
-  return await new Promise((resolve, reject) => {
-    try {
-      ffmpeg(file)
-        .on('error', err => {
-          console.dir(`[ffmpeg] error: ${err.message}`)
-          reject(err)
-        })
-        .ffprobe(function(err, data) {
-          resolve({ metadata: data })
-        })
-    } catch (err) {
-      reject(err)
-    }
-  })
-}
-// Create app
-const app = express()
-
-// let router = require('./routers/upload.router.js')
-// app.use('/', router)
-
-let router = require('./routers/thumbs.router.js')
-app.use('/', router)
-
-// app.use('/s3', s3FileUpload)
-
-// create application/json parser
-var jsonParser = bodyParser.json()
-
-// create application/x-www-form-urlencoded parser
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
-
-// POST /login gets urlencoded bodies
-app.post('/getthumb', jsonParser, function(req, res) {
+exports.doThumbs = (req, res, next) => {
+  // res.end(JSON.stringify({ re: req.body }))
+  // res.status(200).json({ re: req.body.file })
+  // res.end(JSON.stringify({ re: req.body.file }))
+  // return
   if (req.body.file) {
     if (fs.existsSync(req.body.file)) {
       gthumbs(req.body.file)
         .then(data => {
-          // res.json({ token: req.body.username, data: meta })
-          // res.json({ token: req.body.username, data: meta.filepath })
           // res.sendFile(data) // Set disposition and send it.
-
           // read binary data
           let base64 = fs.readFileSync(data.thumbath, 'base64')
           // convert binary data to base64 encoded string
@@ -131,34 +94,4 @@ app.post('/getthumb', jsonParser, function(req, res) {
   } else {
     res.json({ error: 'true', msg: 'file not send' })
   }
-})
-// POST /login gets urlencoded bodies
-app.post('/getvideometa', jsonParser, function(req, res) {
-  if (req.body.file) {
-    if (fs.existsSync(req.body.file)) {
-      getmeta(req.body.file)
-        .then(meta => {
-          res.json(meta)
-          // res.json({ token: req.body.username, data: meta.filepath })
-        })
-        .catch(err => res.json({ error: 'true', msg: err }))
-    } else res.json({ error: 'true', msg: 'file not found' })
-  } else res.json({ error: 'true', msg: 'file not found' })
-})
-
-// POST /api/users gets JSON bodies
-app.post('/test2', jsonParser, function(req, res) {
-  res.send('welcome, ' + 'req.body.username')
-})
-
-// Error handler
-app.use((err, req, res, next) => {
-  console.error(err) // eslint-disable-line no-console
-  res.status(401).send(err + '')
-})
-
-// -- export app --
-module.exports = {
-  path: '/api/tools',
-  handler: app
 }
