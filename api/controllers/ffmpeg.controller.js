@@ -8,15 +8,15 @@ const os = require('os')
 const startTime = +new Date()
 const tmp = os.tmpdir() + '/api-thumbnails'
 
-async function gthumbs(file) {
+async function gthumbs(file, count = 100) {
   return await new Promise((resolve, reject) => {
     try {
       ffmpeg(file)
         .screenshots({
-          count: 1,
+          count: count,
           folder: tmp,
           filename: 'screenshot%00i.png',
-          size: '1600x?'
+          size: '160x?'
         })
         .on('progress', progress => {
           console.dir(`[ffmpeg] ${JSON.stringify(progress)}`)
@@ -76,21 +76,17 @@ exports.doThumbs = (req, res, next) => {
   // res.status(200).json({ re: req.body.file })
   // res.end(JSON.stringify({ re: req.body.file }))
   // return
-  if (req.body.file) {
-    if (fs.existsSync(req.body.file)) {
-      gthumbs(req.body.file)
-        .then(data => {
-          // res.sendFile(data) // Set disposition and send it.
-          // read binary data
-          let base64 = fs.readFileSync(data.thumbath, 'base64')
-          // convert binary data to base64 encoded string
-          // let resp = new Buffer(bitmap).toString('base64')
-          res.json({ metadata: data.metadata, imgbase64: base64 })
-        })
-        .catch(err => res.json({ error: 'true', msg: err }))
-    } else {
-      res.json({ error: 'true', msg: 'file not found' })
-    }
+  if (req.body.file && req.body.count) {
+    gthumbs(req.body.file, req.body.count)
+      .then(data => {
+        // res.sendFile(data) // Set disposition and send it.
+        // read binary data
+        let base64 = fs.readFileSync(data.thumbath, 'base64')
+        // convert binary data to base64 encoded string
+        // let resp = new Buffer(bitmap).toString('base64')
+        res.json({ metadata: data.metadata, imgbase64: base64 })
+      })
+      .catch(err => res.json({ error: 'true', msg: err }))
   } else {
     res.json({ error: 'true', msg: 'file not send' })
   }
