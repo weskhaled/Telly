@@ -61,21 +61,21 @@ export default {
     }
   },
   mounted() {
-    let self = this
-    this.$axios.post('http://localhost:3000/api/tools/genartethumbs',{count: '1', file: 'http://telly.test/api/getvideo/58'})
-    // this.$axios.post('http://127.0.0.1:3000/api/tools/getthumb',{username: 'test', file: 'D:/VikingsS05E20/vikings_s05e20.mkv'},{ responseType: 'arraybuffer' })
-    .then((res)=>{
-        console.log(res.data)
-        let tt = moment.utc(res.data.metadata.format.duration * 1000).format('HH') > 0 ? moment.utc(res.data.metadata.format.duration * 1000).format('HH:mm:ss') : moment.utc(res.data.metadata.format.duration * 1000).format('mm:ss')
-        console.log(tt)
-        this.imageThumb=`data:image/jpeg;base64,${res.data.imgbase64}`
-        this.filethumb.push({
-          uid: '2',
-          name: 'yyy.png',
-          status: 'done',
-          url: this.imageThumb,
-        })
-    })
+    // let self = this
+    // this.$axios.post('http://localhost:3000/api/tools/genartethumbs',{count: '1', file: 'http://telly.test/api/getvideo/58'})
+    // // this.$axios.post('http://127.0.0.1:3000/api/tools/getthumb',{username: 'test', file: 'D:/VikingsS05E20/vikings_s05e20.mkv'},{ responseType: 'arraybuffer' })
+    // .then((res)=>{
+    //     console.log(res.data)
+    //     // let tt = moment.utc(res.data.metadata.format.duration * 1000).format('HH') > 0 ? moment.utc(res.data.metadata.format.duration * 1000).format('HH:mm:ss') : moment.utc(res.data.metadata.format.duration * 1000).format('mm:ss')
+    //     // console.log(tt)
+    //     this.imageThumb=`data:image/jpeg;base64,${res.data.imgbase64}`
+    //     this.filethumb.push({
+    //       uid: '2',
+    //       name: 'yyy.png',
+    //       status: 'done',
+    //       url: this.imageThumb,
+    //     })
+    // })
   },
   methods: {
     addTodo(e) {

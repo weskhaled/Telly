@@ -3,7 +3,7 @@
     <a-row type="flex">
       <a-col :span="24">
         <div class="videoplayer">
-          <Player :video="video">
+          <Player :video="video" v-if="video">
             <template slot="modalcontent">
               test 2
             </template>
@@ -23,8 +23,15 @@ export default {
     return !isNaN(+params.id)
   },
   async asyncData({ params, error }) {
+    // let self = this
+    // console.log($axios)
     try {
-      this.paramId = params.id
+      const data = {
+        player: null,
+        params: params,
+        video: null
+      }
+      return data
     } catch (e) {
       error({ message: 'User not found', statusCode: 404 })
     }
@@ -32,35 +39,38 @@ export default {
   components: {
     Player
   },
-  data() {
-    return {
-      drawervisible: false,
-      player: null,
-      user: {
-        username: 'weskhaled@gmail.com',
-        password: '15021989'
-      },
-      paramId: null,
-      video: {
-        id: null,
-        url: 'videos/1/1.m3u8'
-      }
-    }
-  },
+  // data() {
+  //   return {
+  //     drawervisible: false,
+  //     player: null,
+  //     user: {
+  //       username: 'weskhaled@gmail.com',
+  //       password: '15021989'
+  //     },
+  //     paramId: null,
+  //     video: {
+  //       id: null,
+  //       url: 'videos/1/1.m3u8'
+  //     }
+  //   }
+  // },
   computed: {},
   mounted() {
     let self = this
     // console.log(self.$refs.plyr)
-    console.log(paramId)
-    self.$axios.get('http://telly.test/api/v1/videos/' + paramId)
-      .then(function (response) {
-        self.video = response.data.video
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-        self.$message.error(error, 2.5)
-      });
+    // console.log(self.video)
+    // console.log(self.params.id)
+    if (self.params) {
+      self.$axios.get('http://telly.test/api/v1/videos/' + self.params.id)
+        .then(function (response) {
+          self.video = response.data.video
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+          self.$message.error(error, 2.5)
+        });
+    }
     this.$nextTick(function() {})
     let EVENTSTOPNAV = [
       {

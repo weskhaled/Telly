@@ -4,7 +4,7 @@
       <a-col class="d-flex" :span="24">
         <h4 class="d-inline text-capitalize font-weight-bold text-light">Recommended to you</h4>
         <div class="d-inline ml-auto my-1" v-if="$auth.$state.loggedIn">
-          <a-button 
+          <a-button
             type="primary"
             @click="visible = true"
             > Add new </a-button>
@@ -18,25 +18,25 @@
           <!-- Additional required wrapper -->
           <div class="swiper-wrapper">
             <!-- Slides -->
-            <div 
-              v-for="(slider, index) in sliders" 
-              :key="index" 
+            <div
+              v-for="(slider, index) in sliders"
+              :key="index"
               class="swiper-slide">
               <SlideCard :slide="slider"/>
             </div>
           </div>
-          <!-- If we need pagination 
+          <!-- If we need pagination
           <div class="swiper-pagination"/>  -->
 
           <!-- If we need navigation buttons -->
           <nav class="">
-            <a 
-              class="prev text-right" 
+            <a
+              class="prev text-right"
               href="javascript:void(0)">
               <span class="icon-wrap"><i class="icon fa fa-angle-left"/></span>
             </a>
-            <a 
-              class="next text-left" 
+            <a
+              class="next text-left"
               href="javascript:void(0)">
               <span class="icon-wrap"><i class="icon fa fa-angle-right"/></span>
             </a>
@@ -50,7 +50,7 @@
       </a-col>
     </a-row>
     <a-modal
-      title="Basic Modal"
+      title="Add New Video"
       v-model="visible"
       :maskClosable="true"
       onOk="handleOk">
@@ -192,7 +192,7 @@
               v-decorator="[
                 'description',
                 {
-                  rules: [{ required: false, message: 'Please input your desc!', whitespace: true }]
+                  rules: [{ required: true, message: 'Please input your desc!', whitespace: true }]
                 }
               ]"
             />
@@ -406,8 +406,9 @@ export default {
           this.$axios.post('/api/v1/videos', formData)
             .then(function (response) {
               // handle success
-              self.$message.success(response.data.message, 2.5)
-              self.loading = false;
+              // self.$message.success(response.data.message, 2.5)
+              self.sendThumbs(response.data.videoId, response.data.episodeId)
+              // self.loading = false;
               // self.visible = false;
               // self.form.resetFields();
             })
@@ -463,6 +464,28 @@ export default {
     beforeUploadvideo(file) {
       this.videoFile = [file]
       return false;
+    },
+    sendThumbs(videoId,episodeId) {
+      let self = this;
+      this.$axios.post('http://localhost:3000/api/tools/genartethumbs',{file: 'http://telly.test/api/getvideo/'+videoId},{ responseType: 'arraybuffer' })
+      .then((res)=>{
+          // console.log(res.data)
+          // let tt = moment.utc(res.data.metadata.format.duration * 1000).format('HH') > 0 ? moment.utc(res.data.metadata.format.duration * 1000).format('HH:mm:ss') : moment.utc(res.data.metadata.format.duration * 1000).format('mm:ss')
+          // res.data.imgbase64
+          let formData = new FormData();
+          formData.append('vthumbs',new File([res.data], "thumbs.jpg", {type: "image/jpeg"}))
+          formData.append('episodeId', episodeId);
+          this.$axios.post('/api/v1/savethumbs', formData)
+          .then((res)=>{
+            if(res.data.success) {
+                self.$message.success(res.data.message, 2.5)
+                self.loading = false;
+            } else {
+              self.$message.error(res.data.message, 2.5)
+              self.loading = false;
+            }
+          })
+      })
     }
   }
 }

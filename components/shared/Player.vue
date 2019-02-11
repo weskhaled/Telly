@@ -1,17 +1,17 @@
 <template>
-  <div 
-    class="video_player_wpr d-flex align-items-center" 
-    id="player" 
+  <div
+    class="video_player_wpr d-flex align-items-center"
+    id="player"
     :class="{'open-extras' : videowrp.extras }"
     @contextmenu="rightClick($event)">
     <video
-      class="" 
-      webkit-playsinline="" 
+      class=""
+      webkit-playsinline=""
       playsinline=""
-      preload="none" 
-      src=""/> 
-    <div 
-      class="player-controller-wrp px-3 py-3" 
+      preload="none"
+      src=""/>
+    <div
+      class="player-controller-wrp px-3 py-3"
       :class="{'paused' : (videowrp.state == 'pause'), 'playing' : (videowrp.state == 'play'), 'move' : videowrp.mouse.move}"
       @mouseover="videowrp.mouse.move= true">
       <div class="player-controller animated"
@@ -20,29 +20,28 @@
           ref="progressbar"
           @mouseover="mouseOverProgress"
           @mouseleave="mouseleaveProgress">
-          <a-slider 
+          <a-slider
           :disabled="videowrp.loading"
-          :min="videowrp.min" 
-          :max="videowrp.max" 
+          :min="videowrp.min"
+          :max="videowrp.max"
           :step="0.001"
           :value="videowrp.value"
           :tipFormatter="null"
           @change="onChange"
           @afterChange="onAfterChange"/>
-          <span 
-            :data-buffered="videowrp.buffered" 
+          <span
+            :data-buffered="videowrp.buffered"
             :style="[{'width': videowrp.buffered + '%'}]"
             class="buffered"/>
-          <span  
+          <span
             :style="[videowrp.loading ? {'opacity': '1'} : {}]"
             class="onload progress-bar-striped progress-bar-animated"/>
           <span class="w-100 tooltipprogress">
             <span class="tooltip-content" :class="videowrp.tooltip ? 'hover' : ''" :style="[{'left' : progressx}]">
               <span class="tooltip-text">
                 <span class="tooltip-inner">
-                  <span 
-                    style="background-image: url(images/response.jpg);" 
-                    :style="[{'background-position-x' : bgpositionx}]"
+                  <span
+                    :style="[{'background-position-x' : bgpositionx},{'background-image': 'url(http://telly.test/api/getvideohoverthumbs/'+ video.id +')'}]"
                     class="img-thumb position-relative w-100" />
                   <!-- <img src="images/bg_1.jpg" class="img-responsive"> -->
                   <h5 class="tooltip-title m-0 w-100">
@@ -51,13 +50,13 @@
                 </span>
               </span>
             </span>
-          </span>  
+          </span>
         </div>
         <div class="ply-controles d-flex">
           <div class="mr-auto d-flex">
               <a-button-group
                 class="d-flex justify-content-start">
-                <a-button 
+                <a-button
                   ghost
                   :disabled="videowrp.loading"
                   class="px-2 d-flex justify-content-center align-items-center mr-1"
@@ -66,7 +65,7 @@
                 </a-button>
               </a-button-group>
               <div class="ply-volume d-flex justify-content-start align-items-center">
-                <a-button 
+                <a-button
                   ghost
                   class="d-flex justify-content-center align-items-center mr-1 btn-volume px-1"
                   @click="togglemuted()">
@@ -81,13 +80,13 @@
             <div class="duration d-flex justify-content-center align-items-center">
               <span>{{videowrp.currentTime}} </span> / <span> {{videowrp.duration}}</span>
             </div>
-            <a-button 
-              ghost 
+            <a-button
+              ghost
               class="px-2 mr-1 d-flex justify-content-center align-items-center"
               @click="() => {videowrp.extras = !videowrp.extras}">
               <i :class="videowrp.extras ? 'ti-minus' : 'ti-layout-cta-left'"/>
             </a-button>
-            <a-popover 
+            <a-popover
               title="Settings"
               trigger="click"
               :getPopupContainer="modalcontainer"
@@ -97,21 +96,21 @@
                   <a-slider range :defaultValue="[20, 50]"/>
                   Disabled: <a-switch size="small" v-model="visible"/>
               </template>
-              <a-button 
-                ghost 
+              <a-button
+                ghost
                 class="px-2 mr-1 d-flex justify-content-center align-items-center">
                 <i :class="videowrp.settings.open ? 'ti-settings fa-spin' : 'ti-settings'"/>
               </a-button>
             </a-popover>
-            <a-button 
-              ghost 
+            <a-button
+              ghost
               class="px-2 mr-1 d-flex justify-content-center align-items-center"
               @click="togglepipscreen()">
               <i :class="videowrp.pip ? 'ti-layout-width-full' : 'ti-new-window'"
                 :style="[!videowrp.pip ? {'margin-top' : '-5px'} : {}]"/>
             </a-button>
-            <a-button 
-              ghost 
+            <a-button
+              ghost
               class="px-2 mr-2 d-flex justify-content-center align-items-center"
               @click="togglefullscreen()">
               <!-- <i :class="videowrp.fullscreen ? 'ti-close' : 'ti-layout-media-center-alt'"/> -->
@@ -135,20 +134,20 @@
           </div>
         </div>
       </div>
-    </div> 
-    <div class="mask w-100 h-100" 
+    </div>
+    <div class="mask w-100 h-100"
       ref="mask"
       :class="{'paused' : (videowrp.state == 'pause'), 'playing' : (videowrp.state == 'play'), 'move' : videowrp.mouse.move}"
       @mousemove="mouseMoveMask"
       @mouseover="mouseOverMask"
       @mouseleave="mouseleaveMask"
       v-on:dblclick="doubleClick($event)">
-      <div 
+      <div
         class="d-flex align-items-center flex-column justify-content-center w-100 h-100 animated fast"
         :class="(videowrp.state == 'play') ? 'animated fast' : ''"
         :style="[videowrp.state ? {'visibility' : 'visible', 'opacity' : '0.95'} : {}]">
           <div class="w-100 align-items-center py-3 d-flex justify-content-center">
-            <a-button 
+            <a-button
               ghost
               shape="circle"
               size="large"
@@ -164,8 +163,8 @@
     <div class="extras w-100 p-0" :class="{'open' : videowrp.extras }">
         <div class="extras-header d-flex px-1 py-2">
           <h4 class="text-center title d-flex m-0">list episodes</h4>
-          <a-button 
-            ghost 
+          <a-button
+            ghost
             class="p-1 ml-auto d-flex justify-content-center align-items-center"
             @click="videowrp.extras = false">
             <i class="ti-angle-down"/>
@@ -201,18 +200,18 @@
                       </a-card>
                     </div>
                   </div>
-                  <!-- If we need pagination 
+                  <!-- If we need pagination
                   <div class="swiper-pagination"/>  -->
-    
+
                   <!-- If we need navigation buttons -->
                   <nav class="">
-                    <a 
-                      class="prev text-right" 
+                    <a
+                      class="prev text-right"
                       href="javascript:void(0)">
                       <span class="icon-wrap"><i class="icon fa fa-angle-left"/></span>
                     </a>
-                    <a 
-                      class="next text-left" 
+                    <a
+                      class="next text-left"
                       href="javascript:void(0)">
                       <span class="icon-wrap"><i class="icon fa fa-angle-right"/></span>
                     </a>
@@ -221,7 +220,7 @@
             </div>
         </div>
     </div>
-    <span 
+    <span
       class="position-absolute w-100 h-100 bg-v-poster"
       style="background-image: url('images/bg_1.jpg');background-size: cover;"
       :style="[{'z-index': videowrp.poster.zindex}]" />
@@ -245,7 +244,7 @@ export default {
   props: {
     video: {
       type: Object,
-      required: true
+      required: false
     }
   },
   data() {
@@ -312,7 +311,7 @@ export default {
           return (80 * 100) / this.videowrp.progress.width + '%'
         }
         else if((this.videowrp.progress.thumb.x *  this.videowrp.progress.width ) / 100 > (this.videowrp.progress.width - 80) ) {
-          return ((this.videowrp.progress.width - 80) * 100) / this.videowrp.progress.width + '%' 
+          return ((this.videowrp.progress.width - 80) * 100) / this.videowrp.progress.width + '%'
         }
         return (x * 100) / this.videowrp.progress.width + '%'
       }
@@ -336,11 +335,12 @@ export default {
   },
   mounted() {
     let self = this
+    console.log(self.video.id)
     this.$nextTick(function() {
       // var hlsUrl = 'https://content.jwplatform.com/manifests/vM7nH0Kl.m3u8'
       // var hlsUrl = 'https://moeplayer.b0.upaiyun.com/dplayer/hls/hikarunara.m3u8'
       // let hlsUrl = 'videos/1/1.m3u8'
-      let hlsUrl = 'http://telly.test/api/v1/getstreamvideo/53/53_.m3u8'
+      let hlsUrl = `http://telly.test/api/v1/getstreamvideo/${self.video.id}/${self.video.id}_.m3u8`
       self.player = document.querySelector('video')
       // let video = self.$refs.videoref
       if (Hls.isSupported()) {
@@ -349,7 +349,7 @@ export default {
             xhr.setRequestHeader("Authorization", localStorage.getItem('auth._token.password_grant') );
         }
         self.hls.config.autoStartLoad = false;
-        self.hls.config.maxBufferLength = 3;
+        self.hls.config.maxBufferLength = 1;
         self.hls.loadSource(hlsUrl)
         console.log(self.hls)
         self.hls.attachMedia(self.player)
@@ -364,7 +364,7 @@ export default {
           self.videowrp.duration = moment.utc(self.player.duration * 1000).format('HH') > 0 ? moment.utc(self.player.duration * 1000).format('HH:mm:ss') : moment.utc(self.player.duration * 1000).format('mm:ss')
           self.player.volume = self.videowrp.volume/100
         },
-        { once: false }
+        { once: true }
       )
       self.player.addEventListener(
         'timeupdate',
@@ -413,7 +413,7 @@ export default {
         }
       )
       self.player.addEventListener(
-        'progress', 
+        'progress',
         () => {
           // let range = 0
           let bf = self.player.buffered
@@ -483,7 +483,7 @@ export default {
     },
     toggleplay() {
       let playState = this.player.paused ? 'play' : 'pause'
-      this.player[playState](); // Call play or paused method 
+      this.player[playState](); // Call play or paused method
       this.videowrp.state = playState
     },
     togglefullscreen() {
@@ -593,7 +593,7 @@ export default {
         if(this.videowrp.mouse.timer) {
           if(!this.videowrp.slider.mouse.hover) {
             this.videowrp.slider.mouse.hover = true;
-            clearTimeout(this.videowrp.mouse.timer) 
+            clearTimeout(this.videowrp.mouse.timer)
             console.log('over the slider')
           }
         }
