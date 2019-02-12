@@ -5,11 +5,14 @@
   >
     <template slot="cover">
       <div class="cover-wrp d-flex justify-content-center align-items-center">
-          <img  
-            :alt="slide.title"
-            :src="'http://telly.test/api/getvideothumb/'+slide.thumb"
-            @click="$router.replace('/videos/'+slide.id)"
-          >
+        <figure class="effect-chico" @click="$router.replace('/videos/'+slide.id)">
+						<img :src="'http://telly.test/api/getvideothumb/'+slide.thumb" :alt="slide.title">
+						<figcaption class="w-100 align-items-center d-flex justify-content-center">
+              <span class="play-icon">
+							  <i class="fa fa-play" />
+              </span>
+						</figcaption>			
+				</figure>
       </div>
     </template>
     <div class="sliderinfo">
@@ -18,7 +21,7 @@
       </div>
       <div class="plushover">
         <div class="info">
-          <span class="cat">cat and time</span>
+          <span class="cat">{{ slide.duration | totime}}</span>
         </div>
         <div class="infoplus">
           <h6>
@@ -58,7 +61,13 @@ export default {
   mounted() {
     // console.log(this.slide)
   },
-  methods: {}
+  methods: {},
+  filters: {
+    totime: function (duration) {
+      console.log('duration: ', duration)
+      return moment.utc((duration * 60) / 60).format('HH') > 0 ? moment.utc((duration * 60) / 60).format('HH:mm:ss') : moment.utc((duration * 60) / 60).format('mm:ss')
+    }
+  }
 }
 </script>
 

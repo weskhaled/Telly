@@ -349,20 +349,22 @@ export default {
             xhr.setRequestHeader("Authorization", localStorage.getItem('auth._token.password_grant') );
         }
         self.hls.config.autoStartLoad = false;
-        self.hls.config.maxBufferLength = 1;
-        self.hls.loadSource(hlsUrl)
-        console.log(self.hls)
+        self.hls.config.maxBufferLength = 2;
+        self.hls.config.maxBufferSize = 1500000;
         self.hls.attachMedia(self.player)
       } else {
         let nativeHLS = self.player.canPlayType('application/vnd.apple.mpegurl')
         self.player.src = nativeHLS ? hlsUrl : fallbackUrl
       }
       self.hls.startLoad()
+      console.log(self.hls)
+      self.hls.loadSource(hlsUrl)
       self.player.addEventListener(
         'loadedmetadata',
         function() {
           self.videowrp.duration = moment.utc(self.player.duration * 1000).format('HH') > 0 ? moment.utc(self.player.duration * 1000).format('HH:mm:ss') : moment.utc(self.player.duration * 1000).format('mm:ss')
           self.player.volume = self.videowrp.volume/100
+          self.hls.config.autoStartLoad = false
         },
         { once: true }
       )

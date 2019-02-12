@@ -305,6 +305,7 @@ export default {
             'description': vi.description,
             'stream_path': vi.video.stream_path,
             'thumb': vi.thumb,
+            'duration': vi.duration,
           });
         });
         self.$nextTick(()=> {
@@ -481,6 +482,7 @@ export default {
                 self.$message.success(res.data.message, 2.5)
                 self.loading = false;
                 res.data.videos.map(vi => {
+                  self.sliders = []
                   self.sliders.push({
                     'video_id': vi.video_id,
                     'id': vi.id,
@@ -489,6 +491,7 @@ export default {
                     'description': vi.description,
                     'stream_path': vi.video.stream_path,
                     'thumb': vi.thumb,
+                    'duration': vi.duration,
                   });
                 });
                 self.visible = false;
