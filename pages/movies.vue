@@ -480,6 +480,18 @@ export default {
             if(res.data.success) {
                 self.$message.success(res.data.message, 2.5)
                 self.loading = false;
+                res.data.videos.map(vi => {
+                  self.sliders.push({
+                    'video_id': vi.video_id,
+                    'id': vi.id,
+                    'title': vi.title,
+                    'year': moment(String(vi.year)).format('YYYY'),
+                    'description': vi.description,
+                    'stream_path': vi.video.stream_path,
+                    'thumb': vi.thumb,
+                  });
+                });
+                self.visible = false;
             } else {
               self.$message.error(res.data.message, 2.5)
               self.loading = false;
