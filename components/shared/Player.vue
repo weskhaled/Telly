@@ -340,7 +340,7 @@ export default {
       // var hlsUrl = 'https://content.jwplatform.com/manifests/vM7nH0Kl.m3u8'
       // var hlsUrl = 'https://moeplayer.b0.upaiyun.com/dplayer/hls/hikarunara.m3u8'
       // let hlsUrl = 'videos/1/1.m3u8'
-      let hlsUrl = `http://telly.test/api/v1/getstreamvideo/${self.video.id}/${self.video.id}_.m3u8`
+      let hlsUrl = `http://telly.test/api/v1/getstreamvideo/${self.video.video.id}/${self.video.video.id}_.m3u8`
       self.player = document.querySelector('video')
       // let video = self.$refs.videoref
       if (Hls.isSupported()) {

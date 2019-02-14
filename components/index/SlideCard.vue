@@ -6,7 +6,7 @@
     <template slot="cover">
       <div class="cover-wrp d-flex justify-content-center align-items-center">
         <figure class="effect-chico" @click="$router.replace('/videos/'+slide.id)">
-						<img :src="'http://telly.test/api/getvideothumb/'+slide.thumb" :alt="slide.title">
+						<img :src="'http://telly.test/api/getvideothumb/'+slide.id" :alt="slide.title">
 						<figcaption class="w-100 align-items-center d-flex justify-content-center">
               <span class="play-icon">
 							  <i class="fa fa-play" />
