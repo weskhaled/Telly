@@ -378,6 +378,14 @@ export default {
           )
           self.videowrp.value =
             (self.player.currentTime / self.player.duration) * 100
+            // console.log('self.player.currentTime: ', self.player.currentTime)
+            // console.log('duration : ', self.player.duration)
+            if (self.player.currentTime >= self.player.duration - 5) {
+              self.videowrp.extras = true
+            }
+            if (self.player.currentTime == self.player.duration) {
+              clearTimeout(self.videowrp.mouse.timer)
+            }
         },
         false
       )

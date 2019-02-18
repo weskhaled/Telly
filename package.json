@@ -42,6 +42,7 @@
     "popper.js": "^1.14.6",
     "rimraf": "^2.6.1",
     "swiper": "^4.4.6",
+    "three": "^0.101.1",
     "vue-feather-icons": "^4.7.1"
   },
   "devDependencies": {

@@ -174,7 +174,7 @@ module.exports = {
     // watch: [__dirname + '/api/index.js'],
     postcss: false,
     extractCSS: true,
-    vendor: ['jquery', 'bootstrap', 'plyr', 'hls.js', 'DPlayer', 'moment'],
+    vendor: ['jquery', 'bootstrap', 'plyr', 'hls.js', 'DPlayer', 'moment', 'three'],
     plugins: [
       // set shortcuts as global for bootstrap
       new webpack.ProvidePlugin({
@@ -187,7 +187,8 @@ module.exports = {
         'window.Hls': 'hls.js',
         'window.dplayer': 'dplayer',
         DPlayer: 'dplayer',
-        moment: 'moment'
+        moment: 'moment',
+        THREE: 'three'
       }),
       new webpack.DefinePlugin({
         'process.env.FLUENTFFMPEG_COV': false

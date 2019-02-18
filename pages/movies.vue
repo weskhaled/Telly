@@ -380,7 +380,7 @@ export default {
               // self.$message.success(response.data.message, 2.5)
               self.sendThumbs(
                 response.data.videoId,
-                response.data.episode.episodeId
+                response.data.episode
               )
               // self.loading = false;
               // self.visible = false;
@@ -461,8 +461,8 @@ export default {
             if (res.data.success) {
               self.$message.success(res.data.message, 2.5)
               self.loading = false
+              self.sliders = []
               res.data.videos.map(vi => {
-                self.sliders = []
                 self.sliders.push({
                   video_id: vi.video_id,
                   id: vi.id,
@@ -473,6 +473,9 @@ export default {
                   thumb: vi.thumb,
                   duration: vi.duration
                 })
+              })
+              self.$nextTick(() => {
+                self.swiper.update()
               })
               self.visible = false
             } else {
